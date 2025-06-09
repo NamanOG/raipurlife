@@ -5,7 +5,7 @@ import { Search, MapPin, Star, TrendingUp } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const Hero = () => {
-  const heroRef = useScrollReveal();
+  const heroRef = useScrollReveal<HTMLDivElement>();
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
@@ -38,7 +38,7 @@ const Hero = () => {
 
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Explore{" "}
-            <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-green-300 bg-clip-text text-transparent animate-pulse">
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-teal-400 bg-clip-text text-transparent animate-pulse">
               Raipur
             </span>
           </h1>
