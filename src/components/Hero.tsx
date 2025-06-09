@@ -15,78 +15,94 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-      {/* Background Image with Parallax */}
+    <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
+      {/* Background Image with Parallax - Using Raipur cityscape */}
       <div 
         className="absolute inset-0 z-0 parallax"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`,
+          backgroundImage: `url('https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          transform: `translateY(${scrollY * 0.5}px)`,
+          transform: `translateY(${scrollY * 0.3}px)`,
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/80" />
       </div>
       
-      {/* Floating Elements */}
+      {/* Organic floating elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-primary rounded-full animate-pulse" />
-        <div className="absolute top-40 right-20 w-3 h-3 bg-accent rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-32 left-1/4 w-2 h-2 bg-secondary rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-24 left-8 w-3 h-3 bg-primary/80 rounded-full animate-pulse" />
+        <div className="absolute top-32 right-16 w-2 h-2 bg-accent/70 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
+        <div className="absolute bottom-40 left-1/5 w-2.5 h-2.5 bg-secondary/60 rounded-full animate-pulse" style={{ animationDelay: '1.6s' }} />
+        <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-primary/50 rounded-full animate-pulse" style={{ animationDelay: '2.2s' }} />
       </div>
       
-      {/* Content */}
+      {/* Main Content */}
       <div 
         ref={heroRef}
-        className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto scroll-reveal"
+        className="relative z-10 text-center text-white px-6 max-w-5xl mx-auto scroll-reveal"
       >
-        <div>
-          <h2 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Discover{" "}
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-pulse">
+        <div className="space-y-8">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+            Explore{" "}
+            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Raipur
             </span>
-          </h2>
-          <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto leading-relaxed">
-            Your trusted guide to the best food, places, and experiences in the heart of Chhattisgarh
+            <br />
+            <span className="text-3xl md:text-5xl lg:text-6xl font-medium text-gray-100">
+              Like a Local
+            </span>
+          </h1>
+          
+          <p className="text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-light">
+            Discover authentic experiences, hidden gems, and local favorites in the heart of Chhattisgarh. 
+            Your community-driven guide to the real Raipur.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4">
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white px-8 py-3 transform hover:scale-105 transition-all duration-300 shadow-2xl glass"
+              className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white px-10 py-4 text-lg transform hover:scale-105 transition-all duration-300 shadow-xl glass border border-white/20"
             >
-              Explore Places
+              Start Exploring
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-black px-8 py-3 transform hover:scale-105 transition-all duration-300 glass"
+              className="border-2 border-white/80 text-white hover:bg-white/10 hover:border-white px-10 py-4 text-lg transform hover:scale-105 transition-all duration-300 glass backdrop-blur-sm"
             >
-              Share Your Review
+              Add Your Spot
             </Button>
           </div>
           
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
-            <div className="flex items-center justify-center space-x-2 glass rounded-lg p-4 transform hover:scale-105 transition-all duration-300">
-              <MapPin className="h-5 w-5 text-primary" />
-              <span className="text-lg font-semibold">200+ Places</span>
+          {/* Community Stats with organic layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto pt-8">
+            <div className="flex items-center justify-center space-x-3 glass rounded-xl p-5 transform hover:scale-105 transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10">
+              <MapPin className="h-6 w-6 text-primary" />
+              <div className="text-left">
+                <div className="text-xl font-bold">150+</div>
+                <div className="text-sm text-gray-300">Places</div>
+              </div>
             </div>
-            <div className="flex items-center justify-center space-x-2 glass rounded-lg p-4 transform hover:scale-105 transition-all duration-300">
-              <Users className="h-5 w-5 text-primary" />
-              <span className="text-lg font-semibold">5K+ Visitors</span>
+            <div className="flex items-center justify-center space-x-3 glass rounded-xl p-5 transform hover:scale-105 transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10 sm:mt-4">
+              <Users className="h-6 w-6 text-primary" />
+              <div className="text-left">
+                <div className="text-xl font-bold">2.5K+</div>
+                <div className="text-sm text-gray-300">Contributors</div>
+              </div>
             </div>
-            <div className="flex items-center justify-center space-x-2 glass rounded-lg p-4 transform hover:scale-105 transition-all duration-300">
-              <Star className="h-5 w-5 text-primary" />
-              <span className="text-lg font-semibold">Trusted Reviews</span>
+            <div className="flex items-center justify-center space-x-3 glass rounded-xl p-5 transform hover:scale-105 transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10">
+              <Star className="h-6 w-6 text-primary" />
+              <div className="text-left">
+                <div className="text-xl font-bold">Real</div>
+                <div className="text-sm text-gray-300">Reviews</div>
+              </div>
             </div>
           </div>
         </div>
         
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ArrowDown className="h-6 w-6 text-white" />
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <ArrowDown className="h-7 w-7 text-white/80" />
         </div>
       </div>
     </section>
