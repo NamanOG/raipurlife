@@ -60,9 +60,23 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t mt-12 pt-8 text-center text-muted-foreground">
-          <p className="bg-gradient-to-r from-muted-foreground to-primary bg-clip-text text-transparent">
-            &copy; 2024 Raipur.life. Made with ❤️ by the community, for the community.
+        <div className="border-t mt-12 pt-8 space-y-3">
+          <p className="text-center text-muted-foreground bg-gradient-to-r from-muted-foreground to-primary bg-clip-text text-transparent">
+            Made with ❤️ by the community, for the community.
+          </p>
+          <p className="text-center text-sm text-muted-foreground">
+            Developed by{" "}
+            <a 
+              href="https://github.com/NamanOG" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-medium text-primary hover:text-accent transition-colors duration-300 hover:underline"
+            >
+              Naman
+            </a>
+          </p>
+          <p className="text-center text-xs text-muted-foreground">
+            &copy; 2024 Raipur.life. All rights reserved.
           </p>
         </div>
       </div>

@@ -12,25 +12,25 @@ const QuickActions = () => {
       icon: MapPin,
       title: "Find Places",
       description: "Discover top-rated spots",
-      color: "from-blue-500 to-blue-600",
+      color: "from-blue-500 to-cyan-500",
     },
     {
       icon: Camera,
       title: "Share Photos",
       description: "Show off your finds",
-      color: "from-purple-500 to-purple-600",
+      color: "from-purple-500 to-violet-500",
     },
     {
       icon: Coffee,
       title: "Rate Cafes",
       description: "Help others find great coffee",
-      color: "from-amber-500 to-orange-500",
+      color: "from-amber-500 to-yellow-500",
     },
     {
       icon: Utensils,
       title: "Food Reviews",
       description: "Share your food adventures",
-      color: "from-green-500 to-green-600",
+      color: "from-emerald-500 to-teal-500",
     },
     {
       icon: ShoppingBag,
@@ -42,7 +42,7 @@ const QuickActions = () => {
       icon: Calendar,
       title: "Events",
       description: "What's happening in town",
-      color: "from-indigo-500 to-indigo-600",
+      color: "from-indigo-500 to-blue-500",
     },
   ];
 
@@ -64,11 +64,11 @@ const QuickActions = () => {
             return (
               <Card 
                 key={index} 
-                className="group cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 bg-card/50 backdrop-blur-sm border-border/50"
+                className="group cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/20"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardContent className="p-6 text-center">
-                  <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     <Icon className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors">

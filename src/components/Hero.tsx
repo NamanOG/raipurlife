@@ -1,108 +1,93 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowDown, MapPin, Users, Star } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Search, MapPin, Star, TrendingUp } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { useEffect, useState } from "react";
 
 const Hero = () => {
-  const heroRef = useScrollReveal<HTMLDivElement>();
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const heroRef = useScrollReveal();
 
   return (
-    <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
-      {/* Background Image with Parallax - Using Raipur cityscape */}
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      {/* Enhanced gradient background */}
+      <div className="absolute inset-0 gradient-hero opacity-90"></div>
+      
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl float"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl"></div>
+      </div>
+
+      {/* Cultural pattern overlay */}
       <div 
-        className="absolute inset-0 z-0 parallax"
+        className="absolute inset-0 opacity-5"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          transform: `translateY(${scrollY * 0.3}px)`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/80" />
-      </div>
+      ></div>
       
-      {/* Organic floating elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-24 left-8 w-3 h-3 bg-primary/80 rounded-full animate-pulse" />
-        <div className="absolute top-32 right-16 w-2 h-2 bg-accent/70 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
-        <div className="absolute bottom-40 left-1/5 w-2.5 h-2.5 bg-secondary/60 rounded-full animate-pulse" style={{ animationDelay: '1.6s' }} />
-        <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-primary/50 rounded-full animate-pulse" style={{ animationDelay: '2.2s' }} />
-      </div>
-      
-      {/* Main Content */}
-      <div 
-        ref={heroRef}
-        className="relative z-10 text-center text-white px-6 max-w-5xl mx-auto scroll-reveal"
-      >
-        <div className="space-y-8">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+      <div ref={heroRef} className="relative z-10 text-center text-white px-4 scroll-reveal">
+        <div className="max-w-4xl mx-auto">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-white/30">
+            <Star className="h-4 w-4 text-yellow-300 fill-current" />
+            <span className="text-sm font-medium">Discover Raipur's Hidden Gems</span>
+            <TrendingUp className="h-4 w-4 text-green-300" />
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Explore{" "}
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-green-300 bg-clip-text text-transparent animate-pulse">
               Raipur
-            </span>
-            <br />
-            <span className="text-3xl md:text-5xl lg:text-6xl font-medium text-gray-100">
-              Like a Local
             </span>
           </h1>
           
-          <p className="text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-light">
-            Discover authentic experiences, hidden gems, and local favorites in the heart of Chhattisgarh. 
-            Your community-driven guide to the real Raipur.
+          <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-3xl mx-auto leading-relaxed">
+            Your community-driven guide to the best places, authentic food, and unforgettable experiences in the heart of Chhattisgarh
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white px-10 py-4 text-lg transform hover:scale-105 transition-all duration-300 shadow-xl glass border border-white/20"
-            >
-              Start Exploring
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-2 border-white/80 text-white hover:bg-white/10 hover:border-white px-10 py-4 text-lg transform hover:scale-105 transition-all duration-300 glass backdrop-blur-sm"
-            >
-              Add Your Spot
-            </Button>
+          {/* Enhanced Search Bar */}
+          <div className="max-w-2xl mx-auto mb-8">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+              <div className="relative bg-white/95 backdrop-blur-lg rounded-2xl p-2 border border-white/20">
+                <div className="flex items-center">
+                  <Search className="h-5 w-5 text-gray-500 ml-4" />
+                  <Input
+                    placeholder="Search for restaurants, cafes, attractions..."
+                    className="flex-1 border-0 bg-transparent focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-500 text-lg py-4"
+                  />
+                  <Button size="lg" className="mr-2 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+                    Explore
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          {/* Community Stats with organic layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto pt-8">
-            <div className="flex items-center justify-center space-x-3 glass rounded-xl p-5 transform hover:scale-105 transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10">
-              <MapPin className="h-6 w-6 text-primary" />
-              <div className="text-left">
-                <div className="text-xl font-bold">150+</div>
-                <div className="text-sm text-gray-300">Places</div>
-              </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-8 max-w-md mx-auto">
+            <div className="text-center">
+              <div className="text-3xl font-bold mb-1">500+</div>
+              <div className="text-sm text-white/80">Places</div>
             </div>
-            <div className="flex items-center justify-center space-x-3 glass rounded-xl p-5 transform hover:scale-105 transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10 sm:mt-4">
-              <Users className="h-6 w-6 text-primary" />
-              <div className="text-left">
-                <div className="text-xl font-bold">2.5K+</div>
-                <div className="text-sm text-gray-300">Contributors</div>
-              </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold mb-1">2K+</div>
+              <div className="text-sm text-white/80">Reviews</div>
             </div>
-            <div className="flex items-center justify-center space-x-3 glass rounded-xl p-5 transform hover:scale-105 transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10">
-              <Star className="h-6 w-6 text-primary" />
-              <div className="text-left">
-                <div className="text-xl font-bold">Real</div>
-                <div className="text-sm text-gray-300">Reviews</div>
-              </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold mb-1">50K+</div>
+              <div className="text-sm text-white/80">Visitors</div>
             </div>
           </div>
         </div>
-        
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ArrowDown className="h-7 w-7 text-white/80" />
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-bounce"></div>
         </div>
       </div>
     </section>

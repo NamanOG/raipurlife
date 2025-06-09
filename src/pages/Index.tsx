@@ -7,6 +7,7 @@ import FeaturedPlaces from "@/components/FeaturedPlaces";
 import LocalStories from "@/components/LocalStories";
 import CommunityReviews from "@/components/CommunityReviews";
 import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 
 const Index = () => {
   return (
@@ -19,6 +20,7 @@ const Index = () => {
       <LocalStories />
       <CommunityReviews />
       <Footer />
+      <BackToTop />
     </div>
   );
 };
