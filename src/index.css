@@ -49,6 +49,7 @@
     /* Custom gradients */
     --gradient-primary: linear-gradient(135deg, hsl(25, 95%, 53%) 0%, hsl(43, 74%, 66%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(142, 76%, 36%) 0%, hsl(120, 60%, 50%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(220, 30%, 18%) 0%, hsl(230, 30%, 25%) 100%);
   }
 
   .dark {
@@ -90,6 +91,10 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer utilities {
@@ -99,5 +104,62 @@
   
   .gradient-accent {
     background: var(--gradient-accent);
+  }
+
+  .gradient-dark {
+    background: var(--gradient-dark);
+  }
+
+  /* Scroll reveal animations */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1);
+  }
+
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scroll-reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1);
+  }
+
+  .scroll-reveal-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1);
+  }
+
+  .scroll-reveal-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Parallax effect */
+  .parallax {
+    transform: translateY(0);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }

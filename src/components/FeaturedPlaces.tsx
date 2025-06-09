@@ -1,7 +1,8 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, Clock, Phone } from "lucide-react";
+import { Star, MapPin, Clock } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const featuredPlaces = [
   {
@@ -85,8 +86,10 @@ const featuredPlaces = [
 ];
 
 const FeaturedPlaces = () => {
+  const sectionRef = useScrollReveal();
+
   return (
-    <section className="py-16 px-4 bg-muted/30">
+    <section ref={sectionRef} className="py-16 px-4 bg-muted/30 scroll-reveal">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h3 className="text-3xl md:text-4xl font-bold mb-4">
@@ -101,14 +104,14 @@ const FeaturedPlaces = () => {
           {featuredPlaces.map((place, index) => (
             <Card 
               key={place.id} 
-              className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2 overflow-hidden animate-fade-in"
+              className="group cursor-pointer transition-all duration-500 hover:shadow-2xl hover:-translate-y-3 overflow-hidden glass transform hover:scale-[1.02]"
               style={{ animationDelay: `${index * 150}ms` }}
             >
               <div className="relative overflow-hidden">
                 <img 
                   src={place.image} 
                   alt={place.name}
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge variant="secondary" className="bg-white/90 text-black">
@@ -121,41 +124,42 @@ const FeaturedPlaces = () => {
                     <span className="text-xs font-medium text-black">{place.rating}</span>
                   </div>
                 </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
               
               <CardContent className="p-6">
-                <h4 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                <h4 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">
                   {place.name}
                 </h4>
                 
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                <p className="text-muted-foreground text-sm mb-4 line-clamp-2 leading-relaxed">
                   {place.description}
                 </p>
                 
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4 mr-2" />
+                    <MapPin className="h-4 w-4 mr-2 text-primary" />
                     {place.location}
                   </div>
                   <div className="flex items-center text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4 mr-2" />
+                    <Clock className="h-4 w-4 mr-2 text-primary" />
                     {place.timing}
                   </div>
                 </div>
                 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {place.tags.map((tag) => (
-                    <Badge key={tag} variant="outline" className="text-xs">
+                    <Badge key={tag} variant="outline" className="text-xs glass">
                       {tag}
                     </Badge>
                   ))}
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-primary">{place.price}</span>
+                  <span className="font-semibold text-primary text-lg">{place.price}</span>
                   <div className="flex items-center space-x-1 text-sm text-muted-foreground">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span>{place.rating}</span>
+                    <span className="font-medium">{place.rating}</span>
                     <span>({place.reviews})</span>
                   </div>
                 </div>
