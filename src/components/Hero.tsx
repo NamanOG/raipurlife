@@ -5,7 +5,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useEffect, useState } from "react";
 
 const Hero = () => {
-  const heroRef = useScrollReveal();
+  const heroRef = useScrollReveal<HTMLDivElement>();
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {

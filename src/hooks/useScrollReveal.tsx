@@ -1,8 +1,8 @@
 
 import { useEffect, useRef } from 'react';
 
-export const useScrollReveal = (options = {}) => {
-  const ref = useRef<HTMLElement>(null);
+export const useScrollReveal = <T extends HTMLElement = HTMLElement>(options = {}) => {
+  const ref = useRef<T>(null);
 
   useEffect(() => {
     const element = ref.current;
