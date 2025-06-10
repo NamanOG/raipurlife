@@ -9,12 +9,12 @@ const Hero = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90"
-        style={{
-          backgroundImage: "url('/hero-bg.jpg')"
-        }}
-      ></div>
+<div 
+  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90"
+  style={{
+    backgroundImage: "url('/hero-bg.png')"
+  }}
+></div>
       
       {/* Dark overlay for better text readability */}
       <div className="absolute inset-0 bg-black/40"></div>
