@@ -18,7 +18,7 @@ const communityReviews = [
   },
   {
     id: 2,
-    user: "Naini B.",
+    user: "Naini",
     rating: 4,
     place: "Jungle Safari, Barnawapara",
     category: "Tourism",
@@ -28,7 +28,7 @@ const communityReviews = [
   },
   {
     id: 3,
-    user: "Manoj B.",
+    user: "Manoj",
     rating: 5,
     place: "Ambuja City Mall",
     category: "Shopping",
@@ -38,7 +38,7 @@ const communityReviews = [
   },
   {
     id: 4,
-    user: "Anant B.",
+    user: "Anant",
     rating: 4,
     place: "Buddha Talab",
     category: "Nature",
