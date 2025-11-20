@@ -8,7 +8,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 const communityReviews = [
   {
     id: 1,
-    user: "Naman B.",
+    user: "Naman",
     rating: 5,
     place: "Nukkad Chai",
     category: "Food & Dining",
