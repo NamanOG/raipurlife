@@ -1,4 +1,4 @@
-# Raipur.life v1.0
+# Raipur.life
 
 ![Website Screenshot](public/hero-bg.png)
 
