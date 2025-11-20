@@ -1,3 +1,4 @@
+// Tourism Page v1.0
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { MapPin, Camera, Clock, Star, ChevronRight } from "lucide-react";
 import Header from "@/components/Header";

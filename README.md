@@ -1,6 +1,6 @@
 ![Website Screenshot](public/hero-bg.png)
 
-# Raipur.life
+# Raipur.life v1.0
 
 A community-powered guide to the best places, food, and stories in Raipur, Chhattisgarh.
 

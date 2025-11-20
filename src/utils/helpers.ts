@@ -32,6 +32,7 @@ export const generateSlug = (text: string): string => {
     .replace(/(^-|-$)/g, "");
 };
 
+// Helper Functions v1.0
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.substr(0, maxLength).trim() + "...";

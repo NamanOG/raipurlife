@@ -1,4 +1,5 @@
 
+// Site Configuration v1.0
 export const SITE_CONFIG = {
   name: "Raipur.life",
   description: "Discover the best places in Raipur, Chhattisgarh",

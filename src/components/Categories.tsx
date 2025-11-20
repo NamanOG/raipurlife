@@ -1,4 +1,5 @@
 
+// Categories Component v1.0
 import { Card, CardContent } from "@/components/ui/card";
 import { 
   UtensilsCrossed, 

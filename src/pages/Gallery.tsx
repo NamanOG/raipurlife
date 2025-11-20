@@ -1,3 +1,4 @@
+// Gallery Page v1.0
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useState } from "react";
 import { Camera, Grid3X3, X, Filter, Share2 } from "lucide-react";

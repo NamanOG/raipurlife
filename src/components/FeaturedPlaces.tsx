@@ -1,4 +1,5 @@
 
+// Featured Places v1.0
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star, MapPin, Clock } from "lucide-react";

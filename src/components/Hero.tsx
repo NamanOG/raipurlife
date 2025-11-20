@@ -1,3 +1,4 @@
+// Hero Section v1.0
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, MapPin, Star, TrendingUp } from 'lucide-react';

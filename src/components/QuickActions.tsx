@@ -1,4 +1,5 @@
 
+// Quick Actions v1.0
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Camera, Coffee, Utensils, ShoppingBag, Calendar } from "lucide-react";

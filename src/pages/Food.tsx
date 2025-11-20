@@ -1,3 +1,4 @@
+// Food Page v1.0
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Tag, MapPin, Star, Heart, User, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";

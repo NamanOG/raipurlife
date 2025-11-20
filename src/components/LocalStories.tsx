@@ -1,4 +1,5 @@
 
+// Local Stories v1.0
 import { Card, CardContent } from "@/components/ui/card";
 import { Quote, Star } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";

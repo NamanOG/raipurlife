@@ -1,4 +1,5 @@
 
+// Type Definitions v1.0
 export interface Place {
   id: string;
   name: string;

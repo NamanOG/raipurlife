@@ -1,3 +1,4 @@
+// 404 Page v1.0
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 

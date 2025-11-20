@@ -1,3 +1,4 @@
+// Events Page v1.0
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Calendar, MapPin, Clock, Users, CalendarDays, Star, ChevronRight, Filter, Search } from "lucide-react";
 import { useState } from "react";

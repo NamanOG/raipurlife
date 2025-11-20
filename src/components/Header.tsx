@@ -1,4 +1,5 @@
 
+// Header Component v1.0
 import React, { useState } from "react";
 import { Search, MapPin, Heart, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
