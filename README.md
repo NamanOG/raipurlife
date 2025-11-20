@@ -8,7 +8,9 @@ A community-powered guide to the best places, food, and stories in Raipur, Chhat
 
 ## What is Raipur.life?
 
-Raipur.life helps you discover restaurants, cafes, shops, and attractions in Raipur. Read reviews, share your own experiences, and connect with the local community.
+Raipur.life helps you discover restaurants, cafes, shops,
+and attractions in Raipur. Read reviews, share your own experiences,
+and connect with the local community.
 
 ## Main Features
 
