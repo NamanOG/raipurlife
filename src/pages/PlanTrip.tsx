@@ -7,11 +7,11 @@ const steps = [
   },
   {
     title: "Book Your Stay",
-    description: "Find hotels, guest houses, or homestays in the city.",
+    description: "Find hotels, Resorts, Airbnb options in the city.",
   },
   {
     title: "Explore Attractions",
-    description: "List must-visit places and plan your itinerary.",
+    description: "List of all must visit places. Plan your itinerary accordingly!",
   },
   {
     title: "Local Food & Shopping",
@@ -26,7 +26,7 @@ const PlanTrip = () => {
       <div className="container mx-auto max-w-3xl">
         <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-pulse">Plan Your Trip</h1>
         <p className="text-lg text-muted-foreground mb-8 animate-fade-in">
-          Get ready for your Raipur adventure! Follow these steps for a perfect trip.
+          Ready to explore the streets of Raipur? Follow these simple steps to plan an unforgettable trip to the heart of Chhattisgarh!
         </p>
         <div className="space-y-8">
           {steps.map((step, idx) => (

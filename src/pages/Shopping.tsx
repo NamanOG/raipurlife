@@ -6,7 +6,7 @@ const markets = [
     description: "Raipur's largest market for clothes, accessories, and local goods.",
   },
   {
-    name: "City Center Mall",
+    name: "Ambuja City Center Mall",
     description: "Modern mall with branded stores, food court, and entertainment.",
   },
   {
@@ -14,8 +14,8 @@ const markets = [
     description: "Traditional market for spices, groceries, and household items.",
   },
   {
-    name: "Magneto The Mall",
-    description: "Premier shopping destination with international brands.",
+    name: "Zora Mall",
+    description: "Premier shopping destination with international brands, food and entertainment.",
   },
 ];
 
