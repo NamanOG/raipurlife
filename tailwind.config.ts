@@ -1,5 +1,6 @@
 
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
 	darkMode: ["class"],
@@ -117,9 +118,9 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out'
 			},
 			fontFamily: {
-				sans: ['Inter', 'system-ui', 'sans-serif'],
+				sans: ['Manrope', 'Syne', 'system-ui', 'sans-serif'],
 			}
 		}
 	},
-	plugins: [require('tailwindcss-animate')],
+	plugins: [tailwindcssAnimate],
 } satisfies Config;

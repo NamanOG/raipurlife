@@ -1,155 +1,178 @@
-// Tourism Page v1.0
-import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { MapPin, Camera, Clock, Star, ChevronRight } from "lucide-react";
+import { Clock, MapPin, Star } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
+import { useAutoPlaces } from "@/hooks/useAutoPlaces";
+import SmartImage from "@/components/SmartImage";
 
-const places = [
+const curatedPlaces = [
   {
     name: "Swami Vivekananda Sarovar",
     category: "Nature",
     description: "A beautiful lake perfect for evening strolls and boating with panoramic sunset views.",
-    image: "/wildlife.jpg",
+    image: "/places/sarovar.jpg",
     rating: 4.7,
     location: "Central Raipur",
-    hours: "5:00 AM - 9:00 PM"
+    hours: "5:00 AM - 9:00 PM",
   },
   {
     name: "Mahant Ghasidas Museum",
     category: "Culture",
     description: "Showcasing Chhattisgarh's rich tribal heritage and history with fascinating artifacts.",
-    image: "/Traditional.png",
+    image: "/places/museum.jpeg",
     rating: 4.5,
     location: "Gandhi Chowk",
-    hours: "10:00 AM - 5:30 PM (Closed Mondays)"
+    hours: "10:00 AM - 5:30 PM",
   },
   {
     name: "Purkhouti Muktangan",
     category: "Culture",
-    description: "Open-air museum displaying tribal life and traditions of Chhattisgarh's indigenous communities.",
-    image: "/Modern.png",
+    description: "Open-air museum displaying tribal life and traditions with immersive exhibits.",
+    image: "/places/purkhauti.jpg",
     rating: 4.6,
     location: "Naya Raipur",
-    hours: "9:00 AM - 6:00 PM"
+    hours: "9:00 AM - 6:00 PM",
   },
   {
     name: "Magneto The Mall",
     category: "Shopping",
-    description: "Premier shopping destination with branded stores, entertainment zones, and fine dining options.",
-    image: "/urban.png",
+    description: "Premier destination for brands, dining, and indoor entertainment zones.",
+    image: "/places/urban.png",
     rating: 4.3,
     location: "GE Road",
-    hours: "11:00 AM - 10:00 PM"
+    hours: "11:00 AM - 10:00 PM",
   },
 ];
 
 const Tourism = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
-  
+  const { getReviewsByCategory } = useCommunityReviews();
+  const communityTourismReviews = getReviewsByCategory("tourism");
+  const { places, isLoading, source } = useAutoPlaces("tourism", curatedPlaces);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-blue-950/10 to-background">
+    <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* Hero Section */}
-      <section className="relative w-full h-80 flex items-center justify-center">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-          style={{
-            backgroundImage: "url('/wildlife.jpg')"
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Explore Raipur</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">Discover the hidden gems and top attractions of Chhattisgarh's capital city</p>
+
+      <section className="relative overflow-hidden px-4 py-20">
+        <div className="absolute inset-0 -z-10 bg-[url('/places/barnawapara.jpg')] bg-cover bg-center opacity-30" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/88 to-background/68" />
+        <div className="absolute inset-0 -z-10 hero-atmo" />
+        <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="hero-copy-panel max-w-3xl">
+            <p className="inline-flex border border-border/70 bg-card/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary backdrop-blur-sm">Tourism</p>
+            <h1 className="mt-3 text-4xl font-bold md:text-6xl">Explore Raipur destinations</h1>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              Discover cultural landmarks, lakes, and iconic places that define the city experience.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2 text-xs">
+              <span className="border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground backdrop-blur-sm">Top landmarks</span>
+              <span className="border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground backdrop-blur-sm">Family friendly</span>
+              <span className="border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground backdrop-blur-sm">Weekend spots</span>
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {source === "osm" ? "Live places source: OpenStreetMap" : "Showing curated places list"}
+              {isLoading ? " • Syncing latest places..." : ""}
+            </p>
+          </div>
+
+          <article className="card-tint overflow-hidden shadow-xl">
+            <img src="/places/sarovar.jpg" alt="Vivekananda Sarovar" className="h-44 w-full object-cover" />
+            <div className="p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Featured right now</p>
+              <p className="mt-2 text-xl font-semibold">Sunset Walk at Vivekananda Sarovar</p>
+              <p className="mt-2 text-sm text-muted-foreground">Golden-hour boat rides, food stalls, and calm evening breeze in the city center.</p>
+            </div>
+          </article>
         </div>
       </section>
-      
-      {/* Main Content */}
-      <section ref={sectionRef} className="py-16 px-4 scroll-reveal">
+
+      <section className="px-4 pb-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-10 w-1.5 bg-gradient-to-b from-primary to-secondary rounded-full"></div>
-            <h2 className="text-3xl font-bold">Must-Visit Destinations</h2>
+          <div className="grid gap-3 md:grid-cols-3">
+            <article className="card-tint p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Best season</p>
+              <p className="mt-1 text-lg font-semibold">Oct to Feb</p>
+            </article>
+            <article className="card-tint p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Ideal duration</p>
+              <p className="mt-1 text-lg font-semibold">2 to 3 days</p>
+            </article>
+            <article className="card-tint p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Travel mode</p>
+              <p className="mt-1 text-lg font-semibold">Cab + local walk trails</p>
+            </article>
           </div>
-          
-          <p className="text-lg text-muted-foreground mb-12 max-w-3xl">
-            From serene natural spots to cultural landmarks, Raipur offers diverse experiences for every traveler. 
-            Explore these handpicked attractions to make the most of your visit.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {places.map((place, idx) => (
-              <div 
-                key={idx} 
-                className="group rounded-xl overflow-hidden hover-lift border border-white/10 bg-white/5 backdrop-blur-sm"
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <img 
-                    src={place.image} 
-                    alt={place.name} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1">
-                    <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
-                    <span className="text-sm text-white font-medium">{place.rating}</span>
-                  </div>
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-4 pt-8">
-                    <span className="inline-block mb-2 px-3 py-1 rounded-full bg-secondary/80 text-white text-xs font-semibold">
-                      {place.category}
-                    </span>
-                    <h3 className="text-xl font-bold text-white">{place.name}</h3>
+        </div>
+      </section>
+
+      <section ref={sectionRef} className="scroll-reveal px-4 pb-14">
+        <div className="container mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+          {places.map((place) => (
+            <article key={place.name} className="card-tint overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover-lift">
+              <SmartImage
+                src={place.image}
+                alt={place.name}
+                fallbackQuery={place.name}
+                className="h-52 w-full object-cover"
+              />
+              <div className="p-5">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">{place.category}</p>
+                  <div className="flex items-center gap-1 text-sm font-semibold">
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    {place.rating}
                   </div>
                 </div>
-                
-                <div className="p-6">
-                  <p className="text-muted-foreground mb-4">{place.description}</p>
-                  
-                  <div className="flex flex-col gap-2 mb-4">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{place.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{place.hours}</span>
-                    </div>
+                <h2 className="text-2xl font-semibold">{place.name}</h2>
+                <p className="mt-2 text-sm text-muted-foreground">{place.description}</p>
+                <div className="mt-4 grid gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    {place.location}
                   </div>
-                  
-                  <button className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors">
-                    <span>View Details</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-primary" />
+                    {place.hours || "Check locally"}
+                  </div>
                 </div>
               </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="px-4 pb-16">
+        <div className="container mx-auto max-w-6xl">
+          <h2 className="text-2xl font-bold">Community Tourism Suggestions</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {communityTourismReviews.length === 0 && (
+              <div className="glass border border-border/70 p-5 text-sm text-muted-foreground md:col-span-2">
+                No approved tourism suggestions yet. New entries appear after moderation.
+              </div>
+            )}
+            {communityTourismReviews.slice(0, 4).map((review) => (
+              <article key={review.id} className="overflow-hidden border border-border bg-card shadow-sm hover-lift">
+                <SmartImage
+                  src={review.image || "/hero-bg.png"}
+                  alt={review.place}
+                  fallbackQuery={review.place}
+                  className="h-44 w-full object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold">{review.place}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
-          
-          {/* Map Section */}
-          <div className="mt-16 p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-            <div className="flex flex-col md:flex-row items-start gap-8">
-              <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-4 text-primary">Find Your Way Around</h3>
-                <p className="text-muted-foreground mb-6">
-                  Navigate Raipur with ease using our interactive map. Discover attractions, restaurants,
-                  and accommodations to plan your perfect itinerary.
-                </p>
-                <button className="flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">
-                  <MapPin className="h-4 w-4" />
-                  <span>Open Interactive Map</span>
-                </button>
-              </div>
-              <div className="flex-1 rounded-xl overflow-hidden h-64 w-full border border-white/10">
-                <div className="w-full h-full bg-[#101624] flex items-center justify-center">
-                  <MapPin className="h-12 w-12 text-primary/40" />
-                  <span className="text-lg text-white/40">Map View</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

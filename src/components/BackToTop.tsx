@@ -1,44 +1,34 @@
-
-// Back to Top v1.0
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArrowUp } from "lucide-react";
 
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
+    const toggleVisibility = () => setIsVisible(window.scrollY > 320);
 
     window.addEventListener("scroll", toggleVisibility);
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  if (!isVisible) {
+    return null;
+  }
+
   return (
-    <>
-      {isVisible && (
-        <Button
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 rounded-full w-12 h-12 p-0 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transition-all duration-300 pulse-glow"
-          size="sm"
-        >
-          <ArrowUp className="h-5 w-5" />
-        </Button>
-      )}
-    </>
+    <Button
+      onClick={scrollToTop}
+      className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-2xl border border-border bg-card p-0 text-foreground shadow-xl transition-transform duration-300 hover:-translate-y-1 hover:bg-muted"
+      size="sm"
+      aria-label="Back to top"
+    >
+      <ArrowUpRight className="h-5 w-5" />
+    </Button>
   );
 };
 

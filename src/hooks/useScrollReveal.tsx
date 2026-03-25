@@ -1,5 +1,3 @@
-
-// Scroll Reveal Hook v1.0
 import { useEffect, useRef } from 'react';
 
 export const useScrollReveal = <T extends HTMLElement = HTMLDivElement>(options = {}) => {

@@ -1,25 +1,89 @@
+import { FormEvent, useState } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const Contact = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
+  const [submitted, setSubmitted] = useState(false);
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitted(true);
+  };
+
   return (
-    <section ref={sectionRef} className="py-16 px-4 scroll-reveal">
-      <div className="container mx-auto max-w-xl">
-        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-pulse">Contact & Community</h1>
-        <p className="text-lg text-muted-foreground mb-8 animate-fade-in">
-          Have questions, feedback, or want to join the community? Reach out below!
-        </p>
-        <form className="space-y-6 animate-fade-in">
-          <input type="text" placeholder="Your Name" className="w-full p-3 rounded-lg bg-card/80 border border-primary/30 text-foreground focus:outline-none focus:border-primary" />
-          <input type="email" placeholder="Your Email" className="w-full p-3 rounded-lg bg-card/80 border border-secondary/30 text-foreground focus:outline-none focus:border-secondary" />
-          <textarea placeholder="Your Message" className="w-full p-3 rounded-lg bg-card/80 border border-accent/30 text-foreground focus:outline-none focus:border-accent" rows={4} />
-          <button type="submit" className="w-full py-3 rounded-lg bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg hover:scale-105 transition-transform duration-300">Send Message</button>
-        </form>
-        <div className="mt-8 text-center text-muted-foreground animate-fade-in">
-          Or connect with us on social media!
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <section className="relative overflow-hidden px-4 py-16">
+        <div className="absolute inset-0 -z-10 bg-[url('/places/sarovar.jpg')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/94 to-background/78" />
+        <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="hero-copy-panel max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Community Desk</p>
+            <h1 className="mt-2 text-4xl font-bold md:text-5xl">Contact and community</h1>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              Send feedback, suggest additions, or report outdated information so the guide stays useful.
+            </p>
+          </div>
+
+          <article className="card-tint overflow-hidden shadow-xl">
+            <img src="/places/sarovar.jpg" alt="Raipur community desk" className="h-44 w-full object-cover" />
+            <div className="p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Reach the team</p>
+              <p className="mt-2 text-xl font-semibold">Updates, reports, and suggestions</p>
+              <p className="mt-2 text-sm text-muted-foreground">Help us keep routes, timings, and place details fresh for everyone.</p>
+            </div>
+          </article>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section ref={sectionRef} className="scroll-reveal px-4 pb-16">
+        <div className="container mx-auto grid max-w-6xl gap-6 md:grid-cols-[1fr_0.9fr]">
+          <form onSubmit={onSubmit} className="glass border border-border/70 p-6 md:p-8">
+            <h2 className="text-2xl font-semibold">Send us a message</h2>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <label className="grid gap-2 text-sm font-medium">
+                Name
+                <input type="text" required placeholder="Your Name" className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary" />
+              </label>
+              <label className="grid gap-2 text-sm font-medium">
+                Email
+                <input type="email" required placeholder="Your Email" className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary" />
+              </label>
+            </div>
+            <label className="mt-4 grid gap-2 text-sm font-medium">
+              Message
+              <textarea
+                required
+                placeholder="Share your suggestion, review idea, or correction"
+                className="min-h-36 border border-border bg-background px-3 py-2 text-foreground outline-none focus:border-primary"
+              />
+            </label>
+            <button type="submit" className="mt-6 h-11 border border-foreground bg-foreground px-6 text-sm font-semibold uppercase tracking-wide text-background transition-colors hover:bg-foreground/90">
+              Send message
+            </button>
+            {submitted && <p className="mt-3 text-sm text-accent">Thanks. We received your message.</p>}
+          </form>
+
+          <aside className="glass border border-border/70 p-6 md:p-8">
+            <h3 className="text-2xl font-semibold">Other ways to connect</h3>
+            <div className="mt-5 space-y-4 text-sm text-muted-foreground">
+              <p>Email: hello@raipur.life</p>
+              <p>Community submissions: Add Review page</p>
+              <p>Response time: within 24-48 hours</p>
+            </div>
+            <div className="mt-6 border border-border bg-card p-4">
+              <p className="text-sm font-medium">Tip:</p>
+              <p className="mt-2 text-sm text-muted-foreground">For place suggestions, include exact location and one image for faster review.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
   );
 };
 

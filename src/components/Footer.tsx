@@ -1,88 +1,112 @@
-
-// Footer Component v1.0
-import { MapPin, Facebook, Twitter, Instagram, Github, Code, GitFork } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Code, Eye, Facebook, Github, Instagram, Linkedin } from "lucide-react";
+import { NAV_LINKS } from "@/utils/constants";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const Footer = () => {
   const footerRef = useScrollReveal();
+  const [visits, setVisits] = useState<number | null>(null);
+
+  useEffect(() => {
+    const key = "raipur-local-visit-count";
+
+    const loadCounter = async () => {
+      try {
+        const response = await fetch("https://api.countapi.xyz/hit/raipur.life/website-visits");
+        const data = (await response.json()) as { value?: number };
+
+        if (typeof data.value === "number") {
+          setVisits(data.value);
+          return;
+        }
+      } catch {
+        const current = Number(localStorage.getItem(key) || "0") + 1;
+        localStorage.setItem(key, String(current));
+        setVisits(current);
+      }
+    };
+
+    void loadCounter();
+  }, []);
 
   return (
-    <footer ref={footerRef} className="bg-card border-t scroll-reveal">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <MapPin className="h-6 w-6 text-primary" />
-              <h3 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Raipur.life
-              </h3>
+    <footer ref={footerRef} className="scroll-reveal border-t border-border/80 bg-card px-4 py-14">
+      <div className="container mx-auto">
+        <div className="grid gap-10 md:grid-cols-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="h-10 w-10 overflow-hidden rounded-md">
+                <img src="/rpr_logo.png" alt="Raipur.life logo" className="h-full w-full object-cover" />
+              </div>
+              <div>
+                <p className="text-lg font-bold leading-none">Raipur.life</p>
+                <p className="text-xs text-muted-foreground">One-stop city guide</p>
+              </div>
             </div>
-            <p className="text-muted-foreground leading-relaxed">
-              Your trusted community-driven guide to discovering the best places, food, and experiences in Raipur, Chhattisgarh.
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
+              Built to help people discover food, travel spots, shopping, and local experiences across Raipur, Chhattisgarh.
             </p>
-            <div className="flex space-x-3">
-              <Button className="p-2 glass hover:scale-110 transition-transform duration-300">
+            <div className="mt-5 flex items-center gap-2">
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Facebook">
                 <Facebook className="h-4 w-4" />
-              </Button>
-              <Button className="p-2 glass hover:scale-110 transition-transform duration-300">
-                <Twitter className="h-4 w-4" />
-              </Button>
-              <Button className="p-2 glass hover:scale-110 transition-transform duration-300">
+              </a>
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Instagram">
                 <Instagram className="h-4 w-4" />
-              </Button>
-              <Button className="p-2 glass hover:scale-110 transition-transform duration-300">
+              </a>
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="LinkedIn">
+                <Linkedin className="h-4 w-4" />
+              </a>
+              <a href="https://github.com/NamanOG" target="_blank" rel="noopener noreferrer" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="GitHub">
                 <Github className="h-4 w-4" />
-              </Button>
+              </a>
             </div>
           </div>
-          
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Explore</h4>
-            <div className="space-y-2">
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">Food & Dining</a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">Tourism</a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">Shopping</a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">Entertainment</a>
+
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">Explore</p>
+            <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+              {NAV_LINKS.map((link) => (
+                <Link key={link.href} to={link.href} className="text-foreground/80 transition-colors hover:text-foreground">
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
-          
-          {/* Community */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Community</h4>
-            <div className="space-y-2">
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">Share Reviews</a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">Submit Places</a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">Guidelines</a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 transform">About</a>
+
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">Community</p>
+            <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+              <p>Share your own reviews and recommend your favorite places.</p>
+              <p>Help new visitors navigate Raipur better than ever.</p>
+              <p>Contribute food, event, shopping places, and travel tips.</p>
             </div>
           </div>
         </div>
-        
-        <div className="border-t mt-12 pt-8 space-y-3">
-          <p className="text-center text-muted-foreground bg-gradient-to-r from-muted-foreground to-primary bg-clip-text text-transparent">
-            Made with ❤️ by the community, for the community.
-          </p>
-          <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
+
+        <div className="mt-10 border-t border-border/70 pt-5 text-sm text-muted-foreground">
+          <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+            <p>© 2026 Raipur.life. Built for the city, by the city.</p>
+            <p className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3 py-1 text-xs sm:text-sm">
+              <Eye className="h-4 w-4 text-primary" />
+              <span>Visitors:</span>
+              <span className="font-semibold text-foreground">{visits ? visits.toLocaleString("en-IN") : "..."}</span>
+            </p>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
             <span>Explored by</span>
-            <span className="font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Naman
-            </span>
-            <a 
-              href="https://github.com/NamanOG" 
-              target="_blank" 
+            <span className="font-semibold text-foreground">Naman</span>
+            <a
+              href="https://github.com/NamanOG"
+              target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1 text-muted-foreground hover:text-primary transition-colors duration-300"
+              className="inline-flex items-center space-x-1 text-muted-foreground transition-colors duration-300 hover:text-primary"
+              aria-label="Naman GitHub"
             >
               <Code className="h-4 w-4" />
               <Github className="h-4 w-4" />
             </a>
           </div>
-          <p className="text-center text-xs text-muted-foreground">
-            &copy; 2025 Raipur.life. All rights reserved.
-          </p>
         </div>
       </div>
     </footer>

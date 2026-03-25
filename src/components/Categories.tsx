@@ -1,124 +1,106 @@
-
-// Categories Component v1.0
-import { Card, CardContent } from "@/components/ui/card";
-import { 
-  UtensilsCrossed, 
-  Camera, 
-  ShoppingBag, 
-  Coffee,
-  TreePine,
+import {
   Building,
+  Camera,
+  Coffee,
+  Gamepad2,
   Music,
-  Gamepad2
+  ShoppingBag,
+  TreePine,
+  UtensilsCrossed,
 } from "lucide-react";
 
 const categories = [
   {
     id: "food",
-    title: "Food & Dining",
-    description: "Best restaurants, street food, and local cuisines",
+    title: "Food and Dining",
+    description: "Street icons, family restaurants, and local cuisine stops",
     icon: UtensilsCrossed,
-    color: "from-orange-500 to-red-500",
-    count: 45
+    count: 45,
   },
   {
     id: "tourism",
-    title: "Tourism & Sightseeing",
-    description: "Historic places, temples, and must-visit attractions",
+    title: "Tourism and Sightseeing",
+    description: "Lakes, monuments, and city landmarks worth revisiting",
     icon: Camera,
-    color: "from-blue-500 to-cyan-500",
-    count: 32
+    count: 32,
   },
   {
     id: "shopping",
-    title: "Shopping & Malls",
-    description: "Markets, malls, and shopping destinations",
+    title: "Shopping and Malls",
+    description: "From market bargaining to premium store hopping",
     icon: ShoppingBag,
-    color: "from-purple-500 to-pink-500",
-    count: 28
+    count: 28,
   },
   {
     id: "cafes",
-    title: "Cafés & Hangouts",
-    description: "Cozy cafés, bars, and hangout spots",
+    title: "Cafes and Hangouts",
+    description: "Comfort corners for chai, coffee, and conversations",
     icon: Coffee,
-    color: "from-amber-500 to-orange-500",
-    count: 38
+    count: 38,
   },
   {
     id: "nature",
-    title: "Parks & Nature",
-    description: "Gardens, parks, and nature's attractions",
+    title: "Parks and Nature",
+    description: "Green pockets, open spaces, and evening walk zones",
     icon: TreePine,
-    color: "from-green-500 to-emerald-500",
-    count: 22
+    count: 22,
   },
   {
     id: "culture",
-    title: "Culture & Arts",
-    description: "Museums, galleries, and cultural centers",
+    title: "Culture and Arts",
+    description: "Museums, galleries, and local heritage experiences",
     icon: Building,
-    color: "from-indigo-500 to-purple-500",
-    count: 15
+    count: 15,
   },
   {
     id: "entertainment",
     title: "Entertainment",
-    description: "Cinemas, clubs, and entertainment venues",
+    description: "Cinema, performances, and weekend fun spots",
     icon: Music,
-    color: "from-pink-500 to-rose-500",
-    count: 25
+    count: 25,
   },
   {
     id: "sports",
-    title: "Sports & Recreation",
-    description: "Sports complexes, gyms, and recreational activities",
+    title: "Sports and Recreation",
+    description: "Stadiums, gyms, and play zones around the city",
     icon: Gamepad2,
-    color: "from-teal-500 to-green-500",
-    count: 18
-  }
+    count: 18,
+  },
 ];
 
 const Categories = () => {
   return (
-    <section className="py-16 px-4">
+    <section className="px-4 py-16">
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h3 className="text-3xl md:text-4xl font-bold mb-4">
-            Explore by Category
-          </h3>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover the best places in Raipur across various categories. Whether you're looking for food, culture, or entertainment, we have something for everyone.
-          </p>
+        <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Browse</p>
+            <h3 className="mt-2 text-3xl font-bold md:text-4xl">Explore by category</h3>
+            <p className="mt-3 text-muted-foreground">Curated sections designed for quick decisions and deeper exploration.</p>
+          </div>
+          <p className="text-sm font-medium text-muted-foreground">223+ mapped places and growing</p>
         </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div className="grid gap-0 border border-border lg:grid-cols-2">
           {categories.map((category, index) => {
             const IconComponent = category.icon;
             return (
-              <Card 
-                key={category.id} 
-                className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-scale-in"
-                style={{ animationDelay: `${index * 100}ms` }}
+              <article
+                key={category.id}
+                className="group grid gap-4 border-b border-border px-5 py-5 transition-colors duration-300 hover:bg-muted/35 sm:grid-cols-[auto_1fr_auto] sm:items-center"
+                style={{ animationDelay: `${index * 60}ms` }}
               >
-                <CardContent className="p-6 text-center">
-                  <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${category.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                    <IconComponent className="h-8 w-8 text-white" />
-                  </div>
-                  
-                  <h4 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {category.title}
-                  </h4>
-                  
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {category.description}
-                  </p>
-                  
-                  <div className="text-xs font-medium text-primary">
-                    {category.count} places
-                  </div>
-                </CardContent>
-              </Card>
+                <div className="grid h-10 w-10 place-items-center border border-border bg-background text-primary">
+                  <IconComponent className="h-5 w-5" />
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-semibold leading-tight">{category.title}</h4>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{category.description}</p>
+                </div>
+
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground sm:justify-self-end">{category.count} places</p>
+              </article>
             );
           })}
         </div>

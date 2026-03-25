@@ -1,233 +1,165 @@
-// Food Page v1.0
-import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { Tag, MapPin, Star, Heart, User, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Search, Star, Tag } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
+import { useAutoPlaces } from "@/hooks/useAutoPlaces";
+import SmartImage from "@/components/SmartImage";
 
-const foods = [
+const curatedFoods = [
   {
     name: "Chana Samosa",
-    description: "A Raipur street food classic, spicy chana topped on crispy samosas. The perfect blend of savory and spicy.",
-    image: "/placeholder.svg",
+    category: "Street Food",
+    description: "A Raipur street classic with spicy chana on crispy samosa.",
+    image: "/places/nukkad.jpg",
     price: "₹30 - ₹50",
     tags: ["Street Food", "Snack", "Vegetarian"],
     rating: 4.8,
-    location: "Jaistambh Chowk"
+    location: "Jaistambh Chowk",
   },
   {
     name: "Poha Jalebi",
-    description: "A popular breakfast combo, light flattened rice with sweet jalebi. A must-try Chhattisgarhi breakfast experience.",
-    image: "/placeholder.svg",
+    category: "Breakfast",
+    description: "A popular breakfast combo balancing sweet and savory flavors.",
+    image: "/places/Traditional.png",
     price: "₹40 - ₹60",
-    tags: ["Breakfast", "Sweet & Savory", "Vegetarian"],
+    tags: ["Breakfast", "Sweet and Savory", "Vegetarian"],
     rating: 4.7,
-    location: "Sadar Bazaar"
+    location: "Sadar Bazaar",
   },
   {
     name: "Chhattisgarhi Thali",
-    description: "Traditional thali with rice, dal, and local specialties like fara, chousela, and dubki kadhi. A complete meal experience.",
-    image: "/placeholder.svg",
+    category: "Local Cuisine",
+    description: "Traditional platter with fara, chousela, dubki kadhi, and more.",
+    image: "/hero-bg.png",
     price: "₹120 - ₹200",
     tags: ["Main Course", "Local Cuisine", "Vegetarian"],
     rating: 4.6,
-    location: "Various Restaurants"
+    location: "Various Restaurants",
   },
   {
     name: "Nukkad Chai",
-    description: "Famous tea stall for Irani chai and snacks. The perfect place to experience local tea culture with bun-maska and osmania biscuits.",
-    image: "/placeholder.svg",
+    category: "Cafe",
+    description: "Famous tea spot with Irani chai and quick local bites.",
+    image: "/places/nukkad.jpg",
     price: "₹10 - ₹30",
     tags: ["Beverage", "Tea", "Snacks"],
     rating: 4.5,
-    location: "Station Road"
+    location: "Station Road",
   },
-  {
-    name: "Bafauri",
-    description: "Steamed lentil dumplings seasoned with spices and herbs. A protein-rich local delicacy often served with chutney.",
-    image: "/placeholder.svg",
-    price: "₹40 - ₹60",
-    tags: ["Snack", "Local Cuisine", "Vegetarian"],
-    rating: 4.4,
-    location: "Pandri Market"
-  },
-  {
-    name: "Bhajia & Chila",
-    description: "Crispy gram flour fritters and savory pancakes, popular for breakfast or evening snacks with green chutney.",
-    image: "/placeholder.svg",
-    price: "₹30 - ₹50",
-    tags: ["Breakfast", "Snack", "Vegetarian"],
-    rating: 4.3,
-    location: "Gol Bazaar"
-  }
-];
-
-const categories = [
-  "All", "Street Food", "Local Cuisine", "Breakfast", "Desserts", "Beverages", "Fine Dining"
 ];
 
 const Food = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
-  
+  const { getReviewsByCategory } = useCommunityReviews();
+  const communityFoodReviews = getReviewsByCategory("food");
+  const { places: foods, isLoading, source } = useAutoPlaces("food", curatedFoods);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-accent/5 to-background">
+    <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* Hero Section */}
-      <section className="relative w-full h-80 flex items-center justify-center">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-          style={{
-            backgroundImage: "url('/placeholder.svg')",
-            backgroundColor: "#121a2a"
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/30"></div>
-        <div className="relative z-10 text-center px-4">
-          <span className="inline-block px-4 py-1 rounded-full bg-accent/20 text-accent text-sm font-semibold mb-4">Taste of Raipur</span>
-          <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Food & Culinary Delights</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">Discover authentic Chhattisgarhi cuisine and local favorites</p>
+
+      <section className="relative overflow-hidden px-4 py-20">
+        <div className="absolute inset-0 -z-10 bg-[url('/places/nukkad.jpg')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/90 to-background/74" />
+        <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.12fr_0.88fr]">
+          <div className="hero-copy-panel max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Food Guide</p>
+            <h1 className="mt-2 text-4xl font-bold md:text-5xl">Food and culinary highlights</h1>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              Discover local favorites, trusted spots, and classic combinations that define Raipur's food culture.
+            </p>
+            <div className="mt-6 flex h-12 items-center gap-3 rounded-xl border border-border bg-card px-4 text-muted-foreground">
+              <Search className="h-4 w-4" />
+              Search dishes, restaurants, and local specialties...
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {source === "osm" ? "Live food places source: OpenStreetMap" : "Showing curated food list"}
+              {isLoading ? " • Syncing latest places..." : ""}
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2 text-xs">
+              <span className="rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground">Street icons</span>
+              <span className="rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground">Family spots</span>
+              <span className="rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground">Late-night bites</span>
+            </div>
+          </div>
+
+          <article className="card-tint overflow-hidden shadow-xl">
+            <img src="/places/nukkad.jpg" alt="Raipur food lane" className="h-44 w-full object-cover" />
+            <div className="p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Featured right now</p>
+              <p className="mt-2 text-xl font-semibold">Nukkad lane evening trail</p>
+              <p className="mt-2 text-sm text-muted-foreground">Start with chai, then snack-hop nearby stalls in a 45-minute food walk.</p>
+            </div>
+          </article>
         </div>
       </section>
-      
-      {/* Search & Filter Section */}
-      <section className="py-8 px-4 bg-white/5 backdrop-blur-sm border-y border-white/10">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search for dishes, restaurants or cuisines..." 
-                className="pl-10 bg-white/10 border-white/10 focus:border-accent"
+
+      <section ref={sectionRef} className="scroll-reveal px-4 pb-14">
+        <div className="container mx-auto grid max-w-6xl gap-5 md:grid-cols-2">
+          {foods.map((food) => (
+            <article key={food.name} className="border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover-lift">
+              <SmartImage
+                src={food.image}
+                alt={food.name}
+                fallbackQuery={food.name}
+                className="mb-4 h-44 w-full rounded-xl object-cover"
               />
-            </div>
-            <div className="flex gap-2 overflow-x-auto py-2 w-full md:w-auto">
-              {categories.map((category, idx) => (
-                <button 
-                  key={idx} 
-                  className={`px-4 py-1 rounded-full whitespace-nowrap text-sm font-medium ${
-                    idx === 0 
-                      ? 'bg-accent text-white' 
-                      : 'bg-white/10 hover:bg-white/20 text-white/80'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
+              <div className="mb-2 flex items-start justify-between gap-3">
+                <h2 className="text-2xl font-semibold">{food.name}</h2>
+                <span className="text-sm font-semibold text-primary">{food.price}</span>
+              </div>
+              <p className="text-sm text-muted-foreground">{food.description}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {(food.tags || ["Local Spot", "Community Listed"]).map((tag) => (
+                  <span key={tag} className="inline-flex items-center gap-1 border border-border bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+                    <Tag className="h-3 w-3" />
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4 flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">{food.location}</span>
+                <span className="flex items-center gap-1 font-semibold">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  {food.rating}
+                </span>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
-      
-      {/* Main Content */}
-      <section ref={sectionRef} className="py-16 px-4 scroll-reveal">
+
+      <section className="px-4 pb-16">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex items-center gap-4 mb-12">
-            <div className="h-10 w-1.5 bg-gradient-to-b from-accent to-accent/50 rounded-full"></div>
-            <h2 className="text-3xl font-bold">Popular Local Delicacies</h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {foods.map((food, idx) => (
-              <div 
-                key={idx} 
-                className="group rounded-xl overflow-hidden hover-lift bg-white/5 backdrop-blur-sm border border-white/10"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center">
-                    <span className="text-xl font-semibold text-white/60">Food Image</span>
-                  </div>
-                  <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1">
-                    <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
-                    <span className="text-sm text-white font-medium">{food.rating}</span>
-                  </div>
-                  <button className="absolute top-3 left-3 h-8 w-8 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md text-white/70 hover:text-red-500 transition-colors">
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-                
-                <div className="p-5">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">{food.name}</h3>
-                    <span className="text-sm font-medium text-accent">{food.price}</span>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-4">{food.description}</p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {food.tags.map((tag, tagIdx) => (
-                      <span key={tagIdx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 text-xs font-medium">
-                        <Tag className="h-3 w-3 text-accent" />
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-muted-foreground">{food.location}</span>
-                    </div>
-                    <button className="text-sm text-accent hover:text-accent/80 font-medium">
-                      View Details
-                    </button>
-                  </div>
-                </div>
+          <h2 className="text-2xl font-bold">Community Food Suggestions</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {communityFoodReviews.length === 0 && (
+              <div className="glass border border-border/70 p-5 text-sm text-muted-foreground md:col-span-2">
+                No approved food suggestions yet. New entries appear after moderation.
               </div>
+            )}
+            {communityFoodReviews.slice(0, 4).map((review) => (
+              <article key={review.id} className="overflow-hidden border border-border bg-card shadow-sm hover-lift">
+                <SmartImage
+                  src={review.image || "/hero-bg.png"}
+                  alt={review.place}
+                  fallbackQuery={review.place}
+                  className="h-44 w-full object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold">{review.place}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
-          
-          {/* Featured Restaurant */}
-          <div className="mt-16 rounded-2xl overflow-hidden bg-gradient-to-r from-accent/20 to-primary/20 backdrop-blur-sm">
-            <div className="flex flex-col md:flex-row">
-              <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                <span className="inline-block px-3 py-1 rounded-full bg-accent/20 text-accent text-sm font-semibold mb-4">Featured Restaurant</span>
-                <h3 className="text-3xl font-bold mb-4 text-white">Chhattisgarh Food Trail</h3>
-                <p className="text-muted-foreground mb-6">
-                  Experience authentic Chhattisgarhi cuisine in a traditional setting. From fara to dubki kadhi,
-                  enjoy the full spectrum of local flavors prepared with age-old recipes.
-                </p>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((_, idx) => (
-                      <Star key={idx} className={`h-5 w-5 ${idx < 4 ? 'text-yellow-400 fill-yellow-400' : 'text-white/20'}`} />
-                    ))}
-                  </div>
-                  <span className="text-sm text-white/60">Based on 120+ reviews</span>
-                </div>
-                <button className="w-full md:w-auto px-6 py-3 bg-accent hover:bg-accent/90 text-white font-medium rounded-lg transition-colors">
-                  Reserve a Table
-                </button>
-              </div>
-              <div className="md:w-1/2 relative h-64 md:h-auto">
-                <div className="absolute inset-0 bg-gradient-to-br from-accent/40 to-primary/40 flex items-center justify-center">
-                  <span className="text-2xl font-semibold text-white/60">Restaurant Image</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Food Guide */}
-          <div className="mt-16 p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-            <h3 className="text-2xl font-bold mb-6 text-white">Raipur Food Guide</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                <h4 className="text-lg font-semibold text-accent mb-3">Best Time to Visit</h4>
-                <p className="text-sm text-muted-foreground">Most local food stalls are busiest during breakfast (7-10 AM) and evening hours (4-8 PM) when items are freshly made.</p>
-              </div>
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                <h4 className="text-lg font-semibold text-accent mb-3">Local Etiquette</h4>
-                <p className="text-sm text-muted-foreground">Traditional Chhattisgarhi meals are often eaten by hand. Street food vendors appreciate exact change for small purchases.</p>
-              </div>
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                <h4 className="text-lg font-semibold text-accent mb-3">Must-Try Experiences</h4>
-                <p className="text-sm text-muted-foreground">Don't miss the morning tea culture at Station Road and the traditional thalis at local restaurants near Jaistambh.</p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

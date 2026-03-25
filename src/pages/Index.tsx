@@ -1,5 +1,3 @@
-
-// Home Page v1.0
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import QuickActions from "@/components/QuickActions";
@@ -12,8 +10,8 @@ import BackToTop from "@/components/BackToTop";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Header />
+    <div className="min-h-screen bg-background">
+      <Header overlay />
       <Hero />
       <QuickActions />
       <Categories />

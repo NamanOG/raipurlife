@@ -1,30 +1,50 @@
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const History = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
+
   return (
-    <section ref={sectionRef} className="min-h-screen bg-gradient-to-br from-yellow-100 via-orange-200 to-red-100 p-0">
-      <section className="relative w-full h-72 flex items-center justify-center bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400">
-        <h1 className="text-5xl font-extrabold text-white drop-shadow-lg animate-fade-in">History of Raipur</h1>
+    <div className="min-h-screen bg-background">
+      <Header />
+      <section className="relative isolate overflow-hidden px-4 py-20 min-h-[42vh]">
+        <div className="absolute inset-0 -z-10 bg-[url('/places/Traditional.png')] bg-cover bg-center opacity-50 dark:opacity-28" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/82 via-slate-900/62 to-slate-800/42 dark:from-slate-950/74 dark:via-slate-900/58 dark:to-slate-800/36" />
+        <div className="container mx-auto">
+          <div className="inline-block border border-white/30 bg-slate-950/42 px-5 py-4 backdrop-blur-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100">Heritage</p>
+            <h1 className="mt-2 max-w-3xl text-4xl font-bold text-white md:text-5xl">History of Raipur</h1>
+            <p className="mt-4 max-w-2xl text-white/92 dark:text-white/80">
+              From ancient roots to a fast-growing capital, Raipur carries a layered identity shaped by culture, trade, and community life.
+            </p>
+          </div>
+        </div>
       </section>
-      <div className="max-w-5xl mx-auto py-10 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex flex-col gap-4 justify-center">
-            <h2 className="text-2xl font-bold text-orange-700">Ancient Roots</h2>
-            <p className="text-lg text-gray-700">Raipur has a rich history dating back to ancient times, with influences from various dynasties and cultures. The city’s heritage is reflected in its architecture, traditions, and vibrant festivals.</p>
-          </div>
-          <img src="/public/Traditional.png" alt="Traditional" className="rounded-2xl shadow-2xl border-4 border-yellow-300" />
+
+      <section ref={sectionRef} className="scroll-reveal px-4 py-14">
+        <div className="container mx-auto grid gap-8 md:grid-cols-2">
+          <article className="glass border border-border/70 p-6 hover-lift">
+            <img src="/places/Traditional.png" alt="Traditional Raipur" className="mb-5 h-56 w-full object-cover" />
+            <h2 className="text-2xl font-semibold">Ancient roots</h2>
+            <p className="mt-3 leading-relaxed text-muted-foreground">
+              Raipur's identity has been shaped by multiple dynasties and trading routes. Its local traditions, language, and architecture still carry that long cultural memory.
+            </p>
+          </article>
+
+          <article className="glass border border-border/70 p-6 hover-lift">
+            <img src="/places/urban.png" alt="Modern Raipur" className="mb-5 h-56 w-full object-cover" />
+            <h2 className="text-2xl font-semibold">Modern transformation</h2>
+            <p className="mt-3 leading-relaxed text-muted-foreground">
+              Today, Raipur balances heritage with infrastructure growth. Museums, markets, and newer districts together create a city that is expanding without losing its local pulse.
+            </p>
+          </article>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-          <img src="/public/urban.png" alt="Urban" className="rounded-2xl shadow-2xl border-4 border-orange-300" />
-          <div className="flex flex-col gap-4 justify-center">
-            <h2 className="text-2xl font-bold text-red-700">Modern Era</h2>
-            <p className="text-lg text-gray-700">Today, Raipur is a bustling urban center, blending its historical legacy with modern development. Explore the city’s museums, monuments, and lively streets to experience its unique journey through time.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+
+      <Footer />
+    </div>
   );
-}
+};
 
 export default History;

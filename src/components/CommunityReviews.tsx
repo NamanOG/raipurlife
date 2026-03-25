@@ -1,150 +1,88 @@
-
-// Community Reviews v1.0
-import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, User, Clock, MessageSquare, ExternalLink } from "lucide-react";
+import { Clock, MessageSquare, Star, User } from "lucide-react";
+import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { ReviewCategory } from "@/types/community";
+import SmartImage from "@/components/SmartImage";
 
-const communityReviews = [
-  {
-    id: 1,
-    user: "Naman",
-    rating: 5,
-    place: "Nukkad Chai",
-    category: "Food & Dining",
-    review: "Amazing chai and snacks! Perfect for evening hangouts with friends. The ambiance is cozy and prices are very reasonable. Offers a great variety of food and drinks. Must-try their special Irani Chai!",
-    time: "2 days ago",
-    image: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-  },
-  {
-    id: 2,
-    user: "Naini",
-    rating: 4,
-    place: "Jungle Safari, Barnawapara",
-    category: "Tourism",
-    review: "Great wildlife experience! Saw deer, peacocks, and many birds. Guide was knowledgeable. Best to visit early morning.",
-    time: "1 week ago",
-    image: "https://images.unsplash.com/photo-1549366021-9f761d040a94?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-  },
-  {
-    id: 3,
-    user: "Manoj",
-    rating: 5,
-    place: "Ambuja City Mall",
-    category: "Shopping",
-    review: "Best shopping experience in Raipur. Wide range of International and local brands. Great food court with multiple options. Clean and well-maintained. Perfect for family outings.",
-    time: "3 days ago",
-    image: "https://images.unsplash.com/photo-1555529902-5261145633bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-  },
-  {
-    id: 4,
-    user: "Anant",
-    rating: 4,
-    place: "Buddha Talab",
-    category: "Nature",
-    review: "Peaceful place for morning walks and meditation. Well-maintained park area. Perfect for photography enthusiasts.",
-    time: "5 days ago",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-  }
-];
+const categoryLabel: Record<ReviewCategory, string> = {
+  food: "Food",
+  events: "Events",
+  shopping: "Shopping",
+  tourism: "Tourism",
+};
 
 const CommunityReviews = () => {
   const sectionRef = useScrollReveal();
+  const { latestReviews } = useCommunityReviews();
 
   return (
-    <section ref={sectionRef} className="py-16 px-4 scroll-reveal">
+    <section ref={sectionRef} className="scroll-reveal px-4 py-16">
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h3 className="text-3xl md:text-4xl font-bold mb-4">
-            Community Reviews
-          </h3>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Real experiences from locals and visitors. Share your own recommendations!
-          </p>
-          
-          <Button 
-            className="bg-primary hover:bg-primary/90 transform hover:scale-105 transition-all duration-300"
-            onClick={() => window.open('https://www.appsheet.com/start/93f7c023-4304-4236-9db1-dd92f32f0644?platform=desktop', '_blank')}
-          >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            Submit your review
+        <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Community Lens</p>
+            <h3 className="mt-2 text-3xl font-bold md:text-4xl">Recent reviews from locals and visitors</h3>
+            <p className="mt-3 text-muted-foreground">Your feedback powers this city guide. Add your own recommendations and tips.</p>
+          </div>
+          <Button asChild className="h-11 rounded-xl border border-foreground bg-foreground px-5 text-background hover:bg-foreground/90">
+            <Link to="/add-review">Submit your review</Link>
           </Button>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {communityReviews.map((review, index) => (
-            <Card 
-              key={review.id} 
-              className="group cursor-pointer transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden glass transform hover:scale-[1.02]"
-              style={{ animationDelay: `${index * 200}ms` }}
-            >
-              <div className="relative">
-                <img 
-                  src={review.image} 
+
+        <div className="divide-y divide-border border border-border">
+          {latestReviews.slice(0, 4).map((review) => (
+            <article key={review.id} className="grid gap-4 p-5 transition-colors duration-300 hover:bg-muted/30 md:grid-cols-[220px_1fr]">
+              <div className="relative h-44 overflow-hidden border border-border/70 md:h-full">
+                <SmartImage
+                  src={review.image || "/hero-bg.png"}
                   alt={review.place}
-                  className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-500"
+                  fallbackQuery={review.place}
+                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                 />
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-white/90 text-black">
-                    {review.category}
-                  </Badge>
-                </div>
-                <div className="absolute top-4 right-4">
-                  <div className="bg-white/90 rounded-full px-2 py-1 flex items-center space-x-1">
-                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                    <span className="text-xs font-medium text-black">{review.rating}</span>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute left-4 top-4">
+                  <Badge className="rounded-xl border border-white/30 bg-black/50 text-white">{categoryLabel[review.category]}</Badge>
                 </div>
               </div>
-              
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                    <User className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm">{review.user}</h4>
-                    <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      <span>{review.time}</span>
+
+              <div>
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center border border-border bg-muted">
+                      <User className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold leading-none">{review.authorName}</p>
+                      <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3" />
+                        {formatReviewTimeAgo(review.createdAt)}
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <h5 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                  {review.place}
-                </h5>
-                
-                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                  "{review.review}"
-                </p>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-                      />
-                    ))}
-                  </div>
-                  <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                    <MessageSquare className="h-4 w-4" />
-                    <span>Review</span>
+                  <div className="flex items-center gap-1 text-sm font-semibold">
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    5.0
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+
+                <h5 className="text-lg font-semibold">{review.place}</h5>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">"{review.message}"</p>
+
+                <div className="mt-4 flex items-center gap-2 border-t border-border/70 pt-4 text-sm text-muted-foreground">
+                  <MessageSquare className="h-4 w-4" />
+                  Community recommendation
+                </div>
+              </div>
+            </article>
           ))}
         </div>
-        
-        <div className="text-center mt-12">
-          <Button 
-            className="glass transform hover:scale-105 transition-all duration-300 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
-            onClick={() => window.open('https://www.appsheet.com/start/93f7c023-4304-4236-9db1-dd92f32f0644?platform=desktop', '_blank')}
-          >
-            View All Reviews
+
+        <div className="mt-10 text-center">
+          <Button asChild className="rounded-xl border border-border bg-card text-foreground hover:bg-muted">
+            <Link to="/add-review">Add your own review</Link>
           </Button>
         </div>
       </div>

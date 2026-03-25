@@ -1,85 +1,65 @@
-
-// Quick Actions v1.0
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Camera, Coffee, Utensils, ShoppingBag, Calendar } from "lucide-react";
+import { Calendar, Camera, Coffee, MapPin, ShoppingBag, Utensils } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+
+const actions = [
+  {
+    icon: MapPin,
+    title: "Explore Neighborhoods",
+    description: "Area-wise guides for old city streets and new Raipur zones.",
+  },
+  {
+    icon: Camera,
+    title: "Share Moments",
+    description: "Upload your finds and help build the city map together.",
+  },
+  {
+    icon: Coffee,
+    title: "Tea and Cafe Radar",
+    description: "Find chill corners from classic chai stands to late-night cafes.",
+  },
+  {
+    icon: Utensils,
+    title: "Food Trails",
+    description: "Local plates, street legends, and family-favorite eateries.",
+  },
+  {
+    icon: ShoppingBag,
+    title: "Markets and Malls",
+    description: "Compare local bazaars with modern shopping destinations.",
+  },
+  {
+    icon: Calendar,
+    title: "Events This Week",
+    description: "Cultural activities, city festivals, and weekend plans.",
+  },
+];
 
 const QuickActions = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
 
-  const actions = [
-    {
-      icon: MapPin,
-      title: "Explore Raipur",
-      description: "Find hidden gems in the city",
-      color: "from-primary to-primary/80",
-    },
-    {
-      icon: Camera,
-      title: "Share Moments",
-      description: "Capture your Raipur stories",
-      color: "from-secondary to-secondary/80",
-    },
-    {
-      icon: Coffee,
-      title: "Best Chai Spots",
-      description: "Local tea and snack places",
-      color: "from-accent to-accent/80",
-    },
-    {
-      icon: Utensils,
-      title: "Local Food",
-      description: "Authentic Chhattisgarhi cuisine",
-      color: "from-primary to-secondary",
-    },
-    {
-      icon: ShoppingBag,
-      title: "Markets",
-      description: "Traditional and modern shopping",
-      color: "from-secondary to-accent",
-    },
-    {
-      icon: Calendar,
-      title: "City Events",
-      description: "Festivals and local happenings",
-      color: "from-accent to-primary",
-    },
-  ];
-
   return (
-    <section ref={sectionRef} className="py-16 bg-muted/30 scroll-reveal">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-            Quick Actions
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Everything you need to explore Raipur at your fingertips
-          </p>
+    <section ref={sectionRef} className="scroll-reveal px-4 py-16">
+      <div className="container mx-auto">
+        <div className="mb-10 max-w-3xl">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Start Here</p>
+          <h2 className="text-3xl font-bold md:text-4xl">Jump to what matters right now</h2>
+          <p className="mt-3 text-muted-foreground">Use quick routes to move through Raipur like a local, whether you're planning a day trip or exploring after work.</p>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {actions.map((action, index) => {
+
+        <div className="border border-border">
+          {actions.map((action) => {
             const Icon = action.icon;
             return (
-              <Card 
-                key={index} 
-                className="group cursor-pointer hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 transform hover:-translate-y-2 glass border border-primary/20 hover:border-primary/40"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <CardContent className="p-6 text-center">
-                  <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <Icon className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors">
-                    {action.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {action.description}
-                  </p>
-                </CardContent>
-              </Card>
+              <article key={action.title} className="group grid gap-4 border-b border-border px-5 py-5 transition-colors duration-300 hover:bg-muted/35 md:grid-cols-[auto_1fr_auto] md:items-center">
+                <div className="grid h-10 w-10 place-items-center border border-border bg-background text-primary">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold">{action.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{action.description}</p>
+                </div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground md:justify-self-end">Open</p>
+              </article>
             );
           })}
         </div>

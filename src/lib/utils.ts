@@ -1,4 +1,3 @@
-// Utility Functions v1.0
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
