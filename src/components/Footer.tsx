@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Code, Eye, Facebook, Github, Instagram, Linkedin } from "lucide-react";
+import { Code, Eye, Facebook, Github, Instagram, MessageCircle, Youtube } from "lucide-react";
 import { NAV_LINKS } from "@/utils/constants";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -48,17 +48,17 @@ const Footer = () => {
               Built to help people discover food, travel spots, shopping, and local experiences across Raipur, Chhattisgarh.
             </p>
             <div className="mt-5 flex items-center gap-2">
+              <a href="https://instagram.com/raipur.life" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Instagram">
+                <Instagram className="h-4 w-4" />
+              </a>
               <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Facebook">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Instagram">
-                <Instagram className="h-4 w-4" />
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="YouTube">
+                <Youtube className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="LinkedIn">
-                <Linkedin className="h-4 w-4" />
-              </a>
-              <a href="https://github.com/NamanOG" target="_blank" rel="noopener noreferrer" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="GitHub">
-                <Github className="h-4 w-4" />
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Community Chat">
+                <MessageCircle className="h-4 w-4" />
               </a>
             </div>
           </div>
