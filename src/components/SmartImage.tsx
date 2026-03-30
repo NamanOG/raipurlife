@@ -1,4 +1,4 @@
-import { ImgHTMLAttributes, useMemo, useState } from "react";
+import { ImgHTMLAttributes, useEffect, useMemo, useState } from "react";
 
 type SmartImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src?: string;
@@ -19,6 +19,10 @@ const SmartImage = ({
 }: SmartImageProps) => {
   const initial = src && src.trim() ? src : HERO_FALLBACK;
   const [currentSrc, setCurrentSrc] = useState(initial);
+
+  useEffect(() => {
+    setCurrentSrc(initial);
+  }, [initial]);
 
   const webFallback = useMemo(() => {
     const query = (fallbackQuery || alt || "raipur").trim();

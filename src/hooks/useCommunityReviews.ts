@@ -17,7 +17,7 @@ const seededReviews: CommunityReview[] = [
     message: "Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.",
     authorName: "Naman",
     isAnonymous: false,
-    image: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/places/urban.png",
     status: "approved",
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
@@ -28,7 +28,7 @@ const seededReviews: CommunityReview[] = [
     message: "Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.",
     authorName: "Naini",
     isAnonymous: false,
-    image: "https://images.unsplash.com/photo-1549366021-9f761d040a94?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/places/barnawapara.jpg",
     status: "approved",
     createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
   },
@@ -39,7 +39,7 @@ const seededReviews: CommunityReview[] = [
     message: "Wide range of local and international brands, clean spaces, and enough food options for full family outings.",
     authorName: "Manoj",
     isAnonymous: false,
-    image: "https://images.unsplash.com/photo-1555529902-5261145633bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/places/zora.jpg",
     status: "approved",
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
   },
@@ -50,7 +50,7 @@ const seededReviews: CommunityReview[] = [
     message: "The city vibe was electric, performances were great, and food stalls had lots of options.",
     authorName: "Anant",
     isAnonymous: false,
-    image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/hero-bg.png",
     status: "approved",
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
   },
@@ -106,6 +106,12 @@ type DbReviewRow = {
   created_at: string;
 };
 
+type ModerateReviewArgs = {
+  review_id: string;
+  new_status: ReviewStatus;
+  moderator_code: string;
+};
+
 const normalizeStatus = (status: unknown): ReviewStatus => {
   if (status === "approved" || status === "rejected") {
     return status;
@@ -156,6 +162,7 @@ const uploadImageToSupabase = async (file: File) => {
 
 export const useCommunityReviews = () => {
   const [reviews, setReviews] = useState<CommunityReview[]>(() => getStoredReviews());
+  const [pendingReviewsRemote, setPendingReviewsRemote] = useState<CommunityReview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -163,9 +170,7 @@ export const useCommunityReviews = () => {
       return;
     }
 
-    let active = true;
-
-    const loadReviews = async () => {
+    const loadApprovedReviews = async () => {
       setIsLoading(true);
 
       const { data, error } = await supabase
@@ -173,25 +178,17 @@ export const useCommunityReviews = () => {
         .select("id, place, category, message, author_name, is_anonymous, image_url, status, created_at")
         .order("created_at", { ascending: false });
 
-      if (!active) {
-        return;
+      if (!error && data) {
+        const mapped = (data as DbReviewRow[])
+          .map(mapDbReviewToCommunityReview)
+          .filter((review) => review.status === "approved");
+        setReviews(mapped);
       }
 
-      if (error || !data) {
-        setIsLoading(false);
-        return;
-      }
-
-      const mapped = (data as DbReviewRow[]).map(mapDbReviewToCommunityReview);
-      setReviews(mapped);
       setIsLoading(false);
     };
 
-    void loadReviews();
-
-    return () => {
-      active = false;
-    };
+    void loadApprovedReviews();
   }, []);
 
   useEffect(() => {
@@ -269,27 +266,68 @@ export const useCommunityReviews = () => {
     [reviews]
   );
 
-  const pendingReviews = useMemo(
+  const pendingReviewsLocal = useMemo(
     () => reviews.filter((review) => review.status === "pending"),
     [reviews]
   );
 
-  const updateReviewStatus = async (reviewId: string, status: ReviewStatus) => {
+  const pendingReviews = isSupabaseConfigured ? pendingReviewsRemote : pendingReviewsLocal;
+
+  const unlockModeration = async (moderatorCode: string) => {
+    const normalizedCode = moderatorCode.trim();
+
+    if (!normalizedCode) {
+      return false;
+    }
+
     if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase
-        .from("community_reviews")
-        .update({ status })
-        .eq("id", reviewId)
-        .select("id, place, category, message, author_name, is_anonymous, image_url, status, created_at")
-        .single();
+      const { data, error } = await supabase.rpc("get_pending_reviews", {
+        moderator_code: normalizedCode,
+      });
+
+      if (error || !data) {
+        return false;
+      }
+
+      const mapped = (data as DbReviewRow[]).map(mapDbReviewToCommunityReview);
+      setPendingReviewsRemote(mapped);
+      return true;
+    }
+
+    return true;
+  };
+
+  const updateReviewStatus = async (
+    reviewId: string,
+    status: ReviewStatus,
+    moderatorCode?: string
+  ) => {
+    if (isSupabaseConfigured && supabase) {
+      if (!moderatorCode?.trim()) {
+        return null;
+      }
+
+      const { data, error } = await supabase.rpc("moderate_review", {
+        review_id: reviewId,
+        new_status: status,
+        moderator_code: moderatorCode.trim(),
+      } as ModerateReviewArgs);
 
       if (!error && data) {
         const mapped = mapDbReviewToCommunityReview(data as DbReviewRow);
-        setReviews((current) =>
-          current.map((review) => (review.id === reviewId ? mapped : review))
-        );
+        setPendingReviewsRemote((current) => current.filter((review) => review.id !== reviewId));
+
+        if (mapped.status === "approved") {
+          setReviews((current) => {
+            const withoutExisting = current.filter((review) => review.id !== mapped.id);
+            return [mapped, ...withoutExisting];
+          });
+        }
+
         return mapped;
       }
+
+      return null;
     }
 
     setReviews((current) =>
@@ -301,11 +339,11 @@ export const useCommunityReviews = () => {
     return null;
   };
 
-  const approveReview = async (reviewId: string) =>
-    updateReviewStatus(reviewId, "approved");
+  const approveReview = async (reviewId: string, moderatorCode?: string) =>
+    updateReviewStatus(reviewId, "approved", moderatorCode);
 
-  const rejectReview = async (reviewId: string) =>
-    updateReviewStatus(reviewId, "rejected");
+  const rejectReview = async (reviewId: string, moderatorCode?: string) =>
+    updateReviewStatus(reviewId, "rejected", moderatorCode);
 
   return {
     reviews,
@@ -314,6 +352,7 @@ export const useCommunityReviews = () => {
     isLoading,
     isRemoteEnabled: isSupabaseConfigured,
     addReview,
+    unlockModeration,
     approveReview,
     rejectReview,
     getReviewsByCategory,

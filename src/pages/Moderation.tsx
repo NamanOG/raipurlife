@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCommunityReviews } from "@/hooks/useCommunityReviews";
@@ -7,27 +8,56 @@ import SmartImage from "@/components/SmartImage";
 const Moderation = () => {
   const requiredCode = import.meta.env.VITE_MODERATOR_CODE;
   const [accessCode, setAccessCode] = useState("");
-  const [unlocked, setUnlocked] = useState(!requiredCode);
+  const [unlocked, setUnlocked] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
-  const { pendingReviews, approveReview, rejectReview } = useCommunityReviews();
+  const [unlockError, setUnlockError] = useState("");
+  const { pendingReviews, unlockModeration, approveReview, rejectReview } = useCommunityReviews();
 
   const onApprove = async (reviewId: string) => {
     setBusyId(reviewId);
-    await approveReview(reviewId);
+    await approveReview(reviewId, accessCode);
     setBusyId(null);
   };
 
   const onReject = async (reviewId: string) => {
     setBusyId(reviewId);
-    await rejectReview(reviewId);
+    await rejectReview(reviewId, accessCode);
     setBusyId(null);
   };
 
-  const onUnlock = () => {
-    if (!requiredCode || accessCode === requiredCode) {
+  const onUnlock = async () => {
+    setUnlockError("");
+    const ok = await unlockModeration(accessCode);
+    if (ok) {
       setUnlocked(true);
+    } else {
+      setUnlockError("Access denied. Please check moderator code.");
     }
   };
+
+  if (!requiredCode?.trim()) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <section className="px-4 py-16">
+          <div className="container mx-auto max-w-2xl glass border border-border/70 p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Unavailable</p>
+            <h1 className="mt-2 text-3xl font-bold">Moderator panel is disabled</h1>
+            <p className="mt-3 text-sm text-muted-foreground">
+              This route is hidden in production unless a moderator code is configured.
+            </p>
+            <Link
+              to="/"
+              className="mt-5 inline-flex h-11 items-center border border-foreground bg-foreground px-5 text-xs font-semibold uppercase tracking-wide text-background"
+            >
+              Back to Home
+            </Link>
+          </div>
+        </section>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,12 +79,15 @@ const Moderation = () => {
                 placeholder="Moderator code"
               />
               <button
-                onClick={onUnlock}
+                onClick={() => void onUnlock()}
                 className="h-11 border border-foreground bg-foreground px-5 text-xs font-semibold uppercase tracking-wide text-background"
               >
                 Unlock
               </button>
             </div>
+            {unlockError && (
+              <p className="mt-3 text-sm text-destructive">{unlockError}</p>
+            )}
           </div>
         </section>
       ) : (

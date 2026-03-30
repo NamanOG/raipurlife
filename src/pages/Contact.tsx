@@ -2,14 +2,59 @@ import { FormEvent, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 const Contact = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setError("");
+    setSubmitted(false);
+    setIsSubmitting(true);
+
+    const payload = {
+      name: name.trim(),
+      email: email.trim(),
+      message: message.trim(),
+      status: "new",
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      setIsSubmitting(false);
+      setError("Please fill all required fields.");
+      return;
+    }
+
+    if (isSupabaseConfigured && supabase) {
+      const { error: insertError } = await supabase
+        .from("contact_messages")
+        .insert(payload);
+
+      if (insertError) {
+        setIsSubmitting(false);
+        setError("Message could not be sent right now. Please try again.");
+        return;
+      }
+    } else {
+      const key = "raipur-contact-messages";
+      const existing = JSON.parse(localStorage.getItem(key) || "[]") as Array<Record<string, string>>;
+      existing.unshift({ ...payload, createdAt: new Date().toISOString() });
+      localStorage.setItem(key, JSON.stringify(existing));
+    }
+
     setSubmitted(true);
+    setName("");
+    setEmail("");
+    setMessage("");
+    setIsSubmitting(false);
   };
 
   return (
@@ -46,25 +91,46 @@ const Contact = () => {
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <label className="grid gap-2 text-sm font-medium">
                 Name
-                <input type="text" required placeholder="Your Name" className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary" />
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  placeholder="Your Name"
+                  className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                />
               </label>
               <label className="grid gap-2 text-sm font-medium">
                 Email
-                <input type="email" required placeholder="Your Email" className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary" />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Your Email"
+                  className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                />
               </label>
             </div>
             <label className="mt-4 grid gap-2 text-sm font-medium">
               Message
               <textarea
                 required
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
                 placeholder="Share your suggestion, review idea, or correction"
                 className="min-h-36 border border-border bg-background px-3 py-2 text-foreground outline-none focus:border-primary"
               />
             </label>
-            <button type="submit" className="mt-6 h-11 border border-foreground bg-foreground px-6 text-sm font-semibold uppercase tracking-wide text-background transition-colors hover:bg-foreground/90">
-              Send message
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="mt-6 h-11 border border-foreground bg-foreground px-6 text-sm font-semibold uppercase tracking-wide text-background transition-colors hover:bg-foreground/90 disabled:opacity-60"
+            >
+              {isSubmitting ? "Sending..." : "Send message"}
             </button>
             {submitted && <p className="mt-3 text-sm text-accent">Thanks. We received your message.</p>}
+            {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
           </form>
 
           <aside className="glass border border-border/70 p-6 md:p-8">

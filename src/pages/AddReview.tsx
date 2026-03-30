@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCommunityReviews } from "@/hooks/useCommunityReviews";
@@ -208,7 +207,7 @@ const AddReview = () => {
               )}
 
               <p className="text-xs text-muted-foreground">
-                Moderator access: <Link className="underline" to="/moderation">Open Moderation Panel</Link>
+                Every new submission is reviewed before it appears publicly.
               </p>
             </div>
           </form>

@@ -12,46 +12,143 @@ create table if not exists public.community_reviews (
   created_at timestamptz not null default now()
 );
 
-alter table public.community_reviews enable row level security;
+create table if not exists public.contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  message text not null,
+  status text not null default 'new' check (status in ('new', 'in_progress', 'resolved', 'closed')),
+  created_at timestamptz not null default now()
+);
 
-create policy if not exists "Public can read reviews"
+create table if not exists public.moderation_settings (
+  id boolean primary key default true,
+  moderator_code text not null,
+  is_active boolean not null default true,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.community_reviews enable row level security;
+alter table public.contact_messages enable row level security;
+
+drop policy if exists "Public can read reviews" on public.community_reviews;
+drop policy if exists "Public can insert reviews" on public.community_reviews;
+drop policy if exists "Public can update review status" on public.community_reviews;
+
+create policy "Public can read approved reviews"
 on public.community_reviews
 for select
 to anon, authenticated
-using (true);
+using (status = 'approved');
 
-create policy if not exists "Public can insert reviews"
+create policy "Public can insert pending reviews"
 on public.community_reviews
+for insert
+to anon, authenticated
+with check (status = 'pending');
+
+drop policy if exists "Public can insert contact messages" on public.contact_messages;
+create policy "Public can insert contact messages"
+on public.contact_messages
 for insert
 to anon, authenticated
 with check (true);
 
-create policy if not exists "Public can update review status"
-on public.community_reviews
-for update
-to anon, authenticated
-using (true)
-with check (true);
+drop policy if exists "Public can read contact messages" on public.contact_messages;
+drop policy if exists "Public can update contact messages" on public.contact_messages;
+drop policy if exists "Public can delete contact messages" on public.contact_messages;
+
+create or replace function public.get_pending_reviews(moderator_code text)
+returns setof public.community_reviews
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not exists (
+    select 1
+    from public.moderation_settings
+    where is_active = true
+      and moderation_settings.moderator_code = get_pending_reviews.moderator_code
+  ) then
+    raise exception 'invalid_moderator_code';
+  end if;
+
+  return query
+  select *
+  from public.community_reviews
+  where status = 'pending'
+  order by created_at desc;
+end;
+$$;
+
+create or replace function public.moderate_review(
+  review_id uuid,
+  new_status text,
+  moderator_code text
+)
+returns public.community_reviews
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  updated_review public.community_reviews;
+begin
+  if new_status not in ('approved', 'rejected') then
+    raise exception 'invalid_status';
+  end if;
+
+  if not exists (
+    select 1
+    from public.moderation_settings
+    where is_active = true
+      and moderation_settings.moderator_code = moderate_review.moderator_code
+  ) then
+    raise exception 'invalid_moderator_code';
+  end if;
+
+  update public.community_reviews
+  set status = new_status
+  where id = review_id
+  returning * into updated_review;
+
+  if updated_review.id is null then
+    raise exception 'review_not_found';
+  end if;
+
+  return updated_review;
+end;
+$$;
+
+grant execute on function public.get_pending_reviews(text) to anon, authenticated;
+grant execute on function public.moderate_review(uuid, text, text) to anon, authenticated;
 
 insert into public.community_reviews (place, category, message, author_name, is_anonymous, image_url, status)
 values
-  ('Nukkad Chai', 'food', 'Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.', 'Naman', false, 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'approved'),
-  ('Jungle Safari, Barnawapara', 'tourism', 'Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.', 'Naini', false, 'https://images.unsplash.com/photo-1549366021-9f761d040a94?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'approved'),
-  ('Ambuja City Mall', 'shopping', 'Wide range of local and international brands, clean spaces, and enough food options for full family outings.', 'Manoj', false, 'https://images.unsplash.com/photo-1555529902-5261145633bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'approved'),
-  ('Raipur Carnival', 'events', 'The city vibe was electric, performances were great, and food stalls had lots of options.', 'Anant', false, 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'approved')
+  ('Nukkad Chai', 'food', 'Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.', 'Naman', false, '/places/urban.png', 'approved'),
+  ('Jungle Safari, Barnawapara', 'tourism', 'Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.', 'Naini', false, '/places/barnawapara.jpg', 'approved'),
+  ('Ambuja City Mall', 'shopping', 'Wide range of local and international brands, clean spaces, and enough food options for full family outings.', 'Manoj', false, '/places/zora.jpg', 'approved'),
+  ('Raipur Carnival', 'events', 'The city vibe was electric, performances were great, and food stalls had lots of options.', 'Anant', false, '/hero-bg.png', 'approved')
 on conflict do nothing;
+
+insert into public.moderation_settings (id, moderator_code, is_active)
+values (true, 'change-this-moderator-code', true)
+on conflict (id) do nothing;
 
 insert into storage.buckets (id, name, public)
 values ('review-images', 'review-images', true)
 on conflict (id) do nothing;
 
-create policy if not exists "Public can upload review images"
+drop policy if exists "Public can upload review images" on storage.objects;
+create policy "Public can upload review images"
 on storage.objects
 for insert
 to anon, authenticated
-with check (bucket_id = 'review-images');
+with check (bucket_id = 'review-images' and name like 'community/%');
 
-create policy if not exists "Public can view review images"
+drop policy if exists "Public can view review images" on storage.objects;
+create policy "Public can view review images"
 on storage.objects
 for select
 to anon, authenticated

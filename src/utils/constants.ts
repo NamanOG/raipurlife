@@ -6,7 +6,6 @@ export const NAV_LINKS = [
   { href: "/shopping", label: "Shopping" },
   { href: "/gallery", label: "Gallery" },
   { href: "/add-review", label: "Add Review" },
-  { href: "/moderation", label: "Moderation" },
   { href: "/plan-trip", label: "Plan Trip" },
   { href: "/contact", label: "Contact" },
 ];

@@ -20,6 +20,7 @@ const AddReview = lazy(() => import("./pages/AddReview"));
 const Moderation = lazy(() => import("./pages/Moderation"));
 
 const queryClient = new QueryClient();
+const moderationEnabled = Boolean(import.meta.env.VITE_MODERATOR_CODE?.trim());
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -46,7 +47,7 @@ const App = () => (
               <Route path="/plan-trip" element={<PlanTrip />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/add-review" element={<AddReview />} />
-              <Route path="/moderation" element={<Moderation />} />
+              <Route path="/moderation" element={moderationEnabled ? <Moderation /> : <NotFound />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

@@ -1,45 +1,43 @@
-# Supabase Setup for Community Reviews
+# Supabase Setup for Reviews and Contact Flow
 
-## 1. Create project
-- Create a new project on Supabase.
+## 1. Create Supabase project
+- Create a project on Supabase.
 - Open SQL Editor.
 
-## 2. Run schema
-- Copy and run the SQL from `supabase/schema.sql`.
-- This creates:
-  - `community_reviews` table
-  - moderation status (`pending` / `approved` / `rejected`)
-  - public read + insert + status update policies
-  - `review-images` storage bucket
-  - image upload + read policies
+## 2. Apply schema
+- Run `supabase/schema.sql` in SQL Editor.
+- This sets up:
+  - `community_reviews` table with strict RLS
+  - `contact_messages` table for contact form submissions
+  - `moderation_settings` table for moderator code check
+  - RPC functions: `get_pending_reviews` and `moderate_review`
+  - `review-images` bucket + scoped storage policies
 
-## 3. Add env keys
+## 3. Set moderator code in database
+- After running the schema, update the default placeholder code:
+
+```sql
+update public.moderation_settings
+set moderator_code = 'your-strong-moderator-code',
+    updated_at = now()
+where id = true;
+```
+
+## 4. Configure frontend env
 - Copy `.env.example` to `.env`.
-- Fill:
+- Set:
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_ANON_KEY`
+- Optional UI route toggle for moderation page:
+  - `VITE_MODERATOR_CODE` (only used to show/hide route, not for security)
 
-## 4. Restart app
-- Restart dev server after editing `.env`.
-
-## 5. Verify flow
-- Open `/add-review`
-- Submit with category and optional image
-- Approve in `/moderation`
-- Confirm approved review appears in:
-  - Home community cards
-  - Category pages (`/food`, `/events`, `/shopping`, `/tourism`)
+## 5. Verify end-to-end behavior
+- Submit a review from `/add-review` and verify it lands as `pending`.
+- Verify pending reviews do not show in public lists.
+- Open `/moderation`, unlock with moderator code, approve/reject.
+- Verify approved reviews become public.
+- Submit contact form and verify row appears in `contact_messages`.
 
 ## Notes
-- If Supabase env values are missing, app falls back to local storage
-  so development still works.
-- Current moderation panel is frontend-driven and intended for MVP use.
-- For production-hard moderation, restrict update policy
-  to authenticated admin roles.
-
-## Optional free live events
-- Create a free Ticketmaster API key.
-- Add in `.env`:
-  - `VITE_TICKETMASTER_API_KEY`
-  - `VITE_EVENTS_CITY` (defaults to `Raipur`)
-- Events page will automatically switch to live feed when key is present.
+- If Supabase env values are missing, app falls back to local storage behavior for development.
+- Security boundary is now database-side policy + RPC code validation, not frontend route hiding.
