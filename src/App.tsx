@@ -30,7 +30,7 @@ const App = () => (
           <Suspense
             fallback={
               <div className="grid min-h-[50vh] place-items-center text-muted-foreground">
-                Loading page...
+                Loading Raipur...
               </div>
             }
           >
