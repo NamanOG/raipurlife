@@ -1,12 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SmartImage from "@/components/SmartImage";
 import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { ContactMessage, ContactMessageStatus, CommunityReview, ReviewStatus } from "@/types/community";
-
-const ADMIN_ID = "admin";
-const ADMIN_PASSWORD = "admin184";
 
 const reviewViews: Array<{ key: ReviewStatus; label: string }> = [
   { key: "pending", label: "Pending" },
@@ -22,9 +19,6 @@ const messageStatusOptions: ContactMessageStatus[] = [
 ];
 
 const Moderation = () => {
-  const requiredCode = import.meta.env.VITE_MODERATOR_CODE;
-  const [adminId, setAdminId] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
   const [accessCode, setAccessCode] = useState("");
   const [unlocked, setUnlocked] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -48,7 +42,7 @@ const Moderation = () => {
     updateContactMessageStatus,
   } = useCommunityReviews();
 
-  const refreshAdminData = async (moderatorCode: string) => {
+  const refreshAdminData = useCallback(async (moderatorCode: string) => {
     setPanelError("");
     setIsRefreshing(true);
 
@@ -71,7 +65,7 @@ const Moderation = () => {
     setContactMessages(messages);
     setIsRefreshing(false);
     return true;
-  };
+  }, [loadContactMessages, loadReviewsForModeration]);
 
   useEffect(() => {
     if (!unlocked) {
@@ -79,18 +73,19 @@ const Moderation = () => {
     }
 
     void refreshAdminData(accessCode);
-  }, [unlocked]);
+  }, [accessCode, refreshAdminData, unlocked]);
 
   const onUnlock = async () => {
     setUnlockError("");
-    if (adminId.trim() !== ADMIN_ID || adminPassword !== ADMIN_PASSWORD) {
-      setUnlockError("Access denied. Check admin ID and password.");
+
+    if (isRemoteEnabled && !accessCode.trim()) {
+      setUnlockError("Moderator code is required.");
       return;
     }
 
-    const ok = requiredCode?.trim() ? await unlockModeration(accessCode) : true;
+    const ok = await unlockModeration(accessCode);
     if (!ok) {
-      setUnlockError("Access denied. Please check moderator code.");
+      setUnlockError(isRemoteEnabled ? "Access denied. Please check moderator code." : "Admin tools are only available in local development fallback mode.");
       return;
     }
 
@@ -215,24 +210,10 @@ const Moderation = () => {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Restricted</p>
             <h1 className="mt-2 text-3xl font-bold">Admin access</h1>
             <p className="mt-3 text-sm text-muted-foreground">
-              Enter the admin login before opening reviews and message controls.
+              Enter the moderator code to unlock review and inbox controls.
             </p>
             <div className="mt-5 grid gap-3">
-              <input
-                type="text"
-                value={adminId}
-                onChange={(event) => setAdminId(event.target.value)}
-                className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
-                placeholder="Admin ID"
-              />
-              <input
-                type="password"
-                value={adminPassword}
-                onChange={(event) => setAdminPassword(event.target.value)}
-                className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
-                placeholder="Password"
-              />
-              {requiredCode?.trim() && (
+              {isRemoteEnabled ? (
                 <input
                   type="password"
                   value={accessCode}
@@ -240,12 +221,16 @@ const Moderation = () => {
                   className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
                   placeholder="Moderator code"
                 />
+              ) : (
+                <p className="border border-border/70 bg-muted/30 p-3 text-sm text-muted-foreground">
+                  Supabase is not connected. In development, local fallback data can be opened without a code.
+                </p>
               )}
               <button
                 onClick={() => void onUnlock()}
                 className="h-11 border border-foreground bg-foreground px-5 text-xs font-semibold uppercase tracking-wide text-background"
               >
-                Unlock admin
+                Unlock panel
               </button>
             </div>
             {unlockError && <p className="mt-3 text-sm text-destructive">{unlockError}</p>}
