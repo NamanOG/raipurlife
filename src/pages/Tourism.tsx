@@ -38,7 +38,7 @@ const curatedPlaces = [
     name: "Magneto The Mall",
     category: "Shopping",
     description: "Premier destination for brands, dining, and indoor entertainment zones.",
-    image: "/places/urban.png",
+    image: "/places/zora.jpg",
     rating: 4.3,
     location: "GE Road",
     hours: "11:00 AM - 10:00 PM",
@@ -61,24 +61,24 @@ const Tourism = () => {
         <div className="absolute inset-0 -z-10 hero-atmo" />
         <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="hero-copy-panel max-w-3xl">
-            <p className="inline-flex border border-border/70 bg-card/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary backdrop-blur-sm">Tourism</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Tourism</p>
             <h1 className="mt-3 text-4xl font-bold md:text-6xl">Explore Raipur destinations</h1>
             <p className="mt-4 max-w-2xl text-muted-foreground">
               Discover cultural landmarks, lakes, and iconic places that define the city experience.
             </p>
-            <div className="mt-6 flex flex-wrap gap-2 text-xs">
-              <span className="border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground backdrop-blur-sm">Top landmarks</span>
-              <span className="border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground backdrop-blur-sm">Family friendly</span>
-              <span className="border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground backdrop-blur-sm">Weekend spots</span>
-            </div>
             <p className="mt-3 text-sm text-muted-foreground">
               {source === "osm" ? "Live places source: OpenStreetMap" : "Showing curated places list"}
               {isLoading ? " • Syncing latest places..." : ""}
             </p>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+              <p>Landmarks and quieter green spaces.</p>
+              <p>Works well for family routes.</p>
+              <p>Best explored between October and February.</p>
+            </div>
           </div>
 
           <article className="card-tint overflow-hidden shadow-xl">
-            <img src="/places/sarovar.jpg" alt="Vivekananda Sarovar" className="h-44 w-full object-cover" />
+            <SmartImage src="/places/sarovar.jpg" alt="Vivekananda Sarovar" className="h-44 w-full object-cover" />
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Featured right now</p>
               <p className="mt-2 text-xl font-semibold">Sunset Walk at Vivekananda Sarovar</p>
@@ -136,6 +136,9 @@ const Tourism = () => {
                     <Clock className="h-4 w-4 text-primary" />
                     {place.hours || "Check locally"}
                   </div>
+                </div>
+                <div className="mt-4 border-t border-border/70 pt-3 text-xs text-muted-foreground">
+                  {place.reviewsCount?.toLocaleString("en-IN")} reviews • {place.reviewerName} • {place.reviewTimeAgo}
                 </div>
               </div>
             </article>

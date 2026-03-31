@@ -4,13 +4,14 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { useAutoPlaces } from "@/hooks/useAutoPlaces";
 import SmartImage from "@/components/SmartImage";
+import { Star } from "lucide-react";
 
 const curatedMarkets = [
   {
     name: "Pandri Market",
     category: "Market",
     description: "Raipur's biggest shopping belt for clothes, accessories, and local finds.",
-    image: "/places/zora.jpg",
+    image: "/places/morning_raipur.jpg",
     location: "Pandri, Raipur",
     rating: 4.5,
   },
@@ -18,17 +19,9 @@ const curatedMarkets = [
     name: "Ambuja City Center Mall",
     category: "Mall",
     description: "A modern mall setup with popular brands, food court, and entertainment.",
-    image: "/places/urban.png",
+    image: "/places/zora.jpg",
     location: "GE Road",
     rating: 4.4,
-  },
-  {
-    name: "Gol Bazaar",
-    category: "Bazaar",
-    description: "Traditional market for spices, groceries, and household shopping.",
-    image: "/hero-bg.png",
-    location: "Gol Bazar, Raipur",
-    rating: 4.3,
   },
   {
     name: "Zora Mall",
@@ -50,8 +43,9 @@ const Shopping = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <section className="relative overflow-hidden px-4 py-20">
-        <div className="absolute inset-0 -z-10 bg-[url('/places/zora.jpg')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 -z-10 bg-[url('/places/morning_raipur.jpg')] bg-cover bg-center opacity-20" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/90 to-background/75" />
+        <div className="absolute inset-0 -z-10 hero-atmo" />
         <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="hero-copy-panel max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Shopping Guide</p>
@@ -63,10 +57,15 @@ const Shopping = () => {
               {source === "osm" ? "Live shopping places source: OpenStreetMap" : "Showing curated market list"}
               {isLoading ? " • Syncing latest places..." : ""}
             </p>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+              <p>Best for mixed street and mall shopping.</p>
+              <p>Most routes work well in the evening.</p>
+              <p>Pair market runs with a food stop nearby.</p>
+            </div>
           </div>
 
           <article className="card-tint overflow-hidden shadow-xl">
-            <img src="/places/zora.jpg" alt="Raipur shopping district" className="h-44 w-full object-cover" />
+            <SmartImage src="/places/morning_raipur.jpg" alt="Raipur shopping district" className="h-44 w-full object-cover" />
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Shopping spotlight</p>
               <p className="mt-2 text-xl font-semibold">Pandri to mall route</p>
@@ -86,9 +85,21 @@ const Shopping = () => {
                 fallbackQuery={market.name}
                 className="h-44 w-full rounded-xl object-cover"
               />
-              <h2 className="mt-4 text-2xl font-semibold">{market.name}</h2>
+              <div className="mt-4 flex items-start justify-between gap-3">
+                <h2 className="text-2xl font-semibold">{market.name}</h2>
+                <div className="inline-flex items-center gap-1 text-sm font-semibold">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  {market.rating.toFixed(1)}
+                </div>
+              </div>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary">{market.category}</p>
               <p className="mt-2 text-sm text-muted-foreground">{market.location}</p>
               <p className="mt-3 text-muted-foreground">{market.description}</p>
+              <div className="mt-4 border-t border-border/70 pt-3 text-xs text-muted-foreground">
+                <p>
+                  {market.reviewsCount?.toLocaleString("en-IN")} reviews • {market.reviewerName} • {market.reviewTimeAgo}
+                </p>
+              </div>
             </article>
           ))}
         </div>

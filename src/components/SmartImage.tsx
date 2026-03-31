@@ -1,4 +1,5 @@
 import { ImgHTMLAttributes, useEffect, useMemo, useState } from "react";
+import { resolvePlaceImage } from "@/utils/placeImages";
 
 type SmartImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src?: string;
@@ -6,9 +7,6 @@ type SmartImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
 };
 
 const HERO_FALLBACK = "/hero-bg.png";
-
-const makeWebFallbackUrl = (query: string) =>
-  `https://loremflickr.com/1200/800/${encodeURIComponent(query)}`;
 
 const SmartImage = ({
   src,
@@ -24,9 +22,9 @@ const SmartImage = ({
     setCurrentSrc(initial);
   }, [initial]);
 
-  const webFallback = useMemo(() => {
+  const localFallback = useMemo(() => {
     const query = (fallbackQuery || alt || "raipur").trim();
-    return makeWebFallbackUrl(`${query},raipur`);
+    return resolvePlaceImage({ name: query });
   }, [alt, fallbackQuery]);
 
   return (
@@ -34,9 +32,11 @@ const SmartImage = ({
       {...props}
       alt={alt}
       src={currentSrc}
+      loading={props.loading ?? "lazy"}
+      decoding={props.decoding ?? "async"}
       onError={(event) => {
-        if (currentSrc !== webFallback) {
-          setCurrentSrc(webFallback);
+        if (currentSrc !== localFallback) {
+          setCurrentSrc(localFallback);
         } else if (currentSrc !== HERO_FALLBACK) {
           setCurrentSrc(HERO_FALLBACK);
         }

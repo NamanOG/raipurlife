@@ -24,11 +24,20 @@ const Header = ({ overlay = false }: HeaderProps) => {
 
   const headerClass = overlay
     ? "absolute inset-x-0 top-0 z-50 bg-transparent"
-    : "sticky top-0 z-50 border-b border-slate-800/55 bg-slate-950/46 backdrop-blur-xl";
+    : "sticky top-0 z-50 border-b border-border/80 bg-card/90 backdrop-blur-xl dark:border-slate-800/55 dark:bg-slate-950/52";
 
   const frameClass = overlay
-    ? "flex items-center justify-between gap-4 rounded-2xl border border-slate-700/55 bg-slate-950/44 px-3 py-2 shadow-[0_12px_28px_hsl(217_44%_6%_/_0.28)] backdrop-blur-xl"
-    : "flex items-center justify-between gap-4 rounded-2xl border border-slate-700/55 bg-slate-950/52 px-3 py-2 shadow-[0_10px_24px_hsl(213_34%_8%_/_0.24)] backdrop-blur-xl";
+    ? "flex items-center justify-between gap-4 rounded-[1.4rem] border border-slate-700/55 bg-slate-950/42 px-3 py-2 shadow-[0_14px_30px_hsl(217_30%_6%_/_0.26)] backdrop-blur-xl"
+    : "flex items-center justify-between gap-4 rounded-[1.4rem] border border-border/75 bg-background/84 px-3 py-2 shadow-[0_12px_28px_hsl(220_18%_10%_/_0.1)] backdrop-blur-xl dark:border-slate-700/55 dark:bg-slate-950/56 dark:shadow-[0_14px_28px_hsl(213_24%_6%_/_0.24)]";
+
+  const brandTitleClass = overlay ? "text-lg font-bold leading-none text-white" : "text-lg font-bold leading-none text-foreground";
+  const brandSubtitleClass = overlay ? "text-xs text-slate-200/85" : "text-xs text-muted-foreground";
+  const navIdleClass = overlay
+    ? "rounded-lg !text-white hover:bg-white/8 hover:!text-white"
+    : "rounded-lg text-foreground/82 hover:bg-muted/70 hover:text-foreground";
+  const actionButtonClass = overlay
+    ? "rounded-lg border border-slate-600/55 bg-white/8 text-white hover:bg-white/14"
+    : "rounded-lg border border-border bg-background/92 text-foreground hover:bg-muted";
 
   return (
     <header className={headerClass}>
@@ -39,8 +48,8 @@ const Header = ({ overlay = false }: HeaderProps) => {
               <img src="/rpr_logo.png" alt="Raipur.life logo" className="h-full w-full object-cover" />
             </div>
             <div>
-              <p className="text-lg font-bold leading-none text-white">Raipur.life</p>
-              <p className="text-xs text-slate-200/85">City stories, food, and travel</p>
+              <p className={brandTitleClass}>Raipur.life</p>
+              <p className={brandSubtitleClass}>City stories, food, and travel</p>
             </div>
           </Link>
 
@@ -50,10 +59,12 @@ const Header = ({ overlay = false }: HeaderProps) => {
                 key={link.href}
                 to={link.href}
                 className={({ isActive }) =>
-                  `px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 ${
+                  `relative px-3 py-2 text-sm font-semibold tracking-wide transition-[background-color,color,transform,box-shadow] duration-300 motion-safe:hover:-translate-y-0.5 ${
                     isActive
-                      ? "rounded-xl bg-gradient-to-r from-secondary/90 to-primary/90 text-white shadow-md"
-                      : "rounded-xl text-white hover:bg-white/10 hover:text-white"
+                      ? overlay
+                        ? "rounded-lg bg-white/8 !text-white shadow-sm after:absolute after:bottom-1 after:left-3 after:right-3 after:h-px after:bg-gradient-to-r after:from-secondary after:to-primary"
+                        : "rounded-lg bg-muted/70 text-foreground shadow-sm after:absolute after:bottom-1 after:left-3 after:right-3 after:h-px after:bg-gradient-to-r after:from-secondary after:to-primary"
+                      : navIdleClass
                   }`
                 }
               >
@@ -63,20 +74,20 @@ const Header = ({ overlay = false }: HeaderProps) => {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button className="hidden rounded-xl border border-slate-600/55 bg-white/8 px-3 text-white hover:bg-white/14 md:inline-flex">
+            <Button className={`hidden px-3 md:inline-flex ${actionButtonClass}`}>
               <Heart className="mr-2 h-4 w-4" />
               Saved
             </Button>
             <Button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-xl border border-slate-600/55 bg-white/8 text-white hover:bg-white/14"
+              className={actionButtonClass}
               aria-label="Toggle theme"
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button className="rounded-xl border border-slate-600/55 bg-white/8 text-white hover:bg-white/14 lg:hidden" aria-label="Open menu">
+                <Button className={`lg:hidden ${actionButtonClass}`} aria-label="Open menu">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
@@ -96,9 +107,9 @@ const Header = ({ overlay = false }: HeaderProps) => {
                       <NavLink
                         to={link.href}
                         className={({ isActive }) =>
-                          `rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
+                          `rounded-lg px-4 py-3 text-sm font-semibold transition-all ${
                             isActive
-                              ? "bg-foreground text-background"
+                              ? "border border-border bg-muted text-foreground"
                               : "border border-border bg-background text-foreground hover:bg-muted"
                           }`
                         }

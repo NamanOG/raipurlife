@@ -46,10 +46,10 @@ const events = [
 ];
 
 const eventImageByCategory: Record<string, string> = {
-  Festival: "/places/Traditional.png",
+  Festival: "/places/morning_raipur.jpg",
   Cultural: "/places/marine_drive.jpg",
   Food: "/places/nukkad.jpg",
-  Music: "/places/urban.png",
+  Music: "/places/morning_raipur.jpg",
   Live: "/places/marine_drive.jpg",
 };
 
@@ -76,25 +76,30 @@ const Events = () => {
       <Header />
 
       <section className="relative overflow-hidden px-4 py-16">
-        <div className="absolute inset-0 -z-10 bg-[url('/places/Traditional.png')] bg-cover bg-center opacity-30" />
+        <div className="absolute inset-0 -z-10 bg-[url('/places/morning_raipur.jpg')] bg-cover bg-center opacity-24" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/90 to-background/65" />
         <div className="absolute inset-0 -z-10 grid-fabric opacity-25" />
         <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="hero-copy-panel max-w-3xl">
-            <p className="inline-flex items-center border border-border/70 bg-card/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary backdrop-blur-sm">Calendar</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Calendar</p>
             <h1 className="mt-2 text-4xl font-bold md:text-5xl">Events and festivals</h1>
             <p className="mt-4 max-w-2xl text-muted-foreground">
               Keep track of cultural programs, food fests, and city-wide celebrations across the year.
             </p>
-            <div className="mt-4 inline-flex max-w-full items-center border border-border/70 bg-card/70 px-4 py-2 text-sm text-muted-foreground backdrop-blur-sm">
+            <div className="mt-4 text-sm text-muted-foreground">
               {hasLiveEvents && source === "ticketmaster" && "Showing live events fetched from Ticketmaster."}
               {hasLiveEvents && source === "public-holiday" && "Showing free live civic calendar (public holiday feed)."}
               {!hasLiveEvents && "Showing curated events. Add Ticketmaster key for hyper-local live feed."}
             </div>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+              <p>Seasonal festivals and civic dates.</p>
+              <p>Curated first, live feeds optional.</p>
+              <p>Useful for planning weekends in advance.</p>
+            </div>
           </div>
 
           <article className="card-tint overflow-hidden shadow-xl">
-            <img src="/places/Traditional.png" alt="Raipur event night" className="h-44 w-full object-cover" />
+            <SmartImage src="/places/morning_raipur.jpg" alt="Raipur event night" className="h-44 w-full object-cover" />
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Featured this week</p>
               <p className="mt-2 text-xl font-semibold">City cultural circuit</p>

@@ -39,5 +39,6 @@ where id = true;
 - Submit contact form and verify row appears in `contact_messages`.
 
 ## Notes
-- If Supabase env values are missing, app falls back to local storage behavior for development.
-- Security boundary is now database-side policy + RPC code validation, not frontend route hiding.
+- Local storage fallback is only available in development when Supabase env values are missing.
+- In production builds without Supabase configured, review submission, moderation, and contact writes are intentionally unavailable.
+- Security boundary is database-side policy + RPC code validation, not frontend route hiding.

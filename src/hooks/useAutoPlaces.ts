@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { resolvePlaceImage } from "@/utils/placeImages";
 
 type AutoCategory = "tourism" | "food" | "shopping";
 
@@ -20,16 +21,38 @@ export interface AutoPlace {
   hours?: string;
   price?: string;
   tags?: string[];
+  reviewerName?: string;
+  reviewTimeAgo?: string;
+  reviewsCount?: number;
 }
 
 const RAIPUR_BBOX = "21.18,81.55,21.32,81.75";
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
-
-const IMAGE_POOL: Record<AutoCategory, string[]> = {
-  tourism: ["/places/sarovar.jpg", "/places/museum.jpeg", "/places/purkhauti.jpg", "/places/barnawapara.jpg"],
-  food: ["/places/nukkad.jpg", "/places/Traditional.png", "/hero-bg.png", "/places/urban.png"],
-  shopping: ["/places/zora.jpg", "/places/urban.png", "/places/Traditional.png", "/hero-bg.png"],
-};
+const GOOGLE_PLACES_API_KEY = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+const PLACE_PHOTO_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const LIVE_PLACES_ENABLED = import.meta.env.VITE_ENABLE_LIVE_PLACES === "true";
+const REVIEWER_NAMES = [
+  "Aarav",
+  "Priya",
+  "Rohan",
+  "Kavya",
+  "Neha",
+  "Yash",
+  "Anjali",
+  "Vikram",
+  "Ishita",
+  "Rahul",
+];
+const TIME_AGO_LABELS = [
+  "29m ago",
+  "1h ago",
+  "3h ago",
+  "7h ago",
+  "12h ago",
+  "1d ago",
+  "2d ago",
+  "4d ago",
+];
 
 const QUERY_BY_CATEGORY: Record<AutoCategory, string> = {
   tourism: `
@@ -81,6 +104,155 @@ const seededRating = (seed: string) => {
   return Number((4.1 + normalized * 0.1).toFixed(1));
 };
 
+const seededHash = (seed: string) => {
+  let hash = 0;
+
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
+  }
+
+  return Math.abs(hash);
+};
+
+const seededIndex = (seed: string, length: number) => {
+  if (length <= 0) {
+    return 0;
+  }
+
+  return seededHash(seed) % length;
+};
+
+const ensureRaipurLocation = (location: string) => {
+  const trimmed = location.trim();
+  if (!trimmed) {
+    return "Raipur, Chhattisgarh";
+  }
+
+  if (/raipur/i.test(trimmed)) {
+    if (/chhattisgarh/i.test(trimmed)) {
+      return trimmed;
+    }
+    return `${trimmed}, Chhattisgarh`;
+  }
+
+  return `${trimmed}, Raipur, Chhattisgarh`;
+};
+
+const makePhotoCacheKey = (name: string) =>
+  `raipur-google-place-photo-v1-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+
+const getCachedPlacePhoto = (name: string) => {
+  try {
+    const raw = localStorage.getItem(makePhotoCacheKey(name));
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw) as { timestamp: number; url: string };
+    if (!parsed.url || Date.now() - parsed.timestamp > PLACE_PHOTO_CACHE_TTL_MS) {
+      localStorage.removeItem(makePhotoCacheKey(name));
+      return null;
+    }
+
+    return parsed.url;
+  } catch {
+    return null;
+  }
+};
+
+const setCachedPlacePhoto = (name: string, url: string) => {
+  try {
+    localStorage.setItem(
+      makePhotoCacheKey(name),
+      JSON.stringify({ timestamp: Date.now(), url })
+    );
+  } catch {
+    // Ignore cache write failures.
+  }
+};
+
+const fetchGooglePlacePhotoUrl = async (name: string, signal?: AbortSignal) => {
+  if (!GOOGLE_PLACES_API_KEY) {
+    return null;
+  }
+
+  const cached = getCachedPlacePhoto(name);
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const response = await fetch("https://places.googleapis.com/v1/places:searchText", {
+      method: "POST",
+      signal,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": GOOGLE_PLACES_API_KEY,
+        "X-Goog-FieldMask": "places.photos",
+      },
+      body: JSON.stringify({
+        textQuery: `${name}, Raipur, Chhattisgarh`,
+        maxResultCount: 1,
+      }),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const json = (await response.json()) as {
+      places?: Array<{ photos?: Array<{ name?: string }> }>;
+    };
+
+    const photoName = json.places?.[0]?.photos?.[0]?.name;
+    if (!photoName) {
+      return null;
+    }
+
+    const mediaUrl = `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=1200&key=${GOOGLE_PLACES_API_KEY}`;
+    setCachedPlacePhoto(name, mediaUrl);
+    return mediaUrl;
+  } catch {
+    return null;
+  }
+};
+
+const attachGooglePlacePhotos = async (
+  places: AutoPlace[],
+  signal?: AbortSignal
+) => {
+  if (!GOOGLE_PLACES_API_KEY || places.length === 0) {
+    return places;
+  }
+
+  const withPhotos = await Promise.all(
+    places.map(async (place) => {
+      const googlePhotoUrl = await fetchGooglePlacePhotoUrl(place.name, signal);
+      return {
+        ...place,
+        image: googlePhotoUrl || place.image,
+      };
+    })
+  );
+
+  return withPhotos;
+};
+
+const withSyntheticReviewMeta = (place: AutoPlace): AutoPlace => {
+  const seed = `${place.name}-${place.category}`;
+
+  return {
+    ...place,
+    rating: place.rating || seededRating(seed),
+    reviewerName: place.reviewerName || REVIEWER_NAMES[seededIndex(seed, REVIEWER_NAMES.length)],
+    reviewTimeAgo: place.reviewTimeAgo || TIME_AGO_LABELS[seededIndex(`${seed}-time`, TIME_AGO_LABELS.length)],
+    reviewsCount: place.reviewsCount || 45 + (seededHash(`${seed}-count`) % 800),
+    location: ensureRaipurLocation(place.location),
+    image: place.image || resolvePlaceImage({ name: place.name, category: place.category, tags: place.tags }),
+  };
+};
+
 const getLocationLabel = (tags: Record<string, string>) => {
   return (
     tags["addr:suburb"] ||
@@ -127,7 +299,7 @@ const buildTags = (category: AutoCategory, tags: Record<string, string>) => {
 const mapElementsToPlaces = (category: AutoCategory, elements: OverpassElement[]) => {
   const unique = new Map<string, AutoPlace>();
 
-  elements.forEach((element, index) => {
+  elements.forEach((element) => {
     const tags = element.tags || {};
     const name = tags.name?.trim();
 
@@ -135,7 +307,11 @@ const mapElementsToPlaces = (category: AutoCategory, elements: OverpassElement[]
       return;
     }
 
-    const image = IMAGE_POOL[category][index % IMAGE_POOL[category].length];
+    const image = resolvePlaceImage({
+      name,
+      category,
+      tags: [tags.tourism, tags.leisure, tags.amenity, tags.shop, tags.cuisine].filter(Boolean) as string[],
+    });
     const location = getLocationLabel(tags);
 
     unique.set(name.toLowerCase(), {
@@ -154,14 +330,22 @@ const mapElementsToPlaces = (category: AutoCategory, elements: OverpassElement[]
   return Array.from(unique.values()).slice(0, 8);
 };
 
-const getCacheKey = (category: AutoCategory) => `raipur-auto-places-${category}-v1`;
+const enrichPlaces = (places: AutoPlace[]) => places.map(withSyntheticReviewMeta);
+
+const getCacheKey = (category: AutoCategory) => `raipur-auto-places-${category}-v2`;
 
 export const useAutoPlaces = (category: AutoCategory, fallback: AutoPlace[]) => {
-  const [places, setPlaces] = useState<AutoPlace[]>(fallback);
+  const [places, setPlaces] = useState<AutoPlace[]>(() => enrichPlaces(fallback));
   const [isLoading, setIsLoading] = useState(false);
   const [source, setSource] = useState<"osm" | "curated">("curated");
 
   useEffect(() => {
+    if (!LIVE_PLACES_ENABLED) {
+      setPlaces(enrichPlaces(fallback));
+      setSource("curated");
+      return;
+    }
+
     const controller = new AbortController();
     const cacheKey = getCacheKey(category);
 
@@ -174,8 +358,14 @@ export const useAutoPlaces = (category: AutoCategory, fallback: AutoPlace[]) => 
         };
 
         if (Date.now() - parsed.timestamp < CACHE_TTL_MS && parsed.places.length > 0) {
-          setPlaces(parsed.places);
+          const enrichedCached = enrichPlaces(parsed.places);
+          setPlaces(enrichedCached);
           setSource("osm");
+          void attachGooglePlacePhotos(enrichedCached, controller.signal).then((withPhotos) => {
+            if (!controller.signal.aborted) {
+              setPlaces(withPhotos);
+            }
+          });
           return () => controller.abort();
         }
       } catch {
@@ -197,15 +387,21 @@ export const useAutoPlaces = (category: AutoCategory, fallback: AutoPlace[]) => 
         const mapped = mapElementsToPlaces(category, json.elements || []);
 
         if (mapped.length > 0) {
-          setPlaces(mapped);
+          const enriched = enrichPlaces(mapped);
+          const withPhotos = await attachGooglePlacePhotos(enriched, controller.signal);
+          setPlaces(withPhotos);
           setSource("osm");
-          localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), places: mapped }));
+          localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), places: withPhotos }));
         } else {
-          setPlaces(fallback);
+          const enrichedFallback = enrichPlaces(fallback);
+          const withPhotos = await attachGooglePlacePhotos(enrichedFallback, controller.signal);
+          setPlaces(withPhotos);
           setSource("curated");
         }
       } catch {
-        setPlaces(fallback);
+        const enrichedFallback = enrichPlaces(fallback);
+        const withPhotos = await attachGooglePlacePhotos(enrichedFallback, controller.signal);
+        setPlaces(withPhotos);
         setSource("curated");
       } finally {
         setIsLoading(false);

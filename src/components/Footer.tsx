@@ -31,7 +31,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer ref={footerRef} className="scroll-reveal border-t border-border/80 bg-card px-4 py-14">
+    <footer ref={footerRef} className="scroll-reveal border-t border-border/80 bg-card/92 px-4 py-14">
       <div className="container mx-auto">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
@@ -48,16 +48,16 @@ const Footer = () => {
               Built to help people discover food, travel spots, shopping, and local experiences across Raipur, Chhattisgarh.
             </p>
             <div className="mt-5 flex items-center gap-2">
-              <a href="https://instagram.com/raipur.life" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Instagram">
+              <a href="https://instagram.com/raipur.life" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Instagram">
                 <Instagram className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Facebook">
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Facebook">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="YouTube">
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="YouTube">
                 <Youtube className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Community Chat">
+              <a href="#" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Community Chat">
                 <MessageCircle className="h-4 w-4" />
               </a>
             </div>
@@ -87,7 +87,7 @@ const Footer = () => {
         <div className="mt-10 border-t border-border/70 pt-5 text-sm text-muted-foreground">
           <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <p>© 2026 Raipur.life. Built for the city, by the city.</p>
-            <p className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3 py-1 text-xs sm:text-sm">
+            <p className="inline-flex items-center gap-2 border border-border/70 bg-background/70 px-3 py-1 text-xs sm:text-sm">
               <Eye className="h-4 w-4 text-primary" />
               <span>Visitors:</span>
               <span className="font-semibold text-foreground">{visits ? visits.toLocaleString("en-IN") : "..."}</span>

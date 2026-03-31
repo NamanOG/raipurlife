@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { supabase, isSupabaseConfigured, shouldUseLocalFallbacks } from "@/lib/supabase";
 import {
   CommunityReview,
   NewCommunityReview,
@@ -17,7 +17,7 @@ const seededReviews: CommunityReview[] = [
     message: "Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.",
     authorName: "Naman",
     isAnonymous: false,
-    image: "/places/urban.png",
+    image: "/places/zora.jpg",
     status: "approved",
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
@@ -176,12 +176,11 @@ export const useCommunityReviews = () => {
       const { data, error } = await supabase
         .from("community_reviews")
         .select("id, place, category, message, author_name, is_anonymous, image_url, status, created_at")
+        .eq("status", "approved")
         .order("created_at", { ascending: false });
 
       if (!error && data) {
-        const mapped = (data as DbReviewRow[])
-          .map(mapDbReviewToCommunityReview)
-          .filter((review) => review.status === "approved");
+        const mapped = (data as DbReviewRow[]).map(mapDbReviewToCommunityReview);
         setReviews(mapped);
       }
 
@@ -209,7 +208,7 @@ export const useCommunityReviews = () => {
     if (newReview.imageFile) {
       if (isSupabaseConfigured && supabase) {
         image = await uploadImageToSupabase(newReview.imageFile);
-      } else {
+      } else if (shouldUseLocalFallbacks) {
         image = await readFileAsDataUrl(newReview.imageFile);
       }
     } else if (newReview.imageUrl?.trim()) {
@@ -238,6 +237,12 @@ export const useCommunityReviews = () => {
         setReviews((current) => [review, ...current]);
         return review;
       }
+
+      throw new Error("Review could not be submitted right now.");
+    }
+
+    if (!shouldUseLocalFallbacks) {
+      throw new Error("Community reviews are temporarily unavailable.");
     }
 
     const review: CommunityReview = {
@@ -271,13 +276,17 @@ export const useCommunityReviews = () => {
     [reviews]
   );
 
-  const pendingReviews = isSupabaseConfigured ? pendingReviewsRemote : pendingReviewsLocal;
+  const pendingReviews = isSupabaseConfigured
+    ? pendingReviewsRemote
+    : shouldUseLocalFallbacks
+      ? pendingReviewsLocal
+      : [];
 
   const unlockModeration = async (moderatorCode: string) => {
     const normalizedCode = moderatorCode.trim();
 
     if (!normalizedCode) {
-      return false;
+      return shouldUseLocalFallbacks;
     }
 
     if (isSupabaseConfigured && supabase) {
@@ -294,7 +303,7 @@ export const useCommunityReviews = () => {
       return true;
     }
 
-    return true;
+    return shouldUseLocalFallbacks;
   };
 
   const updateReviewStatus = async (
@@ -330,11 +339,13 @@ export const useCommunityReviews = () => {
       return null;
     }
 
-    setReviews((current) =>
-      current.map((review) =>
-        review.id === reviewId ? { ...review, status: normalizeStatus(status) } : review
-      )
-    );
+    if (shouldUseLocalFallbacks) {
+      setReviews((current) =>
+        current.map((review) =>
+          review.id === reviewId ? { ...review, status: normalizeStatus(status) } : review
+        )
+      );
+    }
 
     return null;
   };
@@ -351,6 +362,7 @@ export const useCommunityReviews = () => {
     pendingReviews,
     isLoading,
     isRemoteEnabled: isSupabaseConfigured,
+    canUseLocalFallbacks: shouldUseLocalFallbacks,
     addReview,
     unlockModeration,
     approveReview,

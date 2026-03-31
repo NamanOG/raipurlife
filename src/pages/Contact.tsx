@@ -1,8 +1,9 @@
 import { FormEvent, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SmartImage from "@/components/SmartImage";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { isSupabaseConfigured, shouldUseLocalFallbacks, supabase } from "@/lib/supabase";
 
 const Contact = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
@@ -43,11 +44,15 @@ const Contact = () => {
         setError("Message could not be sent right now. Please try again.");
         return;
       }
-    } else {
+    } else if (shouldUseLocalFallbacks) {
       const key = "raipur-contact-messages";
       const existing = JSON.parse(localStorage.getItem(key) || "[]") as Array<Record<string, string>>;
       existing.unshift({ ...payload, createdAt: new Date().toISOString() });
       localStorage.setItem(key, JSON.stringify(existing));
+    } else {
+      setIsSubmitting(false);
+      setError("Contact form is temporarily unavailable.");
+      return;
     }
 
     setSubmitted(true);
@@ -64,6 +69,7 @@ const Contact = () => {
       <section className="relative overflow-hidden px-4 py-16">
         <div className="absolute inset-0 -z-10 bg-[url('/places/sarovar.jpg')] bg-cover bg-center opacity-20" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/94 to-background/78" />
+        <div className="absolute inset-0 -z-10 hero-atmo" />
         <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="hero-copy-panel max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Community Desk</p>
@@ -71,10 +77,15 @@ const Contact = () => {
             <p className="mt-4 max-w-2xl text-muted-foreground">
               Send feedback, suggest additions, or report outdated information so the guide stays useful.
             </p>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+              <p>Corrections and route updates welcome.</p>
+              <p>Best for quick factual feedback.</p>
+              <p>Replies are handled manually.</p>
+            </div>
           </div>
 
           <article className="card-tint overflow-hidden shadow-xl">
-            <img src="/places/sarovar.jpg" alt="Raipur community desk" className="h-44 w-full object-cover" />
+            <SmartImage src="/places/sarovar.jpg" alt="Raipur community desk" className="h-44 w-full object-cover" />
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Reach the team</p>
               <p className="mt-2 text-xl font-semibold">Updates, reports, and suggestions</p>

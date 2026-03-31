@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCommunityReviews } from "@/hooks/useCommunityReviews";
 import SmartImage from "@/components/SmartImage";
 
+const ADMIN_ID = "admin";
+const ADMIN_PASSWORD = "admin184";
+
 const Moderation = () => {
   const requiredCode = import.meta.env.VITE_MODERATOR_CODE;
+  const [adminId, setAdminId] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [accessCode, setAccessCode] = useState("");
   const [unlocked, setUnlocked] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -27,37 +31,18 @@ const Moderation = () => {
 
   const onUnlock = async () => {
     setUnlockError("");
-    const ok = await unlockModeration(accessCode);
+    if (adminId.trim() !== ADMIN_ID || adminPassword !== ADMIN_PASSWORD) {
+      setUnlockError("Access denied. Check admin ID and password.");
+      return;
+    }
+
+    const ok = requiredCode?.trim() ? await unlockModeration(accessCode) : true;
     if (ok) {
       setUnlocked(true);
     } else {
       setUnlockError("Access denied. Please check moderator code.");
     }
   };
-
-  if (!requiredCode?.trim()) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <section className="px-4 py-16">
-          <div className="container mx-auto max-w-2xl glass border border-border/70 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Unavailable</p>
-            <h1 className="mt-2 text-3xl font-bold">Moderator panel is disabled</h1>
-            <p className="mt-3 text-sm text-muted-foreground">
-              This route is hidden in production unless a moderator code is configured.
-            </p>
-            <Link
-              to="/"
-              className="mt-5 inline-flex h-11 items-center border border-foreground bg-foreground px-5 text-xs font-semibold uppercase tracking-wide text-background"
-            >
-              Back to Home
-            </Link>
-          </div>
-        </section>
-        <Footer />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,16 +53,32 @@ const Moderation = () => {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Restricted</p>
             <h1 className="mt-2 text-3xl font-bold">Moderator access</h1>
             <p className="mt-3 text-sm text-muted-foreground">
-              Enter moderator code to review pending submissions.
+              Enter the admin login before opening the review queue.
             </p>
-            <div className="mt-5 flex gap-2">
+            <div className="mt-5 grid gap-3">
+              <input
+                type="text"
+                value={adminId}
+                onChange={(event) => setAdminId(event.target.value)}
+                className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                placeholder="Admin ID"
+              />
+              <input
+                type="password"
+                value={adminPassword}
+                onChange={(event) => setAdminPassword(event.target.value)}
+                className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                placeholder="Password"
+              />
+              {requiredCode?.trim() && (
               <input
                 type="password"
                 value={accessCode}
                 onChange={(event) => setAccessCode(event.target.value)}
-                className="h-11 flex-1 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
                 placeholder="Moderator code"
               />
+              )}
               <button
                 onClick={() => void onUnlock()}
                 className="h-11 border border-foreground bg-foreground px-5 text-xs font-semibold uppercase tracking-wide text-background"
@@ -93,7 +94,7 @@ const Moderation = () => {
       ) : (
         <>
       <section className="relative overflow-hidden px-4 py-16">
-        <div className="absolute inset-0 -z-10 bg-[url('/places/Traditional.png')] bg-cover bg-center opacity-18" />
+        <div className="absolute inset-0 -z-10 bg-[url('/places/morning_raipur.jpg')] bg-cover bg-center opacity-18" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/95 to-background/80" />
         <div className="container mx-auto max-w-5xl">
           <div className="hero-copy-panel max-w-3xl">
@@ -101,6 +102,9 @@ const Moderation = () => {
             <h1 className="mt-2 text-4xl font-bold md:text-5xl">Pending reviews</h1>
             <p className="mt-4 text-muted-foreground">
               Approve or reject community submissions before they appear publicly.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Admin sign-in is required before this queue opens.
             </p>
           </div>
         </div>

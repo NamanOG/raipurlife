@@ -8,7 +8,7 @@ This version is a full redesign and content revamp, with stronger visual identit
 
 ## Project Direction
 
-- Present Raipur with a distinct, premium feel instead of a generic city-directory template.
+- Present Raipur with a distinct, premium feel instead of a generic city-directory layout.
 - Blend editorial storytelling with practical discovery so users can explore and plan in the same experience.
 - Keep the interface visually rich while maintaining readability and fast interaction.
 

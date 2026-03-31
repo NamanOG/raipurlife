@@ -23,6 +23,7 @@ const AddReview = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+  const [submitError, setSubmitError] = useState("");
   const [preview, setPreview] = useState("");
 
   const onImageFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -52,26 +53,34 @@ const AddReview = () => {
 
     setIsSubmitting(true);
     setSubmitMessage("");
+    setSubmitError("");
 
-    await addReview({
-      place,
-      category,
-      message,
-      authorName: name,
-      isAnonymous,
-      imageFile,
-      imageUrl,
-    });
+    try {
+      await addReview({
+        place,
+        category,
+        message,
+        authorName: name,
+        isAnonymous,
+        imageFile,
+        imageUrl,
+      });
 
-    setPlace("");
-    setMessage("");
-    setName("");
-    setImageFile(null);
-    setImageUrl("");
-    setPreview("");
-    setIsAnonymous(false);
-    setSubmitMessage("Submitted. Your review is now pending moderation.");
-    setIsSubmitting(false);
+      setPlace("");
+      setMessage("");
+      setName("");
+      setImageFile(null);
+      setImageUrl("");
+      setPreview("");
+      setIsAnonymous(false);
+      setSubmitMessage("Submitted. Your review is now pending moderation.");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Review could not be submitted right now."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -81,6 +90,7 @@ const AddReview = () => {
       <section className="relative overflow-hidden px-4 py-16">
         <div className="absolute inset-0 -z-10 bg-[url('/places/sarovar.jpg')] bg-cover bg-center opacity-20" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/92 to-background/78" />
+        <div className="absolute inset-0 -z-10 hero-atmo" />
         <div className="container mx-auto max-w-3xl">
           <div className="hero-copy-panel max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Community Form</p>
@@ -91,6 +101,11 @@ const AddReview = () => {
             <p className="mt-3 text-sm text-muted-foreground">
               New submissions go to moderation first. After approval, they appear on public pages.
             </p>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+              <p>One place at a time.</p>
+              <p>Clear notes get approved faster.</p>
+              <p>Images help with verification later.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -204,6 +219,10 @@ const AddReview = () => {
 
               {submitMessage && (
                 <p className="text-sm font-medium text-accent">{submitMessage}</p>
+              )}
+
+              {submitError && (
+                <p className="text-sm font-medium text-destructive">{submitError}</p>
               )}
 
               <p className="text-xs text-muted-foreground">

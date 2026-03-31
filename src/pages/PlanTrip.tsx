@@ -64,7 +64,7 @@ const PlanTrip = () => {
       <Header />
 
       <section className="relative overflow-hidden px-4 py-16">
-        <div className="absolute inset-0 -z-10 bg-[url('/places/urban.png')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 -z-10 bg-[url('/places/morning_raipur.jpg')] bg-cover bg-center opacity-20" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/92 to-background/75" />
         <div className="absolute inset-0 -z-10 grid-fabric opacity-25" />
         <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.05fr_0.95fr]">
@@ -74,6 +74,11 @@ const PlanTrip = () => {
             <p className="mt-4 max-w-2xl text-muted-foreground">
               Pick your style, duration, and interests. Get a practical route you can start using right away.
             </p>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+              <p>Balanced for short city visits.</p>
+              <p>Budget estimate adjusts live.</p>
+              <p>Built around food, culture, shopping, and nature.</p>
+            </div>
           </div>
 
           <article className="card-tint overflow-hidden shadow-xl">

@@ -1,4 +1,4 @@
-import { Search, Star, Tag } from "lucide-react";
+import { Star, Tag } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -21,7 +21,7 @@ const curatedFoods = [
     name: "Poha Jalebi",
     category: "Breakfast",
     description: "A popular breakfast combo balancing sweet and savory flavors.",
-    image: "/places/Traditional.png",
+    image: "/hero-bg.png",
     price: "₹40 - ₹60",
     tags: ["Breakfast", "Sweet and Savory", "Vegetarian"],
     rating: 4.7,
@@ -62,6 +62,7 @@ const Food = () => {
       <section className="relative overflow-hidden px-4 py-20">
         <div className="absolute inset-0 -z-10 bg-[url('/places/nukkad.jpg')] bg-cover bg-center opacity-20" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/90 to-background/74" />
+        <div className="absolute inset-0 -z-10 hero-atmo" />
         <div className="container mx-auto grid max-w-6xl items-end gap-8 lg:grid-cols-[1.12fr_0.88fr]">
           <div className="hero-copy-panel max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Food Guide</p>
@@ -69,23 +70,19 @@ const Food = () => {
             <p className="mt-4 max-w-2xl text-muted-foreground">
               Discover local favorites, trusted spots, and classic combinations that define Raipur's food culture.
             </p>
-            <div className="mt-6 flex h-12 items-center gap-3 rounded-xl border border-border bg-card px-4 text-muted-foreground">
-              <Search className="h-4 w-4" />
-              Search dishes, restaurants, and local specialties...
-            </div>
             <p className="mt-3 text-sm text-muted-foreground">
               {source === "osm" ? "Live food places source: OpenStreetMap" : "Showing curated food list"}
               {isLoading ? " • Syncing latest places..." : ""}
             </p>
-            <div className="mt-5 flex flex-wrap gap-2 text-xs">
-              <span className="rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground">Street icons</span>
-              <span className="rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground">Family spots</span>
-              <span className="rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-muted-foreground">Late-night bites</span>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+              <p>Street snacks and thali staples.</p>
+              <p>Shortlist built for casual city eating.</p>
+              <p>Good for breakfast runs and evening stops.</p>
             </div>
           </div>
 
           <article className="card-tint overflow-hidden shadow-xl">
-            <img src="/places/nukkad.jpg" alt="Raipur food lane" className="h-44 w-full object-cover" />
+            <SmartImage src="/places/nukkad.jpg" alt="Raipur food lane" className="h-44 w-full object-cover" />
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Featured right now</p>
               <p className="mt-2 text-xl font-semibold">Nukkad lane evening trail</p>
@@ -124,6 +121,9 @@ const Food = () => {
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                   {food.rating}
                 </span>
+              </div>
+              <div className="mt-3 border-t border-border/70 pt-3 text-xs text-muted-foreground">
+                {food.reviewsCount?.toLocaleString("en-IN")} reviews • {food.reviewerName} • {food.reviewTimeAgo}
               </div>
             </article>
           ))}
