@@ -19,7 +19,7 @@ const curatedMarkets = [
     name: "Ambuja City Center Mall",
     category: "Mall",
     description: "A modern mall setup with popular brands, food court, and entertainment.",
-    image: "/places/zora.jpg",
+    image: "/places/urban.png",
     location: "GE Road",
     rating: 4.4,
   },

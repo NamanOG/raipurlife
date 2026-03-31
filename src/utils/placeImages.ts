@@ -8,7 +8,7 @@ const PLACE_IMAGE_RULES: Array<{ keywords: string[]; image: string }> = [
   { keywords: ["dudhadhari", "gurudwara", "temple", "mandir"], image: "/places/dudhadhari.png" },
   { keywords: ["nukkad", "chai", "cafe", "restaurant", "fast food", "food"], image: "/places/nukkad.jpg" },
   { keywords: ["zora mall", "zora"], image: "/places/zora.jpg" },
-  { keywords: ["ambuja", "magneto"], image: "/places/zora.jpg" },
+  { keywords: ["ambuja", "magneto"], image: "/places/urban.png" },
   { keywords: ["pandri market", "pandri", "jawahar market", "gol bazaar", "gol bazar"], image: "/places/morning_raipur.jpg" },
   { keywords: ["market", "shopping", "bazaar"], image: "/places/morning_raipur.jpg" },
   { keywords: ["marine drive", "riverfront"], image: "/places/marine_drive.jpg" },

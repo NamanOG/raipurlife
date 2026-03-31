@@ -256,9 +256,9 @@ grant execute on function public.update_contact_message_status(uuid, text, text)
 
 insert into public.community_reviews (place, category, message, author_name, is_anonymous, image_url, status)
 values
-  ('Nukkad Chai', 'food', 'Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.', 'Naman', false, '/places/urban.png', 'approved'),
+  ('Nukkad Chai', 'food', 'Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.', 'Naman', false, '/places/nukkad.jpg', 'approved'),
   ('Jungle Safari, Barnawapara', 'tourism', 'Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.', 'Naini', false, '/places/barnawapara.jpg', 'approved'),
-  ('Ambuja City Mall', 'shopping', 'Wide range of local and international brands, clean spaces, and enough food options for full family outings.', 'Manoj', false, '/places/zora.jpg', 'approved'),
+  ('Ambuja City Mall', 'shopping', 'Wide range of local and international brands, clean spaces, and enough food options for full family outings.', 'Manoj', false, '/places/urban.png', 'approved'),
   ('Raipur Carnival', 'events', 'The city vibe was electric, performances were great, and food stalls had lots of options.', 'Anant', false, '/hero-bg.png', 'approved')
 on conflict do nothing;
 
