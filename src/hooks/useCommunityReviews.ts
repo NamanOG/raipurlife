@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase, isSupabaseConfigured, shouldUseLocalFallbacks } from "@/lib/supabase";
 import {
   CommunityReview,
+  ContactMessage,
+  ContactMessageStatus,
   NewCommunityReview,
   ReviewCategory,
   ReviewStatus,
@@ -112,6 +114,31 @@ type ModerateReviewArgs = {
   moderator_code: string;
 };
 
+type GetReviewsForModerationArgs = {
+  moderator_code: string;
+  review_status?: ReviewStatus | null;
+};
+
+type DeleteReviewArgs = {
+  review_id: string;
+  moderator_code: string;
+};
+
+type DbContactMessageRow = {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  status: ContactMessageStatus;
+  created_at: string;
+};
+
+type UpdateContactMessageStatusArgs = {
+  message_id: string;
+  new_status: ContactMessageStatus;
+  moderator_code: string;
+};
+
 const normalizeStatus = (status: unknown): ReviewStatus => {
   if (status === "approved" || status === "rejected") {
     return status;
@@ -129,6 +156,15 @@ const mapDbReviewToCommunityReview = (row: DbReviewRow): CommunityReview => ({
   isAnonymous: row.is_anonymous,
   image: row.image_url || undefined,
   status: normalizeStatus(row.status),
+  createdAt: row.created_at,
+});
+
+const mapDbContactMessageToContactMessage = (row: DbContactMessageRow): ContactMessage => ({
+  id: row.id,
+  name: row.name,
+  email: row.email,
+  message: row.message,
+  status: row.status,
   createdAt: row.created_at,
 });
 
@@ -164,6 +200,65 @@ export const useCommunityReviews = () => {
   const [reviews, setReviews] = useState<CommunityReview[]>(() => getStoredReviews());
   const [pendingReviewsRemote, setPendingReviewsRemote] = useState<CommunityReview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const loadReviewsForModeration = async (
+    moderatorCode: string,
+    reviewStatus?: ReviewStatus
+  ) => {
+    if (isSupabaseConfigured && supabase) {
+      const { data, error } = await supabase.rpc("get_reviews_for_moderation", {
+        moderator_code: moderatorCode.trim(),
+        review_status: reviewStatus ?? null,
+      } as GetReviewsForModerationArgs);
+
+      if (error || !data) {
+        return null;
+      }
+
+      return (data as DbReviewRow[]).map(mapDbReviewToCommunityReview);
+    }
+
+    if (!shouldUseLocalFallbacks) {
+      return null;
+    }
+
+    return getStoredReviews().filter((review) =>
+      reviewStatus ? review.status === reviewStatus : true
+    );
+  };
+
+  const loadContactMessages = async (moderatorCode: string) => {
+    if (isSupabaseConfigured && supabase) {
+      const { data, error } = await supabase.rpc("get_contact_messages", {
+        moderator_code: moderatorCode.trim(),
+      });
+
+      if (error || !data) {
+        return null;
+      }
+
+      return (data as DbContactMessageRow[]).map(mapDbContactMessageToContactMessage);
+    }
+
+    if (!shouldUseLocalFallbacks || typeof window === "undefined") {
+      return null;
+    }
+
+    try {
+      const raw = window.localStorage.getItem("raipur-contact-messages");
+      const parsed = raw ? (JSON.parse(raw) as Array<Partial<ContactMessage>>) : [];
+      return parsed.map((entry) => ({
+        id: entry.id || makeId(),
+        name: entry.name || "Unknown",
+        email: entry.email || "",
+        message: entry.message || "",
+        status: (entry.status as ContactMessageStatus) || "new",
+        createdAt: entry.createdAt || new Date().toISOString(),
+      }));
+    } catch {
+      return [];
+    }
+  };
 
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) {
@@ -290,16 +385,12 @@ export const useCommunityReviews = () => {
     }
 
     if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase.rpc("get_pending_reviews", {
-        moderator_code: normalizedCode,
-      });
-
-      if (error || !data) {
+      const moderationReviews = await loadReviewsForModeration(normalizedCode, "pending");
+      if (!moderationReviews) {
         return false;
       }
 
-      const mapped = (data as DbReviewRow[]).map(mapDbReviewToCommunityReview);
-      setPendingReviewsRemote(mapped);
+      setPendingReviewsRemote(moderationReviews);
       return true;
     }
 
@@ -350,6 +441,87 @@ export const useCommunityReviews = () => {
     return null;
   };
 
+  const deleteReview = async (reviewId: string, moderatorCode?: string) => {
+    if (isSupabaseConfigured && supabase) {
+      if (!moderatorCode?.trim()) {
+        return false;
+      }
+
+      const { error } = await supabase.rpc("delete_review", {
+        review_id: reviewId,
+        moderator_code: moderatorCode.trim(),
+      } as DeleteReviewArgs);
+
+      if (error) {
+        return false;
+      }
+
+      setPendingReviewsRemote((current) => current.filter((review) => review.id !== reviewId));
+      setReviews((current) => current.filter((review) => review.id !== reviewId));
+      return true;
+    }
+
+    if (!shouldUseLocalFallbacks) {
+      return false;
+    }
+
+    setPendingReviewsRemote((current) => current.filter((review) => review.id !== reviewId));
+    setReviews((current) => current.filter((review) => review.id !== reviewId));
+    return true;
+  };
+
+  const updateContactMessageStatus = async (
+    messageId: string,
+    status: ContactMessageStatus,
+    moderatorCode?: string
+  ) => {
+    if (isSupabaseConfigured && supabase) {
+      if (!moderatorCode?.trim()) {
+        return null;
+      }
+
+      const { data, error } = await supabase.rpc("update_contact_message_status", {
+        message_id: messageId,
+        new_status: status,
+        moderator_code: moderatorCode.trim(),
+      } as UpdateContactMessageStatusArgs);
+
+      if (error || !data) {
+        return null;
+      }
+
+      return mapDbContactMessageToContactMessage(data as DbContactMessageRow);
+    }
+
+    if (!shouldUseLocalFallbacks || typeof window === "undefined") {
+      return null;
+    }
+
+    try {
+      const key = "raipur-contact-messages";
+      const existing = JSON.parse(window.localStorage.getItem(key) || "[]") as Array<Record<string, string>>;
+      const updated = existing.map((entry) =>
+        entry.id === messageId ? { ...entry, status } : entry
+      );
+      window.localStorage.setItem(key, JSON.stringify(updated));
+      const nextEntry = updated.find((entry) => entry.id === messageId);
+      if (!nextEntry) {
+        return null;
+      }
+
+      return {
+        id: nextEntry.id,
+        name: nextEntry.name,
+        email: nextEntry.email,
+        message: nextEntry.message,
+        status: (nextEntry.status as ContactMessageStatus) || status,
+        createdAt: nextEntry.createdAt,
+      };
+    } catch {
+      return null;
+    }
+  };
+
   const approveReview = async (reviewId: string, moderatorCode?: string) =>
     updateReviewStatus(reviewId, "approved", moderatorCode);
 
@@ -364,9 +536,13 @@ export const useCommunityReviews = () => {
     isRemoteEnabled: isSupabaseConfigured,
     canUseLocalFallbacks: shouldUseLocalFallbacks,
     addReview,
+    loadReviewsForModeration,
+    loadContactMessages,
     unlockModeration,
     approveReview,
     rejectReview,
+    deleteReview,
+    updateContactMessageStatus,
     getReviewsByCategory,
   };
 };

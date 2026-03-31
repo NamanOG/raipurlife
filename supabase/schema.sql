@@ -121,8 +121,138 @@ begin
 end;
 $$;
 
+create or replace function public.get_reviews_for_moderation(
+  moderator_code text,
+  review_status text default null
+)
+returns setof public.community_reviews
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if review_status is not null and review_status not in ('pending', 'approved', 'rejected') then
+    raise exception 'invalid_status';
+  end if;
+
+  if not exists (
+    select 1
+    from public.moderation_settings
+    where is_active = true
+      and moderation_settings.moderator_code = get_reviews_for_moderation.moderator_code
+  ) then
+    raise exception 'invalid_moderator_code';
+  end if;
+
+  return query
+  select *
+  from public.community_reviews
+  where review_status is null or status = review_status
+  order by created_at desc;
+end;
+$$;
+
+create or replace function public.delete_review(
+  review_id uuid,
+  moderator_code text
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  deleted_id uuid;
+begin
+  if not exists (
+    select 1
+    from public.moderation_settings
+    where is_active = true
+      and moderation_settings.moderator_code = delete_review.moderator_code
+  ) then
+    raise exception 'invalid_moderator_code';
+  end if;
+
+  delete from public.community_reviews
+  where id = review_id
+  returning id into deleted_id;
+
+  if deleted_id is null then
+    raise exception 'review_not_found';
+  end if;
+
+  return deleted_id;
+end;
+$$;
+
+create or replace function public.get_contact_messages(moderator_code text)
+returns setof public.contact_messages
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not exists (
+    select 1
+    from public.moderation_settings
+    where is_active = true
+      and moderation_settings.moderator_code = get_contact_messages.moderator_code
+  ) then
+    raise exception 'invalid_moderator_code';
+  end if;
+
+  return query
+  select *
+  from public.contact_messages
+  order by created_at desc;
+end;
+$$;
+
+create or replace function public.update_contact_message_status(
+  message_id uuid,
+  new_status text,
+  moderator_code text
+)
+returns public.contact_messages
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  updated_message public.contact_messages;
+begin
+  if new_status not in ('new', 'in_progress', 'resolved', 'closed') then
+    raise exception 'invalid_status';
+  end if;
+
+  if not exists (
+    select 1
+    from public.moderation_settings
+    where is_active = true
+      and moderation_settings.moderator_code = update_contact_message_status.moderator_code
+  ) then
+    raise exception 'invalid_moderator_code';
+  end if;
+
+  update public.contact_messages
+  set status = new_status
+  where id = message_id
+  returning * into updated_message;
+
+  if updated_message.id is null then
+    raise exception 'message_not_found';
+  end if;
+
+  return updated_message;
+end;
+$$;
+
 grant execute on function public.get_pending_reviews(text) to anon, authenticated;
 grant execute on function public.moderate_review(uuid, text, text) to anon, authenticated;
+grant execute on function public.get_reviews_for_moderation(text, text) to anon, authenticated;
+grant execute on function public.delete_review(uuid, text) to anon, authenticated;
+grant execute on function public.get_contact_messages(text) to anon, authenticated;
+grant execute on function public.update_contact_message_status(uuid, text, text) to anon, authenticated;
 
 insert into public.community_reviews (place, category, message, author_name, is_anonymous, image_url, status)
 values

@@ -10,7 +10,13 @@
   - `community_reviews` table with strict RLS
   - `contact_messages` table for contact form submissions
   - `moderation_settings` table for moderator code check
-  - RPC functions: `get_pending_reviews` and `moderate_review`
+  - RPC functions for admin operations:
+    - `get_pending_reviews`
+    - `moderate_review`
+    - `get_reviews_for_moderation`
+    - `delete_review`
+    - `get_contact_messages`
+    - `update_contact_message_status`
   - `review-images` bucket + scoped storage policies
 
 ## 3. Set moderator code in database
@@ -35,6 +41,8 @@ where id = true;
 - Submit a review from `/add-review` and verify it lands as `pending`.
 - Verify pending reviews do not show in public lists.
 - Open `/moderation`, unlock with moderator code, approve/reject.
+- Verify approved reviews can be hidden or deleted from the admin panel.
+- Verify contact messages appear in the admin panel and can be updated through status stages.
 - Verify approved reviews become public.
 - Submit contact form and verify row appears in `contact_messages`.
 
@@ -42,3 +50,4 @@ where id = true;
 - Local storage fallback is only available in development when Supabase env values are missing.
 - In production builds without Supabase configured, review submission, moderation, and contact writes are intentionally unavailable.
 - Security boundary is database-side policy + RPC code validation, not frontend route hiding.
+- If you already ran an older version of `supabase/schema.sql`, run the latest file again so the new admin RPCs are created.

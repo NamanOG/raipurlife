@@ -5,6 +5,14 @@ import SmartImage from "@/components/SmartImage";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { isSupabaseConfigured, shouldUseLocalFallbacks, supabase } from "@/lib/supabase";
 
+const makeLocalId = () => {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
+
 const Contact = () => {
   const sectionRef = useScrollReveal<HTMLDivElement>();
   const [submitted, setSubmitted] = useState(false);
@@ -47,7 +55,7 @@ const Contact = () => {
     } else if (shouldUseLocalFallbacks) {
       const key = "raipur-contact-messages";
       const existing = JSON.parse(localStorage.getItem(key) || "[]") as Array<Record<string, string>>;
-      existing.unshift({ ...payload, createdAt: new Date().toISOString() });
+      existing.unshift({ ...payload, id: makeLocalId(), createdAt: new Date().toISOString() });
       localStorage.setItem(key, JSON.stringify(existing));
     } else {
       setIsSubmitting(false);
