@@ -313,7 +313,7 @@ export const useCommunityReviews = () => {
     }
 
     if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("community_reviews")
         .insert({
           place: normalizedPlace,
@@ -323,12 +323,21 @@ export const useCommunityReviews = () => {
           is_anonymous: newReview.isAnonymous,
           image_url: image || null,
           status: "pending",
-        })
-        .select("id, place, category, message, author_name, is_anonymous, image_url, status, created_at")
-        .single();
+        });
 
-      if (!error && data) {
-        const review = mapDbReviewToCommunityReview(data as DbReviewRow);
+      if (!error) {
+        const review: CommunityReview = {
+          id: makeId(),
+          place: normalizedPlace,
+          category: newReview.category,
+          message: normalizedMessage,
+          authorName: normalizedAuthor,
+          isAnonymous: newReview.isAnonymous,
+          image,
+          status: "pending",
+          createdAt: new Date().toISOString(),
+        };
+
         setReviews((current) => [review, ...current]);
         return review;
       }
