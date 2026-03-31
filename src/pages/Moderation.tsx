@@ -90,7 +90,6 @@ const Moderation = () => {
     }
 
     setUnlocked(true);
-    await refreshAdminData(accessCode);
   };
 
   const withBusyState = async (id: string, task: () => Promise<unknown>) => {

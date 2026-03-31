@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase, isSupabaseConfigured, shouldUseLocalFallbacks } from "@/lib/supabase";
 import {
   CommunityReview,
@@ -201,7 +201,7 @@ export const useCommunityReviews = () => {
   const [pendingReviewsRemote, setPendingReviewsRemote] = useState<CommunityReview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadReviewsForModeration = async (
+  const loadReviewsForModeration = useCallback(async (
     moderatorCode: string,
     reviewStatus?: ReviewStatus
   ) => {
@@ -225,9 +225,9 @@ export const useCommunityReviews = () => {
     return getStoredReviews().filter((review) =>
       reviewStatus ? review.status === reviewStatus : true
     );
-  };
+  }, []);
 
-  const loadContactMessages = async (moderatorCode: string) => {
+  const loadContactMessages = useCallback(async (moderatorCode: string) => {
     if (isSupabaseConfigured && supabase) {
       const { data, error } = await supabase.rpc("get_contact_messages", {
         moderator_code: moderatorCode.trim(),
@@ -258,7 +258,7 @@ export const useCommunityReviews = () => {
     } catch {
       return [];
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) {
@@ -331,6 +331,10 @@ export const useCommunityReviews = () => {
         const review = mapDbReviewToCommunityReview(data as DbReviewRow);
         setReviews((current) => [review, ...current]);
         return review;
+      }
+
+      if (error?.message) {
+        throw new Error(`Review could not be submitted: ${error.message}`);
       }
 
       throw new Error("Review could not be submitted right now.");
