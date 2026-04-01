@@ -43,6 +43,24 @@ const curatedPlaces = [
     location: "GE Road",
     hours: "11:00 AM - 10:00 PM",
   },
+  {
+    name: "Dudhadhari Math",
+    category: "Heritage",
+    description: "A historic temple complex with quiet courtyards and murals connected to Raipur's old roots.",
+    image: "/places/dudhadhari.png",
+    rating: 4.4,
+    location: "Dudhadhari, Raipur",
+    hours: "6:00 AM - 8:00 PM",
+  },
+  {
+    name: "Telibandha Marine Drive",
+    category: "Nature",
+    description: "Evening promenade for walking, street bites, and city skyline reflections by the lake.",
+    image: "/places/marine_drive.jpg",
+    rating: 4.5,
+    location: "Telibandha Lake",
+    hours: "5:00 AM - 11:00 PM",
+  },
 ];
 
 const Tourism = () => {
@@ -164,7 +182,13 @@ const Tourism = () => {
                   className="h-44 w-full object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold">{review.place}</h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-lg font-semibold">{review.place}</h3>
+                    <p className="inline-flex items-center gap-1 text-sm font-semibold">
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                      {review.rating.toFixed(1)}
+                    </p>
+                  </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
                   <p className="mt-3 text-xs text-muted-foreground">
                     By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}

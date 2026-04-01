@@ -64,7 +64,7 @@ const CommunityReviews = () => {
                   </div>
                   <div className="flex items-center gap-1 text-sm font-semibold">
                     <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    5.0
+                    {review.rating.toFixed(1)}
                   </div>
                 </div>
 

@@ -17,6 +17,7 @@ const seededReviews: CommunityReview[] = [
     place: "Nukkad Chai",
     category: "food",
     message: "Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.",
+    rating: 4.6,
     authorName: "Naman",
     isAnonymous: false,
     image: "/places/nukkad.jpg",
@@ -28,6 +29,7 @@ const seededReviews: CommunityReview[] = [
     place: "Jungle Safari, Barnawapara",
     category: "tourism",
     message: "Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.",
+    rating: 4.7,
     authorName: "Naini",
     isAnonymous: false,
     image: "/places/barnawapara.jpg",
@@ -39,6 +41,7 @@ const seededReviews: CommunityReview[] = [
     place: "Ambuja City Mall",
     category: "shopping",
     message: "Wide range of local and international brands, clean spaces, and enough food options for full family outings.",
+    rating: 4.4,
     authorName: "Manoj",
     isAnonymous: false,
     image: "/places/urban.png",
@@ -50,11 +53,60 @@ const seededReviews: CommunityReview[] = [
     place: "Raipur Carnival",
     category: "events",
     message: "The city vibe was electric, performances were great, and food stalls had lots of options.",
+    rating: 4.8,
     authorName: "Anant",
     isAnonymous: false,
     image: "/hero-bg.png",
     status: "approved",
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-5",
+    place: "Pandri Market",
+    category: "shopping",
+    message: "Great range of budget shopping options and plenty of variety if you have time to explore lanes.",
+    rating: 4.3,
+    authorName: "Ishita",
+    isAnonymous: false,
+    image: "/places/morning_raipur.jpg",
+    status: "approved",
+    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-6",
+    place: "Mahant Ghasidas Museum",
+    category: "tourism",
+    message: "Excellent museum for understanding local heritage. Quiet galleries and informative displays.",
+    rating: 4.5,
+    authorName: "Ritika",
+    isAnonymous: false,
+    image: "/places/museum.jpeg",
+    status: "approved",
+    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-7",
+    place: "Poha Corner, Sadar Bazaar",
+    category: "food",
+    message: "Super quick breakfast stop. Poha is fresh and jalebi balance is on point.",
+    rating: 4.4,
+    authorName: "Aarav",
+    isAnonymous: false,
+    image: "/hero-bg.png",
+    status: "approved",
+    createdAt: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-8",
+    place: "Marine Drive Evening Walk",
+    category: "events",
+    message: "Weekend cultural stalls and music made this stretch feel lively and safe for families.",
+    rating: 4.6,
+    authorName: "Dev",
+    isAnonymous: false,
+    image: "/places/marine_drive.jpg",
+    status: "approved",
+    createdAt: new Date(Date.now() - 30 * 60 * 60 * 1000).toISOString(),
   },
 ];
 
@@ -75,6 +127,7 @@ const getStoredReviews = (): CommunityReview[] => {
       place: review.place || "Unknown Place",
       category: (review.category as ReviewCategory) || "food",
       message: review.message || "",
+      rating: normalizeRating(review.rating),
       authorName: review.authorName || "Anonymous",
       isAnonymous: Boolean(review.isAnonymous),
       image: review.image,
@@ -101,6 +154,7 @@ type DbReviewRow = {
   place: string;
   category: ReviewCategory;
   message: string;
+  rating: number;
   author_name: string;
   is_anonymous: boolean;
   image_url: string | null;
@@ -147,11 +201,21 @@ const normalizeStatus = (status: unknown): ReviewStatus => {
   return "pending";
 };
 
+const normalizeRating = (rating: unknown): number => {
+  const value = Number(rating);
+  if (Number.isNaN(value)) {
+    return 5;
+  }
+
+  return Math.min(5, Math.max(1, Number(value.toFixed(1))));
+};
+
 const mapDbReviewToCommunityReview = (row: DbReviewRow): CommunityReview => ({
   id: row.id,
   place: row.place,
   category: row.category,
   message: row.message,
+  rating: normalizeRating(row.rating),
   authorName: row.author_name,
   isAnonymous: row.is_anonymous,
   image: row.image_url || undefined,
@@ -270,7 +334,7 @@ export const useCommunityReviews = () => {
 
       const { data, error } = await supabase
         .from("community_reviews")
-        .select("id, place, category, message, author_name, is_anonymous, image_url, status, created_at")
+        .select("id, place, category, message, rating, author_name, is_anonymous, image_url, status, created_at")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
 
@@ -319,6 +383,7 @@ export const useCommunityReviews = () => {
           place: normalizedPlace,
           category: newReview.category,
           message: normalizedMessage,
+          rating: normalizeRating(newReview.rating),
           author_name: normalizedAuthor,
           is_anonymous: newReview.isAnonymous,
           image_url: image || null,
@@ -331,6 +396,7 @@ export const useCommunityReviews = () => {
           place: normalizedPlace,
           category: newReview.category,
           message: normalizedMessage,
+          rating: normalizeRating(newReview.rating),
           authorName: normalizedAuthor,
           isAnonymous: newReview.isAnonymous,
           image,
@@ -358,6 +424,7 @@ export const useCommunityReviews = () => {
       place: normalizedPlace,
       category: newReview.category,
       message: normalizedMessage,
+      rating: normalizeRating(newReview.rating),
       authorName: normalizedAuthor,
       isAnonymous: newReview.isAnonymous,
       image,

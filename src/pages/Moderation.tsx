@@ -367,9 +367,12 @@ const Moderation = () => {
                             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
                               {review.category}
                             </p>
-                            <p className="text-xs text-muted-foreground">
-                              {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
-                            </p>
+                            <div className="text-right">
+                              <p className="text-xs font-semibold text-foreground">{review.rating.toFixed(1)} / 5</p>
+                              <p className="text-xs text-muted-foreground">
+                                {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
+                              </p>
+                            </div>
                           </div>
                           <h3 className="mt-1 text-2xl font-semibold">{review.place}</h3>
                           <p className="mt-3 text-sm text-muted-foreground">{review.message}</p>

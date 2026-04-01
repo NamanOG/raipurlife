@@ -31,6 +31,22 @@ const curatedMarkets = [
     location: "Labhandi",
     rating: 4.2,
   },
+  {
+    name: "Gol Bazar",
+    category: "Traditional Market",
+    description: "Dense old-city market known for fabrics, pooja items, utensils, and festive shopping.",
+    image: "/places/Traditional.png",
+    location: "Gol Bazar, Raipur",
+    rating: 4.3,
+  },
+  {
+    name: "Shastri Market",
+    category: "Budget Bazaar",
+    description: "Good place for affordable clothing and accessory bundles with active bargaining culture.",
+    image: "/places/dudhadhari.png",
+    location: "Shastri Chowk",
+    rating: 4.1,
+  },
 ];
 
 const Shopping = () => {
@@ -123,7 +139,13 @@ const Shopping = () => {
                   className="h-44 w-full object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold">{review.place}</h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-lg font-semibold">{review.place}</h3>
+                    <p className="inline-flex items-center gap-1 text-sm font-semibold">
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                      {review.rating.toFixed(1)}
+                    </p>
+                  </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
                   <p className="mt-3 text-xs text-muted-foreground">
                     By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}

@@ -47,6 +47,26 @@ const curatedFoods = [
     rating: 4.5,
     location: "Station Road",
   },
+  {
+    name: "Bajrang Bhog Dhaba",
+    category: "North Indian",
+    description: "Popular family dhaba for paneer gravies, tandoori roti, and quick dinner service.",
+    image: "/places/Traditional.png",
+    price: "₹180 - ₹350",
+    tags: ["Dinner", "Family", "North Indian"],
+    rating: 4.4,
+    location: "Tatibandh",
+  },
+  {
+    name: "Marine Drive Kulfi Stall",
+    category: "Dessert",
+    description: "Late-evening kulfi and falooda stop near the promenade with steady local crowd.",
+    image: "/places/marine_drive.jpg",
+    price: "₹40 - ₹120",
+    tags: ["Dessert", "Night Snack", "Budget"],
+    rating: 4.3,
+    location: "Telibandha Lake",
+  },
 ];
 
 const Food = () => {
@@ -148,7 +168,13 @@ const Food = () => {
                   className="h-44 w-full object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold">{review.place}</h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-lg font-semibold">{review.place}</h3>
+                    <p className="inline-flex items-center gap-1 text-sm font-semibold">
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                      {review.rating.toFixed(1)}
+                    </p>
+                  </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
                   <p className="mt-3 text-xs text-muted-foreground">
                     By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}

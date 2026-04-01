@@ -22,7 +22,7 @@ const Moderation = lazy(() => import("./pages/Moderation"));
 const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="raipur-life-theme-v2">
+      <ThemeProvider defaultTheme="light" storageKey="raipur-life-theme-v2">
       <TooltipProvider>
         <Toaster />
         <Sonner />

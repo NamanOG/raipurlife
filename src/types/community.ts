@@ -7,6 +7,7 @@ export interface CommunityReview {
   place: string;
   category: ReviewCategory;
   message: string;
+  rating: number;
   authorName: string;
   isAnonymous: boolean;
   image?: string;
@@ -18,6 +19,7 @@ export interface NewCommunityReview {
   place: string;
   category: ReviewCategory;
   message: string;
+  rating: number;
   authorName?: string;
   isAnonymous: boolean;
   imageUrl?: string;

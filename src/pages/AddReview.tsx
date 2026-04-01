@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { Star } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCommunityReviews } from "@/hooks/useCommunityReviews";
@@ -17,6 +18,7 @@ const AddReview = () => {
   const [category, setCategory] = useState<ReviewCategory>("food");
   const [place, setPlace] = useState("");
   const [message, setMessage] = useState("");
+  const [rating, setRating] = useState(5);
   const [name, setName] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
@@ -60,6 +62,7 @@ const AddReview = () => {
         place,
         category,
         message,
+        rating,
         authorName: name,
         isAnonymous,
         imageFile,
@@ -68,6 +71,7 @@ const AddReview = () => {
 
       setPlace("");
       setMessage("");
+      setRating(5);
       setName("");
       setImageFile(null);
       setImageUrl("");
@@ -151,6 +155,31 @@ const AddReview = () => {
                   required
                 />
               </label>
+
+              <div className="grid gap-2 text-sm font-medium">
+                <span>Rating</span>
+                <div className="flex items-center gap-2" role="radiogroup" aria-label="Select rating">
+                  {[1, 2, 3, 4, 5].map((value) => {
+                    const active = value <= rating;
+
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        role="radio"
+                        aria-checked={rating === value}
+                        onClick={() => setRating(value)}
+                        className="p-1"
+                      >
+                        <Star
+                          className={`h-6 w-6 ${active ? "fill-amber-400 text-amber-400" : "text-muted-foreground"}`}
+                        />
+                      </button>
+                    );
+                  })}
+                  <span className="ml-1 text-sm font-semibold text-foreground">{rating.toFixed(1)}</span>
+                </div>
+              </div>
 
               <div className="grid gap-2 text-sm">
                 <label className="inline-flex items-center gap-2 font-medium">

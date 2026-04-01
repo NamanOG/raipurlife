@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Star, Users } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -42,6 +42,24 @@ const events = [
     time: "6:00 PM - 11:00 PM",
     location: "Indoor Stadium",
     attendees: 2800,
+  },
+  {
+    id: 5,
+    name: "Telibandha Night Market",
+    category: "Festival",
+    date: "January 8-10, 2027",
+    time: "5:00 PM - 11:00 PM",
+    location: "Telibandha Marine Drive",
+    attendees: 4200,
+  },
+  {
+    id: 6,
+    name: "Handloom and Tribal Craft Expo",
+    category: "Cultural",
+    date: "February 12-14, 2027",
+    time: "11:00 AM - 9:00 PM",
+    location: "Purkhouti Muktangan",
+    attendees: 3200,
   },
 ];
 
@@ -173,7 +191,13 @@ const Events = () => {
                   className="h-44 w-full object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">{review.place}</h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">{review.place}</h3>
+                    <p className="inline-flex items-center gap-1 text-sm font-semibold">
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                      {review.rating.toFixed(1)}
+                    </p>
+                  </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
                   <p className="mt-3 text-xs text-muted-foreground">
                     By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}

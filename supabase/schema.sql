@@ -5,12 +5,16 @@ create table if not exists public.community_reviews (
   place text not null,
   category text not null check (category in ('food', 'events', 'shopping', 'tourism')),
   message text not null,
+  rating numeric(2,1) not null default 5.0 check (rating >= 1 and rating <= 5),
   author_name text not null,
   is_anonymous boolean not null default false,
   image_url text,
   status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
   created_at timestamptz not null default now()
 );
+
+alter table public.community_reviews
+  add column if not exists rating numeric(2,1) not null default 5.0 check (rating >= 1 and rating <= 5);
 
 create table if not exists public.contact_messages (
   id uuid primary key default gen_random_uuid(),
