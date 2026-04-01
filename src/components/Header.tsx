@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Heart, Menu, Moon, Sparkles, Sun } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Compass, Menu, Moon, Sparkles, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useTheme } from "@/components/ThemeProvider";
+import { useToast } from "@/hooks/use-toast";
 import { NAV_LINKS } from "@/utils/constants";
 
 type HeaderProps = {
@@ -20,7 +21,29 @@ type HeaderProps = {
 
 const Header = ({ overlay = false }: HeaderProps) => {
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const currentPage = useMemo(() => NAV_LINKS.find((link) => link.href === location.pathname), [location.pathname]);
+
+  const handleSurpriseMe = () => {
+    const candidates = NAV_LINKS.filter((link) => link.href !== location.pathname);
+    if (candidates.length === 0) {
+      toast({
+        title: "No destination found",
+        description: "You are already on the only available page.",
+      });
+      return;
+    }
+
+    const next = candidates[Math.floor(Math.random() * candidates.length)];
+    navigate(next.href);
+    toast({
+      title: "Surprise route ready",
+      description: `Taking you to ${next.label}.`,
+    });
+  };
 
   const headerClass = overlay
     ? "absolute inset-x-0 top-0 z-50 bg-transparent"
@@ -74,9 +97,13 @@ const Header = ({ overlay = false }: HeaderProps) => {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button className={`hidden px-3 md:inline-flex ${actionButtonClass}`}>
-              <Heart className="mr-2 h-4 w-4" />
-              Saved
+            <Button
+              onClick={handleSurpriseMe}
+              className={`hidden px-3 md:inline-flex ${actionButtonClass}`}
+              aria-label="Surprise me with a random section"
+            >
+              <Compass className="mr-2 h-4 w-4" />
+              {currentPage ? "Surprise Me" : "Explore"}
             </Button>
             <Button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

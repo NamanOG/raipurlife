@@ -13,7 +13,7 @@ const featuredPlaces = [
     reviews: 1234,
     image: "/places/sarovar.jpg",
     description: "Beautiful artificial lake with boating facilities and scenic walkways, perfect for evening strolls",
-    location: "Kota, Raipur",
+    location: "Budhapara, Raipur",
     timing: "5:00 AM - 9:00 PM",
     price: "Free",
     tags: ["Lake", "Boating", "Picnic Spot", "Evening Walk"],

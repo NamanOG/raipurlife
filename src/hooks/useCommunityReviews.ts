@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase, isSupabaseConfigured, shouldUseLocalFallbacks } from "@/lib/supabase";
+import { sendAdminAlert } from "@/lib/adminAlerts";
 import {
   CommunityReview,
   ContactMessage,
@@ -701,6 +702,18 @@ export const useCommunityReviews = () => {
         };
 
         setReviews((current) => dedupeReviews([review, ...current]));
+
+        void sendAdminAlert({
+          type: "review",
+          payload: {
+            place: review.place,
+            category: review.category,
+            authorName: review.authorName,
+            rating: review.rating,
+            message: review.message,
+          },
+        });
+
         return review;
       }
 

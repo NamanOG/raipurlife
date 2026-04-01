@@ -161,7 +161,7 @@ const Tourism = () => {
       </section>
 
       <section ref={sectionRef} className="scroll-reveal px-4 pb-14">
-        <div className="container mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+        <div className="container mx-auto grid max-w-7xl gap-6 md:grid-cols-2">
           {places.map((place) => (
             <article key={place.name} className="card-tint overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover-lift">
               <SmartImage
@@ -191,7 +191,7 @@ const Tourism = () => {
                   </div>
                 </div>
                 <div className="mt-4 border-t border-border/70 pt-3 text-xs text-muted-foreground">
-                  {place.reviewsCount?.toLocaleString("en-IN")} reviews • {place.reviewerName} • {place.reviewTimeAgo}
+                  Community-picked spot • Recently checked
                 </div>
               </div>
             </article>
@@ -200,7 +200,7 @@ const Tourism = () => {
       </section>
 
       <section className="px-4 pb-16">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-7xl">
           <h2 className="text-2xl font-bold">Community Tourism Suggestions</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             {communityTourismReviews.length === 0 && (

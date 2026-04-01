@@ -24,6 +24,60 @@ This version is a full redesign and content revamp, with stronger visual identit
 - Frontend is production-ready.
 - Supabase integration is staged and can be fully enabled separately.
 
+## Free Admin Notifications (Email + Optional Telegram)
+
+This project now supports free instant admin alerts for:
+
+- New community review submissions
+- New contact form messages
+
+Implementation details:
+
+- Frontend invokes Supabase Edge Function `admin-alerts` after successful insert.
+- Edge Function can send alerts to email (Resend) and/or Telegram.
+
+Files involved:
+
+- `src/lib/adminAlerts.ts`
+- `src/hooks/useCommunityReviews.ts`
+- `src/pages/Contact.tsx`
+- `supabase/functions/admin-alerts/index.ts`
+
+### Setup (Email Recommended)
+
+1. Create a free Resend account and copy your API key.
+2. Decide the inbox that should receive alerts (your admin email).
+3. Deploy the edge function:
+
+```bash
+supabase functions deploy admin-alerts
+```
+
+4. Set function secrets for email:
+
+```bash
+supabase secrets set RESEND_API_KEY=your_resend_api_key
+supabase secrets set ALERT_EMAIL_TO=you@example.com
+supabase secrets set ALERT_EMAIL_FROM="Raipur.life Alerts <onboarding@resend.dev>"
+```
+
+5. Ensure your frontend `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are correctly set.
+
+### Optional Telegram Backup
+
+You can enable Telegram as a second delivery channel:
+
+```bash
+supabase secrets set TELEGRAM_BOT_TOKEN=your_bot_token
+supabase secrets set TELEGRAM_CHAT_ID=your_chat_id
+```
+
+### Notes
+
+- Alerts are non-blocking in the frontend: user submissions still succeed even if notifications fail.
+- Use email as the primary channel for reliability and searchable history.
+- You can keep both email and Telegram enabled for redundancy.
+
 ## Credits
 
 Crafted for Raipur and the people who live it every day.

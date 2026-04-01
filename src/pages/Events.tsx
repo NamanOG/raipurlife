@@ -146,7 +146,7 @@ const Events = () => {
       </section>
 
       <section ref={sectionRef} className="scroll-reveal px-4 pb-14">
-        <div className="container mx-auto max-w-5xl space-y-4">
+        <div className="container mx-auto max-w-7xl space-y-4">
           {loadingLiveEvents && (
             <div className="glass border border-border/70 p-4 text-sm text-muted-foreground">
               Fetching live events...
@@ -192,7 +192,7 @@ const Events = () => {
       </section>
 
       <section className="px-4 pb-16">
-        <div className="container mx-auto max-w-5xl">
+        <div className="container mx-auto max-w-7xl">
           <h2 className="text-2xl font-bold">Community Event Suggestions</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             {communityEventReviews.length === 0 && (

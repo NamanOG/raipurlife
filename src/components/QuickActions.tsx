@@ -1,4 +1,5 @@
 import { Calendar, Camera, Coffee, MapPin, ShoppingBag, Utensils } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const actions = [
@@ -6,31 +7,37 @@ const actions = [
     icon: MapPin,
     title: "Explore Neighborhoods",
     description: "Area-wise guides for old city streets and new Raipur zones.",
+    href: "/tourism",
   },
   {
     icon: Camera,
     title: "Share Moments",
     description: "Upload your finds and help build the city map together.",
+    href: "/add-review",
   },
   {
     icon: Coffee,
     title: "Tea and Cafe Radar",
     description: "Find chill corners from classic chai stands to late-night cafes.",
+    href: "/food",
   },
   {
     icon: Utensils,
     title: "Food Trails",
     description: "Local plates, street legends, and family-favorite eateries.",
+    href: "/food",
   },
   {
     icon: ShoppingBag,
     title: "Markets and Malls",
     description: "Compare local bazaars with modern shopping destinations.",
+    href: "/shopping",
   },
   {
     icon: Calendar,
     title: "Events This Week",
     description: "Cultural activities, city festivals, and weekend plans.",
+    href: "/events",
   },
 ];
 
@@ -50,7 +57,11 @@ const QuickActions = () => {
           {actions.map((action) => {
             const Icon = action.icon;
             return (
-              <article key={action.title} className="group grid gap-4 border-b border-border px-5 py-5 transition-colors duration-300 hover:bg-muted/35 md:grid-cols-[auto_1fr_auto] md:items-center">
+              <Link
+                key={action.title}
+                to={action.href}
+                className="group grid gap-4 border-b border-border px-5 py-5 transition-colors duration-300 hover:bg-muted/35 md:grid-cols-[auto_1fr_auto] md:items-center"
+              >
                 <div className="grid h-10 w-10 place-items-center border border-border bg-background text-primary">
                   <Icon className="h-5 w-5" />
                 </div>
@@ -59,7 +70,7 @@ const QuickActions = () => {
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{action.description}</p>
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground md:justify-self-end">Open</p>
-              </article>
+              </Link>
             );
           })}
         </div>

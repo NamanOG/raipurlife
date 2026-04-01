@@ -1,0 +1,166 @@
+RAIPUR.LIFE EMAIL ALERTS - COMPLETE SETUP GUIDE (RESEND + TESTMAIL)
+
+Overview
+- Your project already has email alert code in the Supabase Edge Function: admin-alerts.
+- You can run email-only mode (no Telegram needed).
+- Two practical setups are documented below:
+  1) Resend -> your personal inbox (recommended production)
+  2) Resend -> Testmail inbox (recommended testing)
+
+Important
+- Do NOT set Telegram secrets if you want email-only.
+- Alerts are sent after:
+  - New review submission
+  - New contact message submission
+
+------------------------------------------------------------
+SECTION A - PREREQUISITES
+------------------------------------------------------------
+
+1) Install and login to Supabase CLI
+- Install: https://supabase.com/docs/guides/cli
+- Verify CLI works:
+  supabase --version
+- Login:
+  supabase login
+
+2) Link this project to your Supabase project (if not already linked)
+- In project root folder, run:
+  supabase link --project-ref YOUR_PROJECT_REF
+
+3) Confirm you are in project root before running commands
+- Should be folder containing package.json and supabase/.
+
+------------------------------------------------------------
+SECTION B - RESEND ACCOUNT SETUP (COMMON FOR BOTH FLOWS)
+------------------------------------------------------------
+
+1) Create Resend account
+- Open: https://resend.com
+- Create account and verify it.
+
+2) Create API key
+- Resend Dashboard -> API Keys -> Create API Key
+- Copy key value (starts with re_...)
+- Keep it secret.
+
+3) Decide sender email
+- Quick testing sender:
+  Raipur.life Alerts <onboarding@resend.dev>
+- Production sender (recommended):
+  Verify your own domain in Resend and use:
+  alerts@yourdomain.com
+
+------------------------------------------------------------
+SECTION C - FLOW 1 (PRODUCTION): RESEND -> YOUR EMAIL
+------------------------------------------------------------
+
+1) Deploy function
+- From project root:
+  supabase functions deploy admin-alerts
+
+2) Set required secrets (email only)
+- Replace placeholders with your real values:
+  supabase secrets set RESEND_API_KEY=YOUR_RESEND_API_KEY
+  supabase secrets set ALERT_EMAIL_TO=yourname@gmail.com
+  supabase secrets set ALERT_EMAIL_FROM="Raipur.life Alerts <onboarding@resend.dev>"
+
+3) Ensure Telegram is not configured (optional but clean)
+- Simply do not set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID.
+
+4) Test by creating events from your app
+- Submit one new review from Add Review page.
+- Submit one new contact message from Contact page.
+
+5) Watch logs while testing
+- In terminal:
+  supabase functions logs admin-alerts --follow
+
+6) Confirm delivery
+- Check inbox (and spam/promotions first time).
+- You should receive separate emails for review and contact events.
+
+------------------------------------------------------------
+SECTION D - FLOW 2 (TESTING): RESEND -> TESTMAIL INBOX
+------------------------------------------------------------
+
+Use this when you want safe test notifications without using your primary inbox.
+
+1) Prepare your Testmail inbox address
+- Create/locate your Testmail inbox from your GitHub Student Pack benefit.
+- Copy the full email address.
+
+2) Keep same deployed function
+- If not deployed yet:
+  supabase functions deploy admin-alerts
+
+3) Set recipient to Testmail
+- Set alert target to your Testmail address:
+  supabase secrets set ALERT_EMAIL_TO=your-testmail-address@example.testmail.app
+
+4) Keep Resend API key and sender set
+- If already set, no change needed.
+- Otherwise run:
+  supabase secrets set RESEND_API_KEY=YOUR_RESEND_API_KEY
+  supabase secrets set ALERT_EMAIL_FROM="Raipur.life Alerts <onboarding@resend.dev>"
+
+5) Submit one review + one contact message
+- Trigger both events from your app.
+
+6) Verify in Testmail dashboard/inbox
+- Both notification emails should appear there.
+
+------------------------------------------------------------
+SECTION E - SWITCHING BETWEEN FLOW 1 AND FLOW 2
+------------------------------------------------------------
+
+To switch destination inbox, only update ALERT_EMAIL_TO:
+
+- For personal inbox:
+  supabase secrets set ALERT_EMAIL_TO=yourname@gmail.com
+
+- For Testmail inbox:
+  supabase secrets set ALERT_EMAIL_TO=your-testmail-address@example.testmail.app
+
+No code changes required.
+
+------------------------------------------------------------
+SECTION F - TROUBLESHOOTING
+------------------------------------------------------------
+
+Issue: No email received
+- Check function logs:
+  supabase functions logs admin-alerts --follow
+- Confirm all secrets exist and values are correct.
+- Confirm function deployment succeeded.
+
+Issue: Resend sender rejected
+- onboarding@resend.dev has limitations in some scenarios.
+- Best fix: verify your domain in Resend and use a domain sender.
+- Update sender secret:
+  supabase secrets set ALERT_EMAIL_FROM="Raipur.life Alerts <alerts@yourdomain.com>"
+
+Issue: Function says missing_notification_config
+- Means required email secrets are not set.
+- Set RESEND_API_KEY and ALERT_EMAIL_TO at minimum.
+
+Issue: Submissions succeed but no notifications
+- This can happen if notification channel fails.
+- App is intentionally non-blocking for user submissions.
+- Use logs to identify the provider error response.
+
+------------------------------------------------------------
+SECTION G - FINAL CHECKLIST
+------------------------------------------------------------
+
+- Supabase CLI installed and logged in
+- Project linked
+- Function deployed: admin-alerts
+- RESEND_API_KEY set
+- ALERT_EMAIL_TO set
+- ALERT_EMAIL_FROM set
+- Test review submitted
+- Test contact message submitted
+- Emails confirmed in inbox/Testmail
+
+Done.

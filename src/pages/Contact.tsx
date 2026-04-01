@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import SmartImage from "@/components/SmartImage";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { isSupabaseConfigured, shouldUseLocalFallbacks, supabase } from "@/lib/supabase";
+import { sendAdminAlert } from "@/lib/adminAlerts";
 
 const makeLocalId = () => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -52,6 +53,15 @@ const Contact = () => {
         setError("Message could not be sent right now. Please try again.");
         return;
       }
+
+      void sendAdminAlert({
+        type: "contact",
+        payload: {
+          name: payload.name,
+          email: payload.email,
+          message: payload.message,
+        },
+      });
     } else if (shouldUseLocalFallbacks) {
       const key = "raipur-contact-messages";
       const existing = JSON.parse(localStorage.getItem(key) || "[]") as Array<Record<string, string>>;

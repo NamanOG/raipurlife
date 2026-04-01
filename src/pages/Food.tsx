@@ -190,7 +190,7 @@ const Food = () => {
       </section>
 
       <section ref={sectionRef} className="scroll-reveal px-4 pb-14">
-        <div className="container mx-auto grid max-w-6xl gap-5 md:grid-cols-2">
+        <div className="container mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
           {foods.map((food) => (
             <article key={food.name} className="border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover-lift">
               <SmartImage
@@ -220,7 +220,7 @@ const Food = () => {
                 </span>
               </div>
               <div className="mt-3 border-t border-border/70 pt-3 text-xs text-muted-foreground">
-                {food.reviewsCount?.toLocaleString("en-IN")} reviews • {food.reviewerName} • {food.reviewTimeAgo}
+                Community-picked spot • Recently checked
               </div>
             </article>
           ))}
@@ -228,7 +228,7 @@ const Food = () => {
       </section>
 
       <section className="px-4 pb-16">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-7xl">
           <h2 className="text-2xl font-bold">Community Food Suggestions</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             {communityFoodReviews.length === 0 && (

@@ -142,7 +142,7 @@ const Shopping = () => {
       </section>
 
       <section ref={sectionRef} className="scroll-reveal px-4 pb-14">
-        <div className="container mx-auto grid max-w-5xl gap-4 md:grid-cols-2">
+        <div className="container mx-auto grid max-w-7xl gap-4 md:grid-cols-2">
           {markets.map((market) => (
             <article key={market.name} className="glass border border-border/70 p-4 hover-lift">
               <SmartImage
@@ -163,7 +163,7 @@ const Shopping = () => {
               <p className="mt-3 text-muted-foreground">{market.description}</p>
               <div className="mt-4 border-t border-border/70 pt-3 text-xs text-muted-foreground">
                 <p>
-                  {market.reviewsCount?.toLocaleString("en-IN")} reviews • {market.reviewerName} • {market.reviewTimeAgo}
+                  Community-picked spot • Recently checked
                 </p>
               </div>
             </article>
@@ -172,7 +172,7 @@ const Shopping = () => {
       </section>
 
       <section className="px-4 pb-16">
-        <div className="container mx-auto max-w-5xl">
+        <div className="container mx-auto max-w-7xl">
           <h2 className="text-2xl font-bold">Community Shopping Suggestions</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             {communityShoppingReviews.length === 0 && (
