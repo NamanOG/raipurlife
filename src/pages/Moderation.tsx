@@ -375,7 +375,15 @@ const Moderation = () => {
                             </div>
                           </div>
                           <h3 className="mt-1 text-2xl font-semibold">{review.place}</h3>
+                          {review.address && <p className="mt-1 text-xs text-muted-foreground">Address: {review.address}</p>}
                           <p className="mt-3 text-sm text-muted-foreground">{review.message}</p>
+                          <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                            {review.visitType && <span className="border border-border/70 bg-muted px-2 py-1">Visit: {review.visitType}</span>}
+                            {review.budgetRange && <span className="border border-border/70 bg-muted px-2 py-1">{review.budgetRange}</span>}
+                            {review.bestTimeToVisit && <span className="border border-border/70 bg-muted px-2 py-1">Best: {review.bestTimeToVisit}</span>}
+                            <span className="border border-border/70 bg-muted px-2 py-1">{review.wouldRecommend ? "Recommend" : "Mixed"}</span>
+                          </div>
+                          {review.quickTip && <p className="mt-2 text-xs text-muted-foreground">Tip: {review.quickTip}</p>}
                           {renderReviewActions(review)}
                         </div>
                       </div>

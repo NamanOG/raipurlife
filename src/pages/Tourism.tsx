@@ -5,6 +5,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { useAutoPlaces } from "@/hooks/useAutoPlaces";
 import SmartImage from "@/components/SmartImage";
+import QuirkyMarquee from "@/components/QuirkyMarquee";
 
 const curatedPlaces = [
   {
@@ -61,6 +62,24 @@ const curatedPlaces = [
     location: "Telibandha Lake",
     hours: "5:00 AM - 11:00 PM",
   },
+  {
+    name: "Nandan Van Jungle Safari",
+    category: "Nature",
+    description: "Green safari-style park area with lakeside sections and family walking routes.",
+    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1400&q=80",
+    rating: 4.3,
+    location: "Naya Raipur",
+    hours: "9:00 AM - 6:00 PM",
+  },
+  {
+    name: "Banjari Mata Temple Circuit",
+    category: "Heritage",
+    description: "Popular devotional stop with active local footfall and neighborhood market lanes nearby.",
+    image: "https://images.unsplash.com/photo-1594387295585-f9c3f29f4bf6?auto=format&fit=crop&w=1400&q=80",
+    rating: 4.2,
+    location: "Raipur Outskirts",
+    hours: "6:00 AM - 9:00 PM",
+  },
 ];
 
 const Tourism = () => {
@@ -103,6 +122,22 @@ const Tourism = () => {
               <p className="mt-2 text-sm text-muted-foreground">Golden-hour boat rides, food stalls, and calm evening breeze in the city center.</p>
             </div>
           </article>
+        </div>
+      </section>
+
+      <section className="px-4 pb-8">
+        <div className="container mx-auto max-w-6xl">
+          <QuirkyMarquee
+            variant={1}
+            palette="mint"
+            items={[
+              "Sarovar sunset walks",
+              "Museum heritage loop",
+              "Dudhadhari morning visit",
+              "Marine Drive nights",
+              "Family route ready",
+            ]}
+          />
         </div>
       </section>
 
@@ -190,8 +225,14 @@ const Tourism = () => {
                     </p>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
+                  {review.address && <p className="mt-2 text-xs text-muted-foreground">Address: {review.address}</p>}
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    {review.visitType && <span className="border border-border/70 bg-muted px-2 py-1">Visit: {review.visitType}</span>}
+                    {review.bestTimeToVisit && <span className="border border-border/70 bg-muted px-2 py-1">Best: {review.bestTimeToVisit}</span>}
+                  </div>
+                  {review.quickTip && <p className="mt-2 text-xs text-muted-foreground">Tip: {review.quickTip}</p>}
                   <p className="mt-3 text-xs text-muted-foreground">
-                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
+                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)} • {review.wouldRecommend ? "Recommended" : "Mixed"}
                   </p>
                 </div>
               </article>

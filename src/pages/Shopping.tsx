@@ -5,8 +5,33 @@ import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityRe
 import { useAutoPlaces } from "@/hooks/useAutoPlaces";
 import SmartImage from "@/components/SmartImage";
 import { Star } from "lucide-react";
+import QuirkyMarquee from "@/components/QuirkyMarquee";
 
 const curatedMarkets = [
+  {
+    name: "Gol Bazaar",
+    category: "Local Market",
+    description: "A classic local market pick for busy streets, variety, and that proper old-city shopping feel.",
+    image: "https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    location: "Gol Bazaar, Raipur",
+    rating: 4.0,
+  },
+  {
+    name: "Danganiya Bazaar",
+    category: "Everyday Bazaar",
+    description: "Good local-market option if you want a crowded everyday bazaar vibe instead of a mall experience.",
+    image: "https://images.pexels.com/photos/346734/pexels-photo-346734.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    location: "Danganiya, Raipur",
+    rating: 3.8,
+  },
+  {
+    name: "Katora Talab Market",
+    category: "Neighborhood Market",
+    description: "Nice market-style card for neighborhood shopping, casual browsing, and a more local city experience.",
+    image: "https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    location: "Katora Talab, Raipur",
+    rating: 3.8,
+  },
   {
     name: "Pandri Market",
     category: "Market",
@@ -24,15 +49,7 @@ const curatedMarkets = [
     rating: 4.4,
   },
   {
-    name: "Zora Mall",
-    category: "Mall",
-    description: "Premium shopping option with brands, cafes, and family-friendly spaces.",
-    image: "/places/zora.jpg",
-    location: "Labhandi",
-    rating: 4.2,
-  },
-  {
-    name: "Gol Bazar",
+    name: "Gol Bazar (Classic Strip)",
     category: "Traditional Market",
     description: "Dense old-city market known for fabrics, pooja items, utensils, and festive shopping.",
     image: "/places/Traditional.png",
@@ -46,6 +63,22 @@ const curatedMarkets = [
     image: "/places/dudhadhari.png",
     location: "Shastri Chowk",
     rating: 4.1,
+  },
+  {
+    name: "Devendra Nagar Retail Street",
+    category: "Lifestyle Street",
+    description: "Cluster of fashion, footwear, and cafe stops ideal for evening shopping rounds.",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80",
+    location: "Devendra Nagar",
+    rating: 4.2,
+  },
+  {
+    name: "City Handloom Outlet",
+    category: "Ethnic",
+    description: "Reliable store for handloom sarees, kurtas, and gifting sets inspired by Chhattisgarh craft.",
+    image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1400&q=80",
+    location: "Civil Lines",
+    rating: 4.3,
   },
 ];
 
@@ -88,6 +121,23 @@ const Shopping = () => {
               <p className="mt-2 text-sm text-muted-foreground">Do local market picks first, then finish with branded stores and dinner stop.</p>
             </div>
           </article>
+        </div>
+      </section>
+
+      <section className="px-4 pb-8">
+        <div className="container mx-auto max-w-6xl">
+          <QuirkyMarquee
+            variant={2}
+            palette="slate"
+            items={[
+              "Pandri bargain loops",
+              "Gol Bazar textile lanes",
+              "Mall + market combo route",
+              "Evening shopping runs",
+              "Festive season essentials",
+            ]}
+            reverse
+          />
         </div>
       </section>
 
@@ -147,8 +197,14 @@ const Shopping = () => {
                     </p>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
+                  {review.address && <p className="mt-2 text-xs text-muted-foreground">Address: {review.address}</p>}
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    {review.budgetRange && <span className="border border-border/70 bg-muted px-2 py-1">{review.budgetRange}</span>}
+                    {review.bestTimeToVisit && <span className="border border-border/70 bg-muted px-2 py-1">Best: {review.bestTimeToVisit}</span>}
+                  </div>
+                  {review.quickTip && <p className="mt-2 text-xs text-muted-foreground">Tip: {review.quickTip}</p>}
                   <p className="mt-3 text-xs text-muted-foreground">
-                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
+                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)} • {review.wouldRecommend ? "Recommended" : "Mixed"}
                   </p>
                 </div>
               </article>

@@ -3,8 +3,15 @@ create extension if not exists pgcrypto;
 create table if not exists public.community_reviews (
   id uuid primary key default gen_random_uuid(),
   place text not null,
+  address text,
   category text not null check (category in ('food', 'events', 'shopping', 'tourism')),
   message text not null,
+  visit_date date,
+  visit_type text check (visit_type in ('solo', 'friends', 'family', 'couple', 'work')),
+  budget_range text,
+  best_time_to_visit text,
+  quick_tip text,
+  would_recommend boolean not null default true,
   rating numeric(2,1) not null default 5.0 check (rating >= 1 and rating <= 5),
   author_name text not null,
   is_anonymous boolean not null default false,
@@ -15,6 +22,15 @@ create table if not exists public.community_reviews (
 
 alter table public.community_reviews
   add column if not exists rating numeric(2,1) not null default 5.0 check (rating >= 1 and rating <= 5);
+
+alter table public.community_reviews
+  add column if not exists address text,
+  add column if not exists visit_date date,
+  add column if not exists visit_type text check (visit_type in ('solo', 'friends', 'family', 'couple', 'work')),
+  add column if not exists budget_range text,
+  add column if not exists best_time_to_visit text,
+  add column if not exists quick_tip text,
+  add column if not exists would_recommend boolean not null default true;
 
 create table if not exists public.contact_messages (
   id uuid primary key default gen_random_uuid(),
@@ -38,6 +54,8 @@ alter table public.contact_messages enable row level security;
 drop policy if exists "Public can read reviews" on public.community_reviews;
 drop policy if exists "Public can insert reviews" on public.community_reviews;
 drop policy if exists "Public can update review status" on public.community_reviews;
+drop policy if exists "Public can read approved reviews" on public.community_reviews;
+drop policy if exists "Public can insert pending reviews" on public.community_reviews;
 
 create policy "Public can read approved reviews"
 on public.community_reviews
@@ -258,13 +276,31 @@ grant execute on function public.delete_review(uuid, text) to anon, authenticate
 grant execute on function public.get_contact_messages(text) to anon, authenticated;
 grant execute on function public.update_contact_message_status(uuid, text, text) to anon, authenticated;
 
-insert into public.community_reviews (place, category, message, author_name, is_anonymous, image_url, status)
-values
-  ('Nukkad Chai', 'food', 'Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.', 'Naman', false, '/places/nukkad.jpg', 'approved'),
-  ('Jungle Safari, Barnawapara', 'tourism', 'Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.', 'Naini', false, '/places/barnawapara.jpg', 'approved'),
-  ('Ambuja City Mall', 'shopping', 'Wide range of local and international brands, clean spaces, and enough food options for full family outings.', 'Manoj', false, '/places/urban.png', 'approved'),
-  ('Raipur Carnival', 'events', 'The city vibe was electric, performances were great, and food stalls had lots of options.', 'Anant', false, '/hero-bg.png', 'approved')
-on conflict do nothing;
+delete from public.community_reviews a
+using public.community_reviews b
+where a.id < b.id
+  and a.place = b.place
+  and a.category = b.category
+  and a.message = b.message
+  and a.author_name = b.author_name;
+
+insert into public.community_reviews (place, address, category, message, visit_date, visit_type, budget_range, best_time_to_visit, quick_tip, would_recommend, rating, author_name, is_anonymous, image_url, status)
+select *
+from (
+  values
+    ('Nukkad Chai', 'Station Road, Raipur', 'food', 'Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.', date '2026-03-28', 'friends', 'Under Rs 200', 'Evening', 'Ask for fresh ginger chai.', true, 4.6, 'Naman', false, '/places/nukkad.jpg', 'approved'),
+    ('Jungle Safari, Barnawapara', 'Barnawapara Wildlife Sanctuary Road', 'tourism', 'Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.', date '2026-03-23', 'family', 'Rs 500-Rs 1200', 'Early Morning', 'Carry water and light snacks.', true, 4.7, 'Naini', false, '/places/barnawapara.jpg', 'approved'),
+    ('Ambuja City Mall', 'GE Road, Raipur', 'shopping', 'Wide range of local and international brands, clean spaces, and enough food options for full family outings.', date '2026-03-26', 'family', 'Rs 1200-Rs 3000', 'Late Afternoon', 'Parking gets crowded after 7 PM.', true, 4.4, 'Manoj', false, '/places/urban.png', 'approved'),
+    ('Raipur Carnival', 'Central Parade Ground, Raipur', 'events', 'The city vibe was electric, performances were great, and food stalls had lots of options.', date '2026-03-24', 'friends', 'Rs 300-Rs 900', 'Evening', 'Reach 30 minutes before headline shows.', true, 4.8, 'Anant', false, '/hero-bg.png', 'approved')
+) as seed(place, address, category, message, visit_date, visit_type, budget_range, best_time_to_visit, quick_tip, would_recommend, rating, author_name, is_anonymous, image_url, status)
+where not exists (
+  select 1
+  from public.community_reviews r
+  where r.place = seed.place
+    and r.category = seed.category
+    and r.message = seed.message
+    and r.author_name = seed.author_name
+);
 
 insert into public.moderation_settings (id, moderator_code, is_active)
 values (true, 'change-this-moderator-code', true)

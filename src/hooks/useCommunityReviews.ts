@@ -11,12 +11,22 @@ import {
 
 const STORAGE_KEY = "raipur-life-community-reviews";
 
+const normalizeText = (value: string | undefined) =>
+  (value || "").trim().toLowerCase().replace(/\s+/g, " ");
+
 const seededReviews: CommunityReview[] = [
   {
     id: "seed-1",
     place: "Nukkad Chai",
+    address: "Station Road, Raipur",
     category: "food",
     message: "Amazing chai and snacks. Perfect for evening hangouts with friends. Must-try their special Irani chai.",
+    visitDate: "2026-03-28",
+    visitType: "friends",
+    budgetRange: "Under Rs 200",
+    bestTimeToVisit: "Evening",
+    quickTip: "Try ginger chai with samosa combo.",
+    wouldRecommend: true,
     rating: 4.6,
     authorName: "Naman",
     isAnonymous: false,
@@ -27,8 +37,15 @@ const seededReviews: CommunityReview[] = [
   {
     id: "seed-2",
     place: "Jungle Safari, Barnawapara",
+    address: "Barnawapara Wildlife Sanctuary Road",
     category: "tourism",
     message: "Great wildlife experience. Saw deer, peacocks, and many birds. Best to visit early morning.",
+    visitDate: "2026-03-23",
+    visitType: "family",
+    budgetRange: "Rs 500-Rs 1200",
+    bestTimeToVisit: "Early Morning",
+    quickTip: "Carry sunscreen and water.",
+    wouldRecommend: true,
     rating: 4.7,
     authorName: "Naini",
     isAnonymous: false,
@@ -39,8 +56,15 @@ const seededReviews: CommunityReview[] = [
   {
     id: "seed-3",
     place: "Ambuja City Mall",
+    address: "GE Road, Raipur",
     category: "shopping",
     message: "Wide range of local and international brands, clean spaces, and enough food options for full family outings.",
+    visitDate: "2026-03-26",
+    visitType: "family",
+    budgetRange: "Rs 1200-Rs 3000",
+    bestTimeToVisit: "Late Afternoon",
+    quickTip: "Weekday evenings are less crowded.",
+    wouldRecommend: true,
     rating: 4.4,
     authorName: "Manoj",
     isAnonymous: false,
@@ -51,8 +75,15 @@ const seededReviews: CommunityReview[] = [
   {
     id: "seed-4",
     place: "Raipur Carnival",
+    address: "Central Parade Ground, Raipur",
     category: "events",
     message: "The city vibe was electric, performances were great, and food stalls had lots of options.",
+    visitDate: "2026-03-24",
+    visitType: "friends",
+    budgetRange: "Rs 300-Rs 900",
+    bestTimeToVisit: "Evening",
+    quickTip: "Reach before the main performance slot.",
+    wouldRecommend: true,
     rating: 4.8,
     authorName: "Anant",
     isAnonymous: false,
@@ -63,8 +94,15 @@ const seededReviews: CommunityReview[] = [
   {
     id: "seed-5",
     place: "Pandri Market",
+    address: "Pandri Main Market, Raipur",
     category: "shopping",
     message: "Great range of budget shopping options and plenty of variety if you have time to explore lanes.",
+    visitDate: "2026-03-27",
+    visitType: "friends",
+    budgetRange: "Rs 500-Rs 1800",
+    bestTimeToVisit: "Evening",
+    quickTip: "Bargaining works better in interior lanes.",
+    wouldRecommend: true,
     rating: 4.3,
     authorName: "Ishita",
     isAnonymous: false,
@@ -75,8 +113,15 @@ const seededReviews: CommunityReview[] = [
   {
     id: "seed-6",
     place: "Mahant Ghasidas Museum",
+    address: "Gandhi Chowk, Raipur",
     category: "tourism",
     message: "Excellent museum for understanding local heritage. Quiet galleries and informative displays.",
+    visitDate: "2026-03-21",
+    visitType: "solo",
+    budgetRange: "Under Rs 300",
+    bestTimeToVisit: "Morning",
+    quickTip: "Allocate at least 90 minutes for full galleries.",
+    wouldRecommend: true,
     rating: 4.5,
     authorName: "Ritika",
     isAnonymous: false,
@@ -87,8 +132,15 @@ const seededReviews: CommunityReview[] = [
   {
     id: "seed-7",
     place: "Poha Corner, Sadar Bazaar",
+    address: "Sadar Bazaar Road, Raipur",
     category: "food",
     message: "Super quick breakfast stop. Poha is fresh and jalebi balance is on point.",
+    visitDate: "2026-03-30",
+    visitType: "work",
+    budgetRange: "Under Rs 150",
+    bestTimeToVisit: "Morning",
+    quickTip: "Go before 9 AM for freshest batch.",
+    wouldRecommend: true,
     rating: 4.4,
     authorName: "Aarav",
     isAnonymous: false,
@@ -99,8 +151,15 @@ const seededReviews: CommunityReview[] = [
   {
     id: "seed-8",
     place: "Marine Drive Evening Walk",
+    address: "Telibandha Marine Drive, Raipur",
     category: "events",
     message: "Weekend cultural stalls and music made this stretch feel lively and safe for families.",
+    visitDate: "2026-03-29",
+    visitType: "couple",
+    budgetRange: "Under Rs 500",
+    bestTimeToVisit: "Sunset",
+    quickTip: "Parking fills up quickly after 7 PM.",
+    wouldRecommend: true,
     rating: 4.6,
     authorName: "Dev",
     isAnonymous: false,
@@ -108,7 +167,205 @@ const seededReviews: CommunityReview[] = [
     status: "approved",
     createdAt: new Date(Date.now() - 30 * 60 * 60 * 1000).toISOString(),
   },
+  {
+    id: "seed-9",
+    place: "Ghadi Chowk Street Bites",
+    address: "Ghadi Chowk, Raipur",
+    category: "food",
+    message: "Great late-evening snack stretch with quick service and good crowd energy.",
+    visitDate: "2026-03-20",
+    visitType: "friends",
+    budgetRange: "Under Rs 300",
+    bestTimeToVisit: "Evening",
+    quickTip: "Go after 7 PM for full stall lineup.",
+    wouldRecommend: true,
+    rating: 4.3,
+    authorName: "Rohan",
+    isAnonymous: false,
+    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1400&q=80",
+    status: "approved",
+    createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-10",
+    place: "Magneto Mall",
+    address: "GE Road, Raipur",
+    category: "shopping",
+    message: "Good mix of brands and food court options. Works well for family evenings.",
+    visitDate: "2026-03-18",
+    visitType: "family",
+    budgetRange: "Rs 1000-Rs 3500",
+    bestTimeToVisit: "Late Afternoon",
+    quickTip: "Weekend parking fills up quickly.",
+    wouldRecommend: true,
+    rating: 4.2,
+    authorName: "Neha",
+    isAnonymous: false,
+    image: "https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?auto=format&fit=crop&w=1400&q=80",
+    status: "approved",
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-11",
+    place: "Naya Raipur Musical Fountain",
+    address: "Atal Nagar, Raipur",
+    category: "tourism",
+    message: "Beautiful evening light-and-water show with family-friendly surroundings.",
+    visitDate: "2026-03-17",
+    visitType: "family",
+    budgetRange: "Under Rs 400",
+    bestTimeToVisit: "Sunset",
+    quickTip: "Reach 20 minutes early for front seating.",
+    wouldRecommend: true,
+    rating: 4.4,
+    authorName: "Priya",
+    isAnonymous: false,
+    image: "https://images.unsplash.com/photo-1526481280695-3c46980f8f4d?auto=format&fit=crop&w=1400&q=80",
+    status: "approved",
+    createdAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-12",
+    place: "City Weekend Art Market",
+    address: "Telibandha, Raipur",
+    category: "events",
+    message: "Handmade crafts, local food counters, and live acoustic sets in one place.",
+    visitDate: "2026-03-16",
+    visitType: "couple",
+    budgetRange: "Rs 300-Rs 900",
+    bestTimeToVisit: "Evening",
+    quickTip: "Most stalls accept UPI only.",
+    wouldRecommend: true,
+    rating: 4.5,
+    authorName: "Kavya",
+    isAnonymous: false,
+    image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1400&q=80",
+    status: "approved",
+    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-13",
+    place: "Raipur Kitchen",
+    address: "Raipur",
+    category: "food",
+    message: "Great for a polished dinner card, with reliable food, nice ambience, and a premium city-dining feel.",
+    visitDate: "2026-03-15",
+    visitType: "couple",
+    budgetRange: "Rs 700-Rs 1800",
+    bestTimeToVisit: "Dinner",
+    quickTip: "Reserve on weekends for quicker seating.",
+    wouldRecommend: true,
+    rating: 4.9,
+    authorName: "Aditi",
+    isAnonymous: false,
+    image: "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    status: "approved",
+    createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-14",
+    place: "Cafe Oriza",
+    address: "Raipur",
+    category: "food",
+    message: "A solid modern cafe pick for casual meals, date nights, and a slightly upscale vibe.",
+    visitDate: "2026-03-14",
+    visitType: "friends",
+    budgetRange: "Rs 400-Rs 1200",
+    bestTimeToVisit: "Evening",
+    quickTip: "Try non-peak hours for quieter seating.",
+    wouldRecommend: true,
+    rating: 4.9,
+    authorName: "Mahi",
+    isAnonymous: false,
+    image: "https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    status: "approved",
+    createdAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-15",
+    place: "Danganiya Bazaar",
+    address: "Danganiya, Raipur",
+    category: "shopping",
+    message: "Good local-market option if you want a crowded everyday bazaar vibe instead of a mall experience.",
+    visitDate: "2026-03-13",
+    visitType: "family",
+    budgetRange: "Rs 300-Rs 1500",
+    bestTimeToVisit: "Evening",
+    quickTip: "Carry cash and UPI both for smaller vendors.",
+    wouldRecommend: true,
+    rating: 3.8,
+    authorName: "Raj",
+    isAnonymous: false,
+    image: "https://images.pexels.com/photos/346734/pexels-photo-346734.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    status: "approved",
+    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "seed-16",
+    place: "Katora Talab Market",
+    address: "Katora Talab, Raipur",
+    category: "shopping",
+    message: "Nice market-style card for neighborhood shopping, casual browsing, and a more local city experience.",
+    visitDate: "2026-03-12",
+    visitType: "solo",
+    budgetRange: "Rs 250-Rs 1200",
+    bestTimeToVisit: "Late Afternoon",
+    quickTip: "Best for quick weekday market rounds.",
+    wouldRecommend: true,
+    rating: 3.8,
+    authorName: "Nikhil",
+    isAnonymous: false,
+    image: "https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    status: "approved",
+    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+  },
 ];
+
+const getReviewCompletenessScore = (review: CommunityReview) => {
+  let score = 0;
+  if (review.address) score += 1;
+  if (review.visitDate) score += 1;
+  if (review.visitType) score += 1;
+  if (review.budgetRange) score += 1;
+  if (review.bestTimeToVisit) score += 1;
+  if (review.quickTip) score += 1;
+  if (review.image) score += 1;
+  return score;
+};
+
+const dedupeReviews = (list: CommunityReview[]) => {
+  const byKey = new Map<string, CommunityReview>();
+
+  for (const review of list) {
+    const key = `${normalizeText(review.place)}|${review.category}|${normalizeText(review.message)}|${normalizeText(review.authorName)}`;
+    const existing = byKey.get(key);
+
+    if (!existing) {
+      byKey.set(key, review);
+      continue;
+    }
+
+    const existingScore = getReviewCompletenessScore(existing);
+    const candidateScore = getReviewCompletenessScore(review);
+
+    if (candidateScore > existingScore) {
+      byKey.set(key, review);
+      continue;
+    }
+
+    if (candidateScore === existingScore) {
+      const existingTime = new Date(existing.createdAt).getTime();
+      const candidateTime = new Date(review.createdAt).getTime();
+      if (candidateTime > existingTime) {
+        byKey.set(key, review);
+      }
+    }
+  }
+
+  return Array.from(byKey.values()).sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+};
 
 const getStoredReviews = (): CommunityReview[] => {
   if (typeof window === "undefined") {
@@ -125,8 +382,15 @@ const getStoredReviews = (): CommunityReview[] => {
     const normalized = parsed.map((review) => ({
       id: review.id || makeId(),
       place: review.place || "Unknown Place",
+      address: review.address || "",
       category: (review.category as ReviewCategory) || "food",
       message: review.message || "",
+      visitDate: review.visitDate,
+      visitType: review.visitType,
+      budgetRange: review.budgetRange,
+      bestTimeToVisit: review.bestTimeToVisit,
+      quickTip: review.quickTip,
+      wouldRecommend: review.wouldRecommend ?? true,
       rating: normalizeRating(review.rating),
       authorName: review.authorName || "Anonymous",
       isAnonymous: Boolean(review.isAnonymous),
@@ -135,9 +399,9 @@ const getStoredReviews = (): CommunityReview[] => {
       createdAt: review.createdAt || new Date().toISOString(),
     }));
 
-    return normalized.length > 0 ? normalized : seededReviews;
+    return dedupeReviews(normalized.length > 0 ? normalized : seededReviews);
   } catch {
-    return seededReviews;
+    return dedupeReviews(seededReviews);
   }
 };
 
@@ -152,8 +416,15 @@ const makeId = () => {
 type DbReviewRow = {
   id: string;
   place: string;
+  address: string | null;
   category: ReviewCategory;
   message: string;
+  visit_date: string | null;
+  visit_type: "solo" | "friends" | "family" | "couple" | "work" | null;
+  budget_range: string | null;
+  best_time_to_visit: string | null;
+  quick_tip: string | null;
+  would_recommend: boolean;
   rating: number;
   author_name: string;
   is_anonymous: boolean;
@@ -213,8 +484,15 @@ const normalizeRating = (rating: unknown): number => {
 const mapDbReviewToCommunityReview = (row: DbReviewRow): CommunityReview => ({
   id: row.id,
   place: row.place,
+  address: row.address || "",
   category: row.category,
   message: row.message,
+  visitDate: row.visit_date || undefined,
+  visitType: row.visit_type || undefined,
+  budgetRange: row.budget_range || undefined,
+  bestTimeToVisit: row.best_time_to_visit || undefined,
+  quickTip: row.quick_tip || undefined,
+  wouldRecommend: row.would_recommend ?? true,
   rating: normalizeRating(row.rating),
   authorName: row.author_name,
   isAnonymous: row.is_anonymous,
@@ -334,12 +612,12 @@ export const useCommunityReviews = () => {
 
       const { data, error } = await supabase
         .from("community_reviews")
-        .select("id, place, category, message, rating, author_name, is_anonymous, image_url, status, created_at")
+        .select("id, place, address, category, message, visit_date, visit_type, budget_range, best_time_to_visit, quick_tip, would_recommend, rating, author_name, is_anonymous, image_url, status, created_at")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
 
       if (!error && data) {
-        const mapped = (data as DbReviewRow[]).map(mapDbReviewToCommunityReview);
+        const mapped = dedupeReviews((data as DbReviewRow[]).map(mapDbReviewToCommunityReview));
         setReviews(mapped);
       }
 
@@ -357,7 +635,11 @@ export const useCommunityReviews = () => {
 
   const addReview = async (newReview: NewCommunityReview) => {
     const normalizedPlace = newReview.place.trim();
+    const normalizedAddress = newReview.address?.trim() || "";
     const normalizedMessage = newReview.message.trim();
+    const normalizedBudget = newReview.budgetRange?.trim() || "";
+    const normalizedBestTime = newReview.bestTimeToVisit?.trim() || "";
+    const normalizedTip = newReview.quickTip?.trim() || "";
     const normalizedAuthor = newReview.isAnonymous
       ? "Anonymous"
       : (newReview.authorName?.trim() || "Anonymous");
@@ -381,8 +663,15 @@ export const useCommunityReviews = () => {
         .from("community_reviews")
         .insert({
           place: normalizedPlace,
+          address: normalizedAddress || null,
           category: newReview.category,
           message: normalizedMessage,
+          visit_date: newReview.visitDate || null,
+          visit_type: newReview.visitType || null,
+          budget_range: normalizedBudget || null,
+          best_time_to_visit: normalizedBestTime || null,
+          quick_tip: normalizedTip || null,
+          would_recommend: newReview.wouldRecommend ?? true,
           rating: normalizeRating(newReview.rating),
           author_name: normalizedAuthor,
           is_anonymous: newReview.isAnonymous,
@@ -394,8 +683,15 @@ export const useCommunityReviews = () => {
         const review: CommunityReview = {
           id: makeId(),
           place: normalizedPlace,
+          address: normalizedAddress,
           category: newReview.category,
           message: normalizedMessage,
+          visitDate: newReview.visitDate,
+          visitType: newReview.visitType,
+          budgetRange: normalizedBudget,
+          bestTimeToVisit: normalizedBestTime,
+          quickTip: normalizedTip,
+          wouldRecommend: newReview.wouldRecommend ?? true,
           rating: normalizeRating(newReview.rating),
           authorName: normalizedAuthor,
           isAnonymous: newReview.isAnonymous,
@@ -404,7 +700,7 @@ export const useCommunityReviews = () => {
           createdAt: new Date().toISOString(),
         };
 
-        setReviews((current) => [review, ...current]);
+        setReviews((current) => dedupeReviews([review, ...current]));
         return review;
       }
 
@@ -422,8 +718,15 @@ export const useCommunityReviews = () => {
     const review: CommunityReview = {
       id: makeId(),
       place: normalizedPlace,
+      address: normalizedAddress,
       category: newReview.category,
       message: normalizedMessage,
+      visitDate: newReview.visitDate,
+      visitType: newReview.visitType,
+      budgetRange: normalizedBudget,
+      bestTimeToVisit: normalizedBestTime,
+      quickTip: normalizedTip,
+      wouldRecommend: newReview.wouldRecommend ?? true,
       rating: normalizeRating(newReview.rating),
       authorName: normalizedAuthor,
       isAnonymous: newReview.isAnonymous,
@@ -432,7 +735,7 @@ export const useCommunityReviews = () => {
       createdAt: new Date().toISOString(),
     };
 
-    setReviews((current) => [review, ...current]);
+    setReviews((current) => dedupeReviews([review, ...current]));
     return review;
   };
 

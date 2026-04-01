@@ -5,8 +5,49 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { useAutoPlaces } from "@/hooks/useAutoPlaces";
 import SmartImage from "@/components/SmartImage";
+import QuirkyMarquee from "@/components/QuirkyMarquee";
 
 const curatedFoods = [
+  {
+    name: "Raipur Kitchen",
+    category: "Fine Dining",
+    description: "Great for a polished dinner card, with reliable food, nice ambience, and a premium city-dining feel.",
+    image: "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    price: "Rs 700 - Rs 1800",
+    tags: ["Premium", "Dinner", "City Dining"],
+    rating: 4.9,
+    location: "Raipur",
+  },
+  {
+    name: "Cafe Oriza",
+    category: "Cafe",
+    description: "A solid modern cafe pick for casual meals, date nights, and a slightly upscale vibe.",
+    image: "https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    price: "Rs 400 - Rs 1200",
+    tags: ["Cafe", "Date Night", "Modern"],
+    rating: 4.9,
+    location: "Raipur",
+  },
+  {
+    name: "Nukkad, The Teafe",
+    category: "Tea Cafe",
+    description: "One of the safer local hangout-style picks for chai, snacks, and relaxed evening plans.",
+    image: "https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    price: "Rs 150 - Rs 500",
+    tags: ["Chai", "Snacks", "Evening"],
+    rating: 4.6,
+    location: "Raipur",
+  },
+  {
+    name: "Naivedya Sweets and Namkeen",
+    category: "Vegetarian",
+    description: "A dependable vegetarian favorite for snacks, sweets, and everyday family outings.",
+    image: "https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    price: "Rs 120 - Rs 600",
+    tags: ["Vegetarian", "Sweets", "Family"],
+    rating: 4.4,
+    location: "Raipur",
+  },
   {
     name: "Chana Samosa",
     category: "Street Food",
@@ -67,6 +108,26 @@ const curatedFoods = [
     rating: 4.3,
     location: "Telibandha Lake",
   },
+  {
+    name: "Station Road Tandoori Point",
+    category: "North Indian",
+    description: "Late-night tandoori rolls and kebab platters with fast takeaway service.",
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80",
+    price: "Rs 180 - Rs 420",
+    tags: ["Dinner", "Tandoor", "Late Night"],
+    rating: 4.4,
+    location: "Station Road",
+  },
+  {
+    name: "Pandri Family Bhoj",
+    category: "Local Cuisine",
+    description: "Comfort-style thali and seasonal sabzi menu with generous portions.",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80",
+    price: "Rs 140 - Rs 300",
+    tags: ["Thali", "Family", "Local"],
+    rating: 4.2,
+    location: "Pandri",
+  },
 ];
 
 const Food = () => {
@@ -109,6 +170,22 @@ const Food = () => {
               <p className="mt-2 text-sm text-muted-foreground">Start with chai, then snack-hop nearby stalls in a 45-minute food walk.</p>
             </div>
           </article>
+        </div>
+      </section>
+
+      <section className="px-4 pb-8">
+        <div className="container mx-auto max-w-6xl">
+          <QuirkyMarquee
+            variant={3}
+            palette="amber"
+            items={[
+              "Chana samosa trail",
+              "Poha before 9 AM",
+              "Irani chai breaks",
+              "Kulfi after sunset",
+              "Budget bites under Rs 200",
+            ]}
+          />
         </div>
       </section>
 
@@ -176,8 +253,15 @@ const Food = () => {
                     </p>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
+                  {review.address && <p className="mt-2 text-xs text-muted-foreground">Address: {review.address}</p>}
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    {review.budgetRange && <span className="border border-border/70 bg-muted px-2 py-1">{review.budgetRange}</span>}
+                    {review.bestTimeToVisit && <span className="border border-border/70 bg-muted px-2 py-1">Best: {review.bestTimeToVisit}</span>}
+                    {review.visitType && <span className="border border-border/70 bg-muted px-2 py-1">Visit: {review.visitType}</span>}
+                  </div>
+                  {review.quickTip && <p className="mt-2 text-xs text-muted-foreground">Tip: {review.quickTip}</p>}
                   <p className="mt-3 text-xs text-muted-foreground">
-                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
+                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)} • {review.wouldRecommend ? "Recommended" : "Mixed"}
                   </p>
                 </div>
               </article>

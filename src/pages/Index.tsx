@@ -7,12 +7,24 @@ import LocalStories from "@/components/LocalStories";
 import CommunityReviews from "@/components/CommunityReviews";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
+import QuirkyMarquee from "@/components/QuirkyMarquee";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header overlay />
       <Hero />
+      <QuirkyMarquee
+        variant={2}
+        palette="teal"
+        items={[
+          "Raipur sunrise routes",
+          "Street chai culture",
+          "Museum afternoons",
+          "Lakefront evenings",
+          "Community-first city guide",
+        ]}
+      />
       <QuickActions />
       <Categories />
       <FeaturedPlaces />

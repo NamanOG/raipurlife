@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Clock, MessageSquare, Star, User } from "lucide-react";
+import { Clock, MapPin, MessageSquare, Star, User } from "lucide-react";
 import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ReviewCategory } from "@/types/community";
@@ -69,11 +69,25 @@ const CommunityReviews = () => {
                 </div>
 
                 <h5 className="text-lg font-semibold">{review.place}</h5>
+                {review.address && (
+                  <p className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {review.address}
+                  </p>
+                )}
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">"{review.message}"</p>
+
+                <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  {review.visitType && <span className="border border-border/70 bg-muted px-2 py-1">Visit: {review.visitType}</span>}
+                  {review.budgetRange && <span className="border border-border/70 bg-muted px-2 py-1">Budget: {review.budgetRange}</span>}
+                  {review.bestTimeToVisit && <span className="border border-border/70 bg-muted px-2 py-1">Best time: {review.bestTimeToVisit}</span>}
+                </div>
+
+                {review.quickTip && <p className="mt-3 text-xs text-muted-foreground">Tip: {review.quickTip}</p>}
 
                 <div className="mt-4 flex items-center gap-2 border-t border-border/70 pt-4 text-sm text-muted-foreground">
                   <MessageSquare className="h-4 w-4" />
-                  Community recommendation
+                  {review.wouldRecommend ? "Recommended by community" : "Mixed feedback"}
                 </div>
               </div>
             </article>

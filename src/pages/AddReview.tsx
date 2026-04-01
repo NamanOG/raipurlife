@@ -2,8 +2,18 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { Star } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import QuirkyMarquee from "@/components/QuirkyMarquee";
 import { useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { ReviewCategory } from "@/types/community";
+
+const featuredPlaceImages = [
+  { src: "/places/sarovar.jpg", label: "Vivekananda Sarovar" },
+  { src: "/places/marine_drive.jpg", label: "Telibandha Marine Drive" },
+  { src: "/places/museum.jpeg", label: "Mahant Ghasidas Museum" },
+  { src: "/places/purkhauti.jpg", label: "Purkhouti Muktangan" },
+  { src: "/places/nukkad.jpg", label: "Nukkad Chai" },
+  { src: "/places/zora.jpg", label: "Zora Mall" },
+];
 
 const categoryOptions: Array<{ value: ReviewCategory; label: string; nextPath: string }> = [
   { value: "food", label: "Food", nextPath: "/food" },
@@ -17,8 +27,15 @@ const AddReview = () => {
 
   const [category, setCategory] = useState<ReviewCategory>("food");
   const [place, setPlace] = useState("");
+  const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [rating, setRating] = useState(5);
+  const [visitDate, setVisitDate] = useState("");
+  const [visitType, setVisitType] = useState<"solo" | "friends" | "family" | "couple" | "work">("friends");
+  const [budgetRange, setBudgetRange] = useState("");
+  const [bestTimeToVisit, setBestTimeToVisit] = useState("");
+  const [quickTip, setQuickTip] = useState("");
+  const [wouldRecommend, setWouldRecommend] = useState(true);
   const [name, setName] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
@@ -60,8 +77,15 @@ const AddReview = () => {
     try {
       await addReview({
         place,
+        address,
         category,
         message,
+        visitDate,
+        visitType,
+        budgetRange,
+        bestTimeToVisit,
+        quickTip,
+        wouldRecommend,
         rating,
         authorName: name,
         isAnonymous,
@@ -70,8 +94,15 @@ const AddReview = () => {
       });
 
       setPlace("");
+      setAddress("");
       setMessage("");
       setRating(5);
+      setVisitDate("");
+      setVisitType("friends");
+      setBudgetRange("");
+      setBestTimeToVisit("");
+      setQuickTip("");
+      setWouldRecommend(true);
       setName("");
       setImageFile(null);
       setImageUrl("");
@@ -91,32 +122,68 @@ const AddReview = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <section className="relative overflow-hidden px-4 py-16">
-        <div className="absolute inset-0 -z-10 bg-[url('/places/sarovar.jpg')] bg-cover bg-center opacity-20" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/92 to-background/78" />
-        <div className="absolute inset-0 -z-10 hero-atmo" />
-        <div className="container mx-auto max-w-3xl">
-          <div className="hero-copy-panel max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Community Form</p>
-            <h1 className="mt-2 text-4xl font-bold md:text-5xl">Add your own review</h1>
-            <p className="mt-4 text-muted-foreground">
-              Suggest a place with category filters, your own name or anonymously, and optional image upload.
-            </p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              New submissions go to moderation first. After approval, they appear on public pages.
-            </p>
-            <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
-              <p>One place at a time.</p>
-              <p>Clear notes get approved faster.</p>
-              <p>Images help with verification later.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="relative overflow-hidden px-4 py-12 lg:py-16">
+        <div className="absolute inset-0 -z-10 bg-[url('/hero-bg.png')] bg-cover bg-center opacity-30" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/85 to-background/68" />
+        <div className="absolute inset-0 -z-10 grid-fabric opacity-25" />
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+            <aside className="space-y-5">
+              <article className="hero-copy-panel">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Community Form</p>
+                <h1 className="mt-2 text-4xl font-bold md:text-5xl">Add your own review</h1>
+                <p className="mt-4 text-muted-foreground">
+                  Suggest a place with address, visit context, quick tips, star rating, and optional image upload.
+                </p>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  New submissions go to moderation first. After approval, they appear on public pages.
+                </p>
+                <div className="mt-6 grid gap-3 border-t border-border/70 pt-4 text-sm text-muted-foreground sm:grid-cols-3">
+                  <p>One place at a time.</p>
+                  <p>Clear notes get approved faster.</p>
+                  <p>Images help with verification later.</p>
+                </div>
+              </article>
 
-      <section className="px-4 pb-16">
-        <div className="container mx-auto max-w-3xl">
-          <form onSubmit={onSubmit} className="glass border border-border/70 p-6 md:p-8">
+              <article className="overflow-hidden border border-border/70 bg-card">
+                <QuirkyMarquee
+                  variant={1}
+                  palette="amber"
+                  fullBleed={false}
+                  items={[
+                    "Pinpoint the address",
+                    "Add best visiting time",
+                    "Mention realistic budget",
+                    "Drop a quick local tip",
+                    "Help people plan better"
+                  ]}
+                />
+              </article>
+
+              <article className="card-tint border border-border/70 p-6 md:p-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">What makes a useful review</p>
+                <h2 className="mt-2 text-3xl font-bold md:text-4xl">Add details people can use instantly</h2>
+                <div className="mt-5 space-y-3 text-sm text-muted-foreground">
+                  <p>Share exact area or landmark so others can locate the place quickly.</p>
+                  <p>Include budget and best time to visit so families and tourists can plan better.</p>
+                  <p>Mention one practical tip like parking, rush hours, must-try item, or entry timing.</p>
+                  <p>Keep your note clear and honest. Helpful reviews get approved faster and stay useful.</p>
+                </div>
+
+                <div className="mt-6 overflow-hidden border border-border/70 bg-background/70">
+                  <div className="marquee-track" style={{ animationDuration: "26s" }}>
+                    {[...featuredPlaceImages, ...featuredPlaceImages].map((item, index) => (
+                      <figure key={`${item.label}-${index}`} className="w-[220px] shrink-0 overflow-hidden border border-border/70 bg-card">
+                        <img src={item.src} alt={item.label} className="h-28 w-full object-cover" loading="lazy" />
+                        <figcaption className="px-3 py-2 text-xs font-medium text-muted-foreground">{item.label}</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            </aside>
+
+            <form onSubmit={onSubmit} className="glass border border-border/70 p-6 md:p-8">
             <div className="grid gap-5">
               <label className="grid gap-2 text-sm font-medium">
                 Category
@@ -142,6 +209,17 @@ const AddReview = () => {
                   placeholder="Example: Nukkad Chai"
                   className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
                   required
+                />
+              </label>
+
+              <label className="grid gap-2 text-sm font-medium">
+                Address
+                <input
+                  type="text"
+                  value={address}
+                  onChange={(event) => setAddress(event.target.value)}
+                  placeholder="Example: Station Road, Raipur"
+                  className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
                 />
               </label>
 
@@ -180,6 +258,78 @@ const AddReview = () => {
                   <span className="ml-1 text-sm font-semibold text-foreground">{rating.toFixed(1)}</span>
                 </div>
               </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="grid gap-2 text-sm font-medium">
+                  Visit date
+                  <input
+                    type="date"
+                    value={visitDate}
+                    onChange={(event) => setVisitDate(event.target.value)}
+                    className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                  />
+                </label>
+
+                <label className="grid gap-2 text-sm font-medium">
+                  Visit type
+                  <select
+                    value={visitType}
+                    onChange={(event) => setVisitType(event.target.value as "solo" | "friends" | "family" | "couple" | "work")}
+                    className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                  >
+                    <option value="solo">Solo</option>
+                    <option value="friends">Friends</option>
+                    <option value="family">Family</option>
+                    <option value="couple">Couple</option>
+                    <option value="work">Work</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="grid gap-2 text-sm font-medium">
+                  Budget range
+                  <input
+                    type="text"
+                    value={budgetRange}
+                    onChange={(event) => setBudgetRange(event.target.value)}
+                    placeholder="Example: Under Rs 500"
+                    className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                  />
+                </label>
+
+                <label className="grid gap-2 text-sm font-medium">
+                  Best time to visit
+                  <input
+                    type="text"
+                    value={bestTimeToVisit}
+                    onChange={(event) => setBestTimeToVisit(event.target.value)}
+                    placeholder="Example: Evening"
+                    className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                  />
+                </label>
+              </div>
+
+              <label className="grid gap-2 text-sm font-medium">
+                Quick tip
+                <input
+                  type="text"
+                  value={quickTip}
+                  onChange={(event) => setQuickTip(event.target.value)}
+                  placeholder="Example: Reach before 7 PM to avoid rush"
+                  className="h-11 border border-border bg-background px-3 text-foreground outline-none focus:border-primary"
+                />
+              </label>
+
+              <label className="inline-flex items-center gap-2 text-sm font-medium">
+                <input
+                  type="checkbox"
+                  checked={wouldRecommend}
+                  onChange={(event) => setWouldRecommend(event.target.checked)}
+                  className="h-4 w-4 accent-primary"
+                />
+                I recommend this place to others
+              </label>
 
               <div className="grid gap-2 text-sm">
                 <label className="inline-flex items-center gap-2 font-medium">
@@ -258,7 +408,8 @@ const AddReview = () => {
                 Every new submission is reviewed before it appears publicly.
               </p>
             </div>
-          </form>
+            </form>
+          </div>
         </div>
       </section>
 

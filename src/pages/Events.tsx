@@ -5,6 +5,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { formatReviewTimeAgo, useCommunityReviews } from "@/hooks/useCommunityReviews";
 import { useLiveEvents } from "@/hooks/useLiveEvents";
 import SmartImage from "@/components/SmartImage";
+import QuirkyMarquee from "@/components/QuirkyMarquee";
 
 const events = [
   {
@@ -127,6 +128,23 @@ const Events = () => {
         </div>
       </section>
 
+      <section className="px-4 pb-8">
+        <div className="container mx-auto max-w-6xl">
+          <QuirkyMarquee
+            variant={3}
+            palette="teal"
+            reverse
+            items={[
+              "Carnival nights",
+              "Foundation day shows",
+              "Food fest circuits",
+              "Live music weekends",
+              "Craft expo highlights",
+            ]}
+          />
+        </div>
+      </section>
+
       <section ref={sectionRef} className="scroll-reveal px-4 pb-14">
         <div className="container mx-auto max-w-5xl space-y-4">
           {loadingLiveEvents && (
@@ -199,8 +217,15 @@ const Events = () => {
                     </p>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{review.message}</p>
+                  {review.address && <p className="mt-2 text-xs text-muted-foreground">Address: {review.address}</p>}
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    {review.visitType && <span className="border border-border/70 bg-muted px-2 py-1">Visit: {review.visitType}</span>}
+                    {review.bestTimeToVisit && <span className="border border-border/70 bg-muted px-2 py-1">Best: {review.bestTimeToVisit}</span>}
+                    {review.budgetRange && <span className="border border-border/70 bg-muted px-2 py-1">{review.budgetRange}</span>}
+                  </div>
+                  {review.quickTip && <p className="mt-2 text-xs text-muted-foreground">Tip: {review.quickTip}</p>}
                   <p className="mt-3 text-xs text-muted-foreground">
-                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)}
+                    By {review.authorName} • {formatReviewTimeAgo(review.createdAt)} • {review.wouldRecommend ? "Recommended" : "Mixed"}
                   </p>
                 </div>
               </article>

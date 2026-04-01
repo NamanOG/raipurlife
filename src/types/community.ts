@@ -5,8 +5,15 @@ export type ContactMessageStatus = "new" | "in_progress" | "resolved" | "closed"
 export interface CommunityReview {
   id: string;
   place: string;
+  address?: string;
   category: ReviewCategory;
   message: string;
+  visitDate?: string;
+  visitType?: "solo" | "friends" | "family" | "couple" | "work";
+  budgetRange?: string;
+  bestTimeToVisit?: string;
+  quickTip?: string;
+  wouldRecommend: boolean;
   rating: number;
   authorName: string;
   isAnonymous: boolean;
@@ -17,8 +24,15 @@ export interface CommunityReview {
 
 export interface NewCommunityReview {
   place: string;
+  address?: string;
   category: ReviewCategory;
   message: string;
+  visitDate?: string;
+  visitType?: "solo" | "friends" | "family" | "couple" | "work";
+  budgetRange?: string;
+  bestTimeToVisit?: string;
+  quickTip?: string;
+  wouldRecommend?: boolean;
   rating: number;
   authorName?: string;
   isAnonymous: boolean;

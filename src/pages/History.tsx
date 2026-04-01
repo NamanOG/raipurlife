@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import SmartImage from "@/components/SmartImage";
+import QuirkyMarquee from "@/components/QuirkyMarquee";
 import { Building2, CalendarDays, Cpu, Landmark, MapPin, ShoppingBag, TrainFront } from "lucide-react";
 
 const timeline = [
@@ -139,6 +140,22 @@ const History = () => {
               </div>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section className="px-4 pb-8">
+        <div className="container mx-auto max-w-6xl">
+          <QuirkyMarquee
+            variant={1}
+            palette="amber"
+            items={[
+              "Temple-era corridors",
+              "1867 civic administration",
+              "Rail-linked market growth",
+              "Capital transition in 2000",
+              "Smart city evolution",
+            ]}
+          />
         </div>
       </section>
 
