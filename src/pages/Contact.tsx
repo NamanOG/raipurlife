@@ -165,7 +165,7 @@ const Contact = () => {
           <aside className="glass border border-border/70 p-6 md:p-8">
             <h3 className="text-2xl font-semibold">Other ways to connect</h3>
             <div className="mt-5 space-y-4 text-sm text-muted-foreground">
-              <p>Email: hello@raipur.life</p>
+              <p>Email: hello.raipur.life@gmail.com</p>
               <p>Community submissions: Add Review page</p>
               <p>Response time: within 24-48 hours</p>
             </div>
