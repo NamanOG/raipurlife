@@ -128,7 +128,7 @@ const AddReview = () => {
         <div className="absolute inset-0 -z-10 grid-fabric opacity-25" />
         <div className="container mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
-            <aside className="space-y-5">
+            <aside className="min-w-0 space-y-5">
               <article className="hero-copy-panel">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Community Form</p>
                 <h1 className="mt-2 text-4xl font-bold md:text-5xl">Add your own review</h1>
@@ -171,10 +171,10 @@ const AddReview = () => {
                 </div>
 
                 <div className="mt-6 overflow-hidden border border-border/70 bg-background/70">
-                  <div className="marquee-track" style={{ animationDuration: "26s" }}>
+                  <div className="featured-marquee-track">
                     {[...featuredPlaceImages, ...featuredPlaceImages].map((item, index) => (
-                      <figure key={`${item.label}-${index}`} className="w-[220px] shrink-0 overflow-hidden border border-border/70 bg-card">
-                        <img src={item.src} alt={item.label} className="h-28 w-full object-cover" loading="lazy" />
+                      <figure key={`${item.label}-${index}`} className="w-[180px] shrink-0 overflow-hidden border border-border/70 bg-card sm:w-[220px]">
+                        <img src={item.src} alt={item.label} className="h-24 w-full object-cover sm:h-28" loading="lazy" />
                         <figcaption className="px-3 py-2 text-xs font-medium text-muted-foreground">{item.label}</figcaption>
                       </figure>
                     ))}
@@ -183,7 +183,10 @@ const AddReview = () => {
               </article>
             </aside>
 
-            <form onSubmit={onSubmit} className="glass border border-border/70 p-6 md:p-8">
+            <form
+              onSubmit={onSubmit}
+              className="glass min-w-0 border border-border/70 p-6 md:p-8 [&_input:not([type='checkbox'])]:min-w-0 [&_input:not([type='checkbox'])]:w-full [&_select]:w-full [&_textarea]:w-full"
+            >
             <div className="grid gap-5">
               <label className="grid gap-2 text-sm font-medium">
                 Category
