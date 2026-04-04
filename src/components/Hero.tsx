@@ -20,12 +20,12 @@ const Hero = () => {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_1.2px)] bg-[length:3px_3px] opacity-20" />
 
           <div className="relative z-10">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-2xl border border-slate-700/85 bg-slate-950/98 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_10px_24px_hsl(220_50%_4%_/_0.42)] backdrop-blur-[8px] md:mb-6">Mor Raipur Collective</p>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-2xl border border-slate-700/60 bg-slate-950/80 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_10px_24px_hsl(220_50%_4%_/_0.42)] backdrop-blur-[9px] md:mb-6">Mor Raipur Collective</p>
             <h1 className="mt-2 max-w-3xl text-[1.95rem] font-extrabold leading-[1.06] [text-shadow:0_2px_10px_rgba(2,6,23,0.5)] sm:text-[2rem] md:mt-3 md:text-[clamp(2.65rem,4.05vw,4.15rem)] md:leading-[1.02]">
               Raipur in one place.
               <span className="mt-2 block text-amber-200">Food, travel, markets, and real local stories.</span>
             </h1>
-            <article className="mt-4 max-w-2xl rounded-2xl border border-white/28 bg-slate-900/34 p-4 text-white shadow-[0_10px_28px_rgba(2,6,23,0.24)] backdrop-blur-[12px] md:mt-5 md:bg-slate-900/30 md:p-5 md:backdrop-blur-[10px]">
+            <article className="mt-4 max-w-2xl rounded-2xl border border-slate-700/0 bg-slate-950/80 p-5 text-white backdrop-blur-[9px] md:mt-5 md:bg-slate-950/90 md:p-5 md:backdrop-blur-[8px]">
               <p className="text-sm font-medium leading-relaxed text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.55)] md:text-lg">
                 Built for people who want practical city guidance: where to go, what is worth it, and what locals actually recommend.
               </p>
