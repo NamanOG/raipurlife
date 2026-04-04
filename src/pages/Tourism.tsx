@@ -66,7 +66,7 @@ const curatedPlaces = [
     name: "Nandan Van Jungle Safari",
     category: "Nature",
     description: "Green safari-style park area with lakeside sections and family walking routes.",
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1400&q=80",
+    image: "/places/nandanvan.jpg",
     rating: 4.3,
     location: "Naya Raipur",
     hours: "9:00 AM - 6:00 PM",

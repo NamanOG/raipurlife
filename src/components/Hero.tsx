@@ -7,20 +7,25 @@ const Hero = () => {
   const heroRef = useScrollReveal<HTMLDivElement>();
 
   return (
-    <section className="relative isolate flex flex-1 items-end overflow-hidden px-4 pb-4 pt-24 sm:pt-28 md:pb-6 md:pt-32">
-      <div className="absolute inset-0 -z-30 bg-[url('/hero-bg.png')] bg-cover bg-no-repeat bg-[position:52%_24%] opacity-45 blur-[1.5px] scale-105 md:bg-[position:center_30%] md:opacity-100 md:blur-0 md:scale-100" />
-      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-slate-950/88 via-slate-950/74 to-slate-950/84 md:bg-gradient-to-r md:from-slate-950/84 md:via-slate-900/62 md:to-slate-900/42" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-slate-950 to-transparent md:hidden" />
+    <section className="relative isolate flex flex-1 items-center overflow-hidden px-4 pb-3 pt-16 sm:pt-24 md:items-end md:pb-6 md:pt-32">
+      <div className="absolute inset-0 -z-30 bg-[url('/hero-bg.png')] bg-cover bg-no-repeat bg-[position:48%_32%] opacity-82 blur-0 scale-100 md:bg-[position:center_30%] md:opacity-100 md:blur-0 md:scale-100" />
+      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-slate-950/62 via-slate-950/48 to-slate-950/76 md:bg-gradient-to-r md:from-slate-950/84 md:via-slate-900/62 md:to-slate-900/42" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-slate-950 to-transparent md:hidden" />
 
       <div ref={heroRef} className="container mx-auto w-full scroll-reveal">
-        <div className="mx-auto grid max-w-[78rem] items-center gap-5 rounded-[1.55rem] border border-slate-700/60 bg-slate-950/80 p-4 text-white shadow-2xl backdrop-blur-[6px] sm:p-5 md:gap-7 md:rounded-[1.8rem] md:bg-slate-950/44 md:p-8 md:grid-cols-[1.2fr_0.8fr]">
-          <div>
-            <p className="mb-4 inline-flex items-center gap-2 rounded-2xl border border-slate-700/60 bg-slate-950/86 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_8px_20px_hsl(220_50%_4%_/_0.35)] backdrop-blur-[8px] md:mb-6">Mor Raipur Collective</p>
-            <h1 className="mt-2 max-w-3xl text-[1.8rem] font-extrabold leading-[1.1] sm:text-[2rem] md:mt-3 md:text-[clamp(2.65rem,4.05vw,4.15rem)] md:leading-[1.02]">
+        <div className="relative mx-auto grid max-w-2xl items-center gap-5 overflow-hidden rounded-[1.55rem] border border-slate-500/40 bg-slate-900/46 p-4 text-white shadow-2xl shadow-slate-950/45 backdrop-blur-[16px] sm:p-5 md:max-w-[78rem] md:gap-7 md:rounded-[1.8rem] md:bg-slate-900/40 md:backdrop-blur-[14px] md:p-8 md:grid-cols-[1.2fr_0.8fr]">
+          <div className="pointer-events-none absolute -left-12 -top-16 h-52 w-52 rounded-full bg-red-400/35 blur-[48px]" />
+          <div className="pointer-events-none absolute -right-20 -top-12 h-56 w-56 rounded-full bg-fuchsia-400/32 blur-[52px]" />
+          <div className="pointer-events-none absolute -bottom-20 left-10 h-48 w-48 rounded-full bg-cyan-300/24 blur-[54px]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_1.2px)] bg-[length:3px_3px] opacity-20" />
+
+          <div className="relative z-10">
+            <p className="mb-4 inline-flex items-center gap-2 rounded-2xl border border-slate-700/85 bg-slate-950/98 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_10px_24px_hsl(220_50%_4%_/_0.42)] backdrop-blur-[8px] md:mb-6">Mor Raipur Collective</p>
+            <h1 className="mt-2 max-w-3xl text-[1.95rem] font-extrabold leading-[1.06] [text-shadow:0_2px_10px_rgba(2,6,23,0.5)] sm:text-[2rem] md:mt-3 md:text-[clamp(2.65rem,4.05vw,4.15rem)] md:leading-[1.02]">
               Raipur in one place.
               <span className="mt-2 block text-amber-200">Food, travel, markets, and real local stories.</span>
             </h1>
-            <article className="mt-4 max-w-2xl rounded-2xl border border-slate-700/60 bg-slate-950/88 p-4 text-white backdrop-blur-[8px] md:mt-5 md:bg-slate-950/82 md:p-5">
+            <article className="mt-4 max-w-2xl rounded-2xl border border-white/28 bg-slate-900/34 p-4 text-white shadow-[0_10px_28px_rgba(2,6,23,0.24)] backdrop-blur-[12px] md:mt-5 md:bg-slate-900/30 md:p-5 md:backdrop-blur-[10px]">
               <p className="text-sm font-medium leading-relaxed text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.55)] md:text-lg">
                 Built for people who want practical city guidance: where to go, what is worth it, and what locals actually recommend.
               </p>
@@ -57,7 +62,7 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="hidden gap-5 md:grid">
+          <div className="relative z-10 hidden gap-5 md:grid">
             <article className="rounded-2xl border border-slate-700/60 bg-slate-950/80 p-5 text-white backdrop-blur-[8px]">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">Right now in Raipur</p>
               <div className="mt-4 space-y-3 text-sm">

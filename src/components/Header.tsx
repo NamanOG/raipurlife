@@ -54,7 +54,7 @@ const Header = ({ overlay = false }: HeaderProps) => {
     : "flex items-center justify-between gap-4 rounded-[1.4rem] border border-border/75 bg-background/84 px-3 py-2 shadow-[0_12px_28px_hsl(220_18%_10%_/_0.1)] backdrop-blur-xl dark:border-slate-700/55 dark:bg-slate-950/56 dark:shadow-[0_14px_28px_hsl(213_24%_6%_/_0.24)]";
 
   const brandTitleClass = overlay ? "text-base font-bold leading-none text-white lg:text-lg" : "text-lg font-bold leading-none text-foreground";
-  const brandSubtitleClass = overlay ? "text-xs text-slate-200/85" : "text-xs text-muted-foreground";
+  const brandSubtitleClass = overlay ? "hidden text-xs text-slate-200/85 sm:block" : "text-xs text-muted-foreground";
   const navIdleClass = overlay
     ? "rounded-lg !text-white hover:bg-white/8 hover:!text-white"
     : "rounded-lg text-foreground/82 hover:bg-muted/70 hover:text-foreground";
