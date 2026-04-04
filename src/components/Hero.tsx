@@ -13,7 +13,7 @@ const Hero = () => {
       <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-slate-950 to-transparent md:hidden" />
 
       <div ref={heroRef} className="container mx-auto w-full scroll-reveal">
-        <div className="relative mx-auto grid max-w-2xl items-center gap-5 overflow-hidden rounded-[1.55rem] border border-slate-500/40 bg-slate-900/46 p-4 text-white shadow-2xl shadow-slate-950/45 backdrop-blur-[16px] sm:p-5 md:max-w-[78rem] md:gap-7 md:rounded-[1.8rem] md:bg-slate-900/40 md:backdrop-blur-[14px] md:p-8 md:grid-cols-[1.2fr_0.8fr]">
+        <div className="relative mx-auto grid max-w-2xl items-center gap-4 overflow-hidden rounded-[1.55rem] border border-slate-500/40 bg-slate-900/46 p-3 text-white shadow-2xl shadow-slate-950/45 backdrop-blur-[16px] sm:p-4 md:max-w-[74rem] md:gap-6 md:rounded-[1.8rem] md:bg-slate-900/40 md:backdrop-blur-[14px] md:p-6 md:grid-cols-[1.2fr_0.8fr]">
           <div className="pointer-events-none absolute -left-12 -top-16 h-52 w-52 rounded-full bg-red-400/35 blur-[48px]" />
           <div className="pointer-events-none absolute -right-20 -top-12 h-56 w-56 rounded-full bg-fuchsia-400/32 blur-[52px]" />
           <div className="pointer-events-none absolute -bottom-20 left-10 h-48 w-48 rounded-full bg-cyan-300/24 blur-[54px]" />
