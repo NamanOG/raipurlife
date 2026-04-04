@@ -39,7 +39,7 @@ const curatedPlaces = [
     name: "Magneto The Mall",
     category: "Shopping",
     description: "Premier destination for brands, dining, and indoor entertainment zones.",
-    image: "/places/urban.png",
+    image: "/places/magneto.png",
     rating: 4.3,
     location: "GE Road",
     hours: "11:00 AM - 10:00 PM",

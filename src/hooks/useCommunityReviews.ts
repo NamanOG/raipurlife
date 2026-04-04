@@ -202,7 +202,7 @@ const seededReviews: CommunityReview[] = [
     rating: 4.2,
     authorName: "Neha",
     isAnonymous: false,
-    image: "https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?auto=format&fit=crop&w=1400&q=80",
+    image: "/places/magneto.png",
     status: "approved",
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
   },

@@ -89,7 +89,7 @@ const retailShift = [
   {
     name: "Magneto The Mall",
     note: "A key branded retail destination in the city growth story.",
-    image: "/places/urban.png",
+    image: "/places/magneto.png",
   },
   {
     name: "Zora Mall",
@@ -236,12 +236,14 @@ const History = () => {
 
           <div className="grid gap-4">
             <article className="card-tint overflow-hidden shadow-sm hover-lift">
-              <SmartImage
-                src="https://commons.wikimedia.org/wiki/Special:FilePath/Central%20Buisness%20District,%20Sector%2021%20Naya%20Raipur.jpg"
-                alt="Central Business District Naya Raipur"
-                fallbackQuery="Naya Raipur CBD"
-                className="h-48 w-full object-cover"
-              />
+              <div className="aspect-[16/9] w-full bg-slate-200/30 dark:bg-slate-900/55">
+                <SmartImage
+                  src="https://commons.wikimedia.org/wiki/Special:FilePath/Central%20Buisness%20District,%20Sector%2021%20Naya%20Raipur.jpg"
+                  alt="Central Business District Naya Raipur"
+                  fallbackQuery="Naya Raipur CBD"
+                  className="h-full w-full object-contain p-2"
+                />
+              </div>
               <div className="p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Planned expansion</p>
                 <p className="mt-1 text-sm text-muted-foreground">New business and administrative clusters widened the city footprint.</p>
@@ -249,12 +251,14 @@ const History = () => {
             </article>
 
             <article className="card-tint overflow-hidden shadow-sm hover-lift">
-              <SmartImage
-                src="https://commons.wikimedia.org/wiki/Special:FilePath/Smart%20City%20Raipur.png"
-                alt="Smart City Raipur"
-                fallbackQuery="Smart City Raipur"
-                className="h-44 w-full object-cover"
-              />
+              <div className="aspect-[16/9] w-full bg-slate-200/30 dark:bg-slate-900/55">
+                <SmartImage
+                  src="https://commons.wikimedia.org/wiki/Special:FilePath/Smart%20City%20Raipur.png"
+                  alt="Smart City Raipur"
+                  fallbackQuery="Smart City Raipur"
+                  className="h-full w-full object-contain p-2"
+                />
+              </div>
               <div className="p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-secondary">Smart systems</p>
                 <p className="mt-1 text-sm text-muted-foreground">Digital operations and utility modernization became core urban themes.</p>
@@ -278,12 +282,14 @@ const History = () => {
           <div className="grid gap-4 md:grid-cols-3">
             {retailShift.map((item) => (
               <article key={item.name} className="glass border border-border/70 p-4 hover-lift">
-                <SmartImage
-                  src={item.image}
-                  alt={item.name}
-                  fallbackQuery={item.name}
-                  className="h-44 w-full rounded-xl object-cover"
-                />
+                <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-200/30 dark:bg-slate-900/55">
+                  <SmartImage
+                    src={item.image}
+                    alt={item.name}
+                    fallbackQuery={item.name}
+                    className="h-full w-full object-contain p-1.5"
+                  />
+                </div>
                 <h3 className="mt-3 text-lg font-semibold">{item.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{item.note}</p>
               </article>

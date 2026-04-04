@@ -355,7 +355,7 @@
     min-width: max-content;
     gap: 1rem;
     align-items: center;
-    padding: 0.65rem 0;
+    padding: 0.5rem 0;
     white-space: nowrap;
     will-change: transform;
     animation: marquee-left 34s linear infinite;
@@ -419,7 +419,7 @@
 
   .marquee-chip.marquee-v2 {
     font-family: "Bebas Neue", "Space Grotesk", sans-serif;
-    font-size: 1.15rem;
+    font-size: clamp(0.98rem, 1.3vw, 1.1rem);
     letter-spacing: 0.07em;
     border: 0;
     color: hsl(var(--background));

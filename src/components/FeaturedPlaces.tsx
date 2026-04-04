@@ -63,7 +63,7 @@ const featuredPlaces = [
     category: "Shopping",
     rating: 4.2,
     reviews: 1523,
-    image: "/places/urban.png",
+    image: "/places/magneto.png",
     description: "Premier shopping destination in Raipur with branded stores, food court, and entertainment options",
     location: "G.E. Road, Raipur",
     timing: "10:00 AM - 10:00 PM",

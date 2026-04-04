@@ -13,18 +13,20 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header overlay />
-      <Hero />
-      <QuirkyMarquee
-        variant={2}
-        palette="teal"
-        items={[
-          "Raipur sunrise routes",
-          "Street chai culture",
-          "Museum afternoons",
-          "Lakefront evenings",
-          "Community-first city guide",
-        ]}
-      />
+      <div className="relative flex h-[100svh] flex-col justify-end overflow-hidden">
+        <Hero />
+        <QuirkyMarquee
+          variant={2}
+          palette="teal"
+          items={[
+            "Raipur sunrise routes",
+            "Street chai culture",
+            "Museum afternoons",
+            "Lakefront evenings",
+            "Community-first city guide",
+          ]}
+        />
+      </div>
       <QuickActions />
       <Categories />
       <FeaturedPlaces />

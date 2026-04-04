@@ -7,26 +7,26 @@ const Hero = () => {
   const heroRef = useScrollReveal<HTMLDivElement>();
 
   return (
-    <section className="relative isolate overflow-hidden px-4 pb-12 pt-24 md:pb-16 md:pt-32">
-      <div className="absolute inset-0 -z-30 bg-[url('/hero-bg.png')] bg-cover bg-no-repeat bg-[position:56%_28%] opacity-28 blur-[5px] scale-110 md:bg-[position:center_30%] md:opacity-100 md:blur-0 md:scale-100" />
-      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-slate-950/96 via-slate-950/90 to-slate-950/92 md:bg-gradient-to-r md:from-slate-950/84 md:via-slate-900/62 md:to-slate-900/42" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-slate-950 to-transparent md:hidden" />
+    <section className="relative isolate flex flex-1 items-end overflow-hidden px-4 pb-4 pt-24 sm:pt-28 md:pb-6 md:pt-32">
+      <div className="absolute inset-0 -z-30 bg-[url('/hero-bg.png')] bg-cover bg-no-repeat bg-[position:52%_24%] opacity-45 blur-[1.5px] scale-105 md:bg-[position:center_30%] md:opacity-100 md:blur-0 md:scale-100" />
+      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-slate-950/88 via-slate-950/74 to-slate-950/84 md:bg-gradient-to-r md:from-slate-950/84 md:via-slate-900/62 md:to-slate-900/42" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-slate-950 to-transparent md:hidden" />
 
-      <div ref={heroRef} className="container mx-auto scroll-reveal">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 rounded-[1.55rem] border border-slate-700/60 bg-slate-950/80 p-5 text-white shadow-2xl backdrop-blur-[6px] md:gap-10 md:rounded-[1.8rem] md:bg-slate-950/44 md:p-11 md:grid-cols-[1.15fr_0.85fr]">
+      <div ref={heroRef} className="container mx-auto w-full scroll-reveal">
+        <div className="mx-auto grid max-w-[78rem] items-center gap-5 rounded-[1.55rem] border border-slate-700/60 bg-slate-950/80 p-4 text-white shadow-2xl backdrop-blur-[6px] sm:p-5 md:gap-7 md:rounded-[1.8rem] md:bg-slate-950/44 md:p-8 md:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <p className="mb-5 inline-flex items-center gap-2 rounded-2xl border border-slate-700/60 bg-slate-950/86 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_8px_20px_hsl(220_50%_4%_/_0.35)] backdrop-blur-[8px] md:mb-8">Mor Raipur Collective</p>
-            <h1 className="mt-3 max-w-3xl text-[1.9rem] font-extrabold leading-[1.12] md:mt-6 md:text-6xl md:leading-tight">
+            <p className="mb-4 inline-flex items-center gap-2 rounded-2xl border border-slate-700/60 bg-slate-950/86 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_8px_20px_hsl(220_50%_4%_/_0.35)] backdrop-blur-[8px] md:mb-6">Mor Raipur Collective</p>
+            <h1 className="mt-2 max-w-3xl text-[1.8rem] font-extrabold leading-[1.1] sm:text-[2rem] md:mt-3 md:text-[clamp(2.65rem,4.05vw,4.15rem)] md:leading-[1.02]">
               Raipur in one place.
               <span className="mt-2 block text-amber-200">Food, travel, markets, and real local stories.</span>
             </h1>
-            <article className="mt-5 max-w-2xl rounded-2xl border border-slate-700/60 bg-slate-950/88 p-4 text-white backdrop-blur-[8px] md:mt-6 md:bg-slate-950/82 md:p-5">
+            <article className="mt-4 max-w-2xl rounded-2xl border border-slate-700/60 bg-slate-950/88 p-4 text-white backdrop-blur-[8px] md:mt-5 md:bg-slate-950/82 md:p-5">
               <p className="text-sm font-medium leading-relaxed text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.55)] md:text-lg">
                 Built for people who want practical city guidance: where to go, what is worth it, and what locals actually recommend.
               </p>
             </article>
 
-            <div className="mt-6 hidden max-w-2xl rounded-2xl border border-slate-600/55 bg-slate-950/84 p-2 text-white shadow-xl backdrop-blur-[8px] md:mt-8 md:block md:bg-slate-950/72">
+            <div className="mt-5 hidden max-w-2xl rounded-2xl border border-slate-600/55 bg-slate-950/84 p-2 text-white shadow-xl backdrop-blur-[8px] md:mt-6 md:block md:bg-slate-950/72">
               <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
                 <div className="flex flex-1 items-center gap-3 px-3">
                   <Search className="h-4 w-4 text-slate-300" />
@@ -41,7 +41,7 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="mt-5 grid gap-2.5 sm:hidden">
+            <div className="mt-4 grid gap-2.5 sm:hidden">
               <Button className="h-10 rounded-xl border border-foreground bg-foreground px-6 text-background hover:bg-foreground/90">
                 Explore City
               </Button>
@@ -50,7 +50,7 @@ const Hero = () => {
               </Button>
             </div>
 
-            <div className="mt-6 hidden gap-3 border-t border-slate-600/55 pt-5 text-sm text-white/95 sm:grid-cols-3 md:mt-8 md:grid">
+            <div className="mt-5 hidden gap-3 border-t border-slate-600/55 pt-4 text-sm text-white/95 sm:grid-cols-3 md:mt-6 md:grid">
               <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-cyan-200" /> City zones mapped</p>
               <p className="flex items-center gap-2"><CalendarDays className="h-4 w-4 text-amber-200" /> Weekly event picks</p>
               <p className="flex items-center gap-2"><Compass className="h-4 w-4 text-emerald-200" /> Practical day routes</p>
