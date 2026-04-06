@@ -48,18 +48,40 @@ const Footer = () => {
               Built to help people discover food, travel spots, shopping, and local experiences across Raipur, Chhattisgarh.
             </p>
             <div className="mt-5 flex items-center gap-2">
-              <a href="https://instagram.com/raipur.life" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Instagram">
+              <a
+                href="https://instagram.com/raipur.life"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Instagram"
+              >
                 <Instagram className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Facebook">
+              <a
+                href="https://facebook.com/raipur.life"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Facebook"
+              >
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="YouTube">
+              <a
+                href="https://youtube.com/@raipurlife"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="YouTube"
+              >
                 <Youtube className="h-4 w-4" />
               </a>
-              <a href="#" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground" aria-label="Community Chat">
+              <Link
+                to="/contact"
+                className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Community Chat"
+              >
                 <MessageCircle className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
           </div>
 

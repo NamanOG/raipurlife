@@ -1,10 +1,72 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CalendarDays, Clock3, Compass, MapPin, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useToast } from "@/hooks/use-toast";
 
 const Hero = () => {
   const heroRef = useScrollReveal<HTMLDivElement>();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const resolveSearchRoute = (rawQuery: string) => {
+    const query = rawQuery.trim().toLowerCase();
+
+    if (!query) {
+      return "/tourism";
+    }
+
+    if (
+      [
+        "food",
+        "eat",
+        "restaurant",
+        "cafe",
+        "chai",
+        "nukkad",
+        "street food",
+      ].some((keyword) => query.includes(keyword))
+    ) {
+      return "/food";
+    }
+
+    if (["shop", "shopping", "mall", "market", "bazaar"].some((keyword) => query.includes(keyword))) {
+      return "/shopping";
+    }
+
+    if (["event", "festival", "concert", "show", "weekend"].some((keyword) => query.includes(keyword))) {
+      return "/events";
+    }
+
+    if (["plan", "itinerary", "trip", "day"].some((keyword) => query.includes(keyword))) {
+      return "/plan-trip";
+    }
+
+    if (["photo", "gallery", "image"].some((keyword) => query.includes(keyword))) {
+      return "/gallery";
+    }
+
+    if (["history", "heritage", "museum", "culture"].some((keyword) => query.includes(keyword))) {
+      return "/history";
+    }
+
+    return "/tourism";
+  };
+
+  const handleExplore = () => {
+    const destination = resolveSearchRoute(searchTerm);
+    navigate(destination);
+
+    if (searchTerm.trim()) {
+      toast({
+        title: "Showing best match",
+        description: `Results for "${searchTerm.trim()}" are in this section.`,
+      });
+    }
+  };
 
   return (
     <section className="relative isolate flex flex-1 items-center overflow-hidden px-4 pb-3 pt-16 sm:pt-24 md:items-end md:pb-6 md:pt-32">
@@ -37,20 +99,28 @@ const Hero = () => {
                   <Search className="h-4 w-4 text-slate-300" />
                   <Input
                     placeholder="Search places, dishes, stays, events..."
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        handleExplore();
+                      }
+                    }}
                     className="h-11 border-0 bg-transparent p-0 text-base text-white placeholder:text-slate-300 shadow-none focus-visible:ring-0"
                   />
                 </div>
-                <Button className="h-11 rounded-xl border border-foreground bg-foreground px-6 text-background hover:bg-foreground/90">
+                <Button onClick={handleExplore} className="h-11 rounded-xl border border-foreground bg-foreground px-6 text-background hover:bg-foreground/90">
                   Explore
                 </Button>
               </div>
             </div>
 
             <div className="mt-4 grid gap-2.5 sm:hidden">
-              <Button className="h-10 rounded-xl border border-foreground bg-foreground px-6 text-background hover:bg-foreground/90">
+              <Button onClick={handleExplore} className="h-10 rounded-xl border border-foreground bg-foreground px-6 text-background hover:bg-foreground/90">
                 Explore City
               </Button>
-              <Button className="h-10 rounded-xl border border-slate-600/70 bg-slate-950/78 px-6 text-white hover:bg-slate-900/90">
+              <Button onClick={() => navigate("/plan-trip")} className="h-10 rounded-xl border border-slate-600/70 bg-slate-950/78 px-6 text-white hover:bg-slate-900/90">
                 Plan Your Day
               </Button>
             </div>
