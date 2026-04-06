@@ -13,7 +13,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header overlay />
-      <div className="relative flex h-[100svh] flex-col overflow-hidden">
+      <div className="relative flex min-h-[100svh] flex-col overflow-hidden">
         <Hero />
         <QuirkyMarquee
           variant={2}
