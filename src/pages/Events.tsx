@@ -206,7 +206,7 @@ const Events = () => {
                   src={review.image || "/hero-bg.png"}
                   alt={review.place}
                   fallbackQuery={review.place}
-                  className="h-44 w-full object-cover"
+                  className="h-auto max-h-[28rem] w-full bg-muted/20 object-contain"
                 />
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">

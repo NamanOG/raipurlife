@@ -112,9 +112,12 @@
       linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
     font-feature-settings: "rlig" 1, "calt" 1;
     text-rendering: optimizeLegibility;
-    min-height: 100vh;
+    min-height: 100%;
     position: relative;
-    overflow-x: clip;
+    overflow-x: hidden;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
   }
 
   body::before {
@@ -158,27 +161,39 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--foreground) / 0.34) transparent;
+    overflow-y: hidden;
+    height: 100%;
   }
 
   body {
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
+    height: 100%;
   }
 
-  ::-webkit-scrollbar {
+  #root {
+    min-height: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--foreground) / 0.34) transparent;
+  }
+
+  #root::-webkit-scrollbar {
     width: 7px;
     height: 7px;
   }
 
-  ::-webkit-scrollbar-track {
+  #root::-webkit-scrollbar-track {
     background: transparent;
     border-radius: 999px;
   }
 
-  ::-webkit-scrollbar-thumb {
+  #root::-webkit-scrollbar-thumb {
     border: 1px solid transparent;
     border-radius: 999px;
     background: hsl(var(--foreground) / 0.32);
@@ -187,21 +202,21 @@
     transition: background-color 0.18s ease;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
+  #root::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--foreground) / 0.5);
   }
 
-  ::-webkit-scrollbar-thumb:active {
+  #root::-webkit-scrollbar-thumb:active {
     background: hsl(var(--foreground) / 0.62);
   }
 
-  ::-webkit-scrollbar-button {
+  #root::-webkit-scrollbar-button {
     display: none;
     width: 0;
     height: 0;
   }
 
-  ::-webkit-scrollbar-corner {
+  #root::-webkit-scrollbar-corner {
     background: transparent;
   }
 }
@@ -354,9 +369,10 @@
 
   .marquee-full-bleed {
     position: relative;
-    width: 100dvw;
-    margin-left: calc(50% - 50dvw);
-    margin-right: calc(50% - 50dvw);
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .marquee-shell {
@@ -387,11 +403,13 @@
     white-space: nowrap;
     will-change: transform;
     animation: marquee-left 34s linear infinite;
+    animation-delay: -17s;
   }
 
   .marquee-track.reverse {
     animation-name: marquee-right;
     animation-duration: 28s;
+    animation-delay: -14s;
   }
 
   .featured-marquee-track {
@@ -403,6 +421,7 @@
     white-space: nowrap;
     will-change: transform;
     animation: marquee-left 26s linear infinite;
+    animation-delay: -13s;
   }
 
   .marquee-chip {

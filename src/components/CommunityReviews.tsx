@@ -34,13 +34,13 @@ const CommunityReviews = () => {
 
         <div className="divide-y divide-border border border-border">
           {latestReviews.slice(0, 4).map((review) => (
-            <article key={review.id} className="grid gap-4 p-5 transition-colors duration-300 hover:bg-muted/30 md:grid-cols-[220px_1fr]">
-              <div className="relative h-44 overflow-hidden border border-border/70 md:h-full">
+            <article key={review.id} className="grid gap-4 p-5 transition-colors duration-300 hover:bg-muted/30 md:grid-cols-[220px_1fr] md:items-start">
+              <div className="relative self-start overflow-hidden border border-border/70">
                 <SmartImage
                   src={review.image || "/hero-bg.png"}
                   alt={review.place}
                   fallbackQuery={review.place}
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                  className="h-auto max-h-[24rem] w-full bg-muted/20 object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute left-4 top-4">

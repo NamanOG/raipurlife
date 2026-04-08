@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Compass, Menu, Moon, Sparkles, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,21 @@ const Header = ({ overlay = false }: HeaderProps) => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const currentPage = useMemo(() => NAV_LINKS.find((link) => link.href === location.pathname), [location.pathname]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (mobileOpen || typeof document === "undefined") {
+      return;
+    }
+
+    // Prevent stale scroll-lock styles from trapping page scroll on mobile.
+    document.body.style.removeProperty("overflow");
+    document.body.style.removeProperty("padding-right");
+    document.body.style.removeProperty("pointer-events");
+  }, [mobileOpen]);
 
   const handleSurpriseMe = () => {
     const candidates = NAV_LINKS.filter((link) => link.href !== location.pathname);

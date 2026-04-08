@@ -355,12 +355,12 @@ const Moderation = () => {
 
                   {currentReviewItems.map((review) => (
                     <article key={review.id} className="overflow-hidden border border-border bg-card shadow-sm">
-                      <div className="grid gap-4 md:grid-cols-[220px_1fr]">
+                      <div className="grid gap-4 md:grid-cols-[220px_1fr] md:items-start">
                         <SmartImage
                           src={review.image || "/hero-bg.png"}
                           alt={review.place}
                           fallbackQuery={review.place}
-                          className="h-full min-h-40 w-full object-cover"
+                          className="h-auto max-h-[28rem] w-full self-start bg-muted/20 object-contain"
                         />
                         <div className="p-5">
                           <div className="flex items-center justify-between gap-2">
